@@ -1,32 +1,83 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Layout from './../Layout.vue';
+import { ref } from 'vue';
 
 const form = useForm({
     name: '',
     email: '',
+    phone: '',
     password: '',
     password_confirmation: '',
+    picture: null,
+    preview: null,
 });
 
+
+const phoneError = ref(null);
+
+const filterInput = (event) => {
+    event.target.value = event.target.value.replace(/\D/g, '');
+    form.phone = event.target.value;
+
+    phoneError.value = null;
+};
+
+const validatePhone = () => {
+    const phone = form.phone;
+
+    if (!phone) {
+        phoneError.value = null;
+        return true;
+    }
+
+    if (phone.length !== 10) {
+        phoneError.value = "Le numéro doit contenir 10 chiffres.";
+        return false;
+    }
+
+    if (phone.startsWith('3')) {
+        phoneError.value = "Format 33 non accepté -> Merci de le remplacer par 0 et de compléter votre numéro";
+        return false;
+    }
+    phoneError.value = null;
+    return true;
+};
+
+const changePicture = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        form.picture = file;
+        form.preview = URL.createObjectURL(file);
+    } else {
+        form.picture = null;
+        form.preview = null;
+    }
+};
+
+
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+    if (validatePhone()) {
+        form.submit('post', route('register'), {
+            forceFormData: true,
+            onFinish: () => form.reset('password', 'password_confirmation'),
+        });
+    }
 };
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
+    <Head title="S'enregistrer | Cabane" />
+    <Layout title="S'enregistrer">
+        <h1 class="text-2xl font-semibold mb-6 text-center">S'enregistrer</h1>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" class="mx-4">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Nom Complet" />
 
                 <TextInput
                     id="name"
@@ -57,7 +108,25 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="phone" value="Numéro de Téléphone" />
+
+                <TextInput
+                    id="phone"
+                    type="tel"
+                    class="mt-1 block w-full"
+                    v-model="form.phone"
+                    maxlength="10"
+                    pattern="[0-9]*"
+                    @input="filterInput"
+                    @blur="validatePhone"
+                />
+
+                <InputError class="mt-2" :message="form.errors.phone" />
+                <p v-if="phoneError" class="!text-red-500 text-sm mt-2">{{ phoneError }}</p>
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="password" value="Mot de Passe" />
 
                 <TextInput
                     id="password"
@@ -72,7 +141,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" value="Confirmez votre Mot de Passe" />
 
                 <TextInput
                     id="password_confirmation"
@@ -86,18 +155,35 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 
+            <div class="mt-4">
+                <InputLabel for="picture" value="Photo de profil" />
+                
+                <div class="flex items-center space-x-4">
+                    <img :src="form.preview ?? 'storage/profiles/default_user.png'" alt="Pré-visuelle de votre photo" class="object-cover w-16 h-16 rounded-xl">
+    
+                    <input
+                        id="picture"
+                        type="file"
+                        class="mt-1 block w-full"
+                        @input="changePicture"
+                    />
+                </div>
+
+                <InputError class="mt-2" :message="form.errors.picture" />
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <Link
                     :href="route('login')"
                     class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 >
-                    Already registered?
+                    Déjà enregistré ?
                 </Link>
 
                 <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
+                    S'enregistrer
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
+    </Layout>
 </template>

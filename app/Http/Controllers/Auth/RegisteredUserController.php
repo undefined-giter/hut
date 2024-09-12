@@ -29,23 +29,37 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
+    {   
+        if ($request->hasFile('picture') && $request->file('picture')->getClientOriginalName() !== 'default_user.png') {
+            $picturePath = $request->file('picture')->store('profiles', 'public');
+            $picturePath = basename($picturePath);
+        } else {
+            $picturePath = 'default_user.png';
+        }
+        
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|min:2|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'phone' => ['nullable', 'string', 'size:10'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'picture' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => ucwords(strtolower($request->name)),
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'picture' => $picturePath,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('login', absolute: false));
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.list');
+        }
+        return redirect()->route('book');
     }
 }

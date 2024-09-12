@@ -1,3 +1,121 @@
+/* Tailwind base components and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Danfo';
+    src: url('/fonts/Danfo/Danfo-Regular-VariableFont_ELSH.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'JacquesFrancoisShadow';
+    src: url('/fonts/Jacques_Francois_Shadow/JacquesFrancoisShadow-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'KalniaGlaze';
+    src: url('/fonts/Kalnia_Glaze/KalniaGlaze-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Mirza';
+    src: url('/fonts/Mirza/Mirza-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'OleoScript';
+    src: url('/fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    @apply bg-htmlLightBg dark:bg-htmlDarkBg;
+}
+
+table{
+    @apply bg-light dark:bg-dark;
+}
+
+h1, p, table td {
+    @apply text-blue-400 dark:text-blue-200;
+}
+
+h1{
+    text-decoration: underline;
+    user-select: none;
+}
+
+
+.active, th, tr:hover{
+    @apply bg-amber-500 dark:bg-amber-600 !important;
+}
+
+.btn {
+    background-color: #007bff;
+    color: #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover:not(:disabled) {
+    background-color: #0056b3;
+    box-shadow: 0 3px 5px -1px rgba(255, 193, 7, 0.5);
+}
+
+body.dark .btn {
+    background-color: #4a5568;
+}
+
+body.dark .btn:hover {
+    background-color: #2d3748;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #b37a00; /* Couleur de la piste (fond) */
+}
+::-webkit-scrollbar-thumb {
+    background-color: #ca8a04; /* Couleur de la barre */
+    border-radius: 10px; /* Bordures arrondies */
+    border: 2px solid #eaa000; /* Optionnel : bordure autour de la barre */
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ca8a04; /* Couleur de la barre au hover */
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #ca8a04; /* Couleur de la barre et de la piste */
+}
+
+/* footer */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+  .footer {
+      background: transparent;
+      position: fixed;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      width: 100%;
+      @apply text-amber-600;
+  }

@@ -10,10 +10,25 @@ export default {
         './resources/js/**/*.vue',
     ],
 
+    darkMode: 'class',
+
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                danfo: ['Danfo', ...defaultTheme.fontFamily.sans],
+                jacques: ['JacquesFrancoisShadow', ...defaultTheme.fontFamily.sans],
+                kalnia: ['KalniaGlaze', ...defaultTheme.fontFamily.sans],
+                mirza: ['Mirza', ...defaultTheme.fontFamily.sans],
+                oleo: ['OleoScript', ...defaultTheme.fontFamily.sans],
+              },
+            colors: {
+                htmlLightBg: '#555555',
+                htmlDarkBg: '#141a23',
+                light: '#f9fafb',
+                dark: '#181a1b',
+            },
+            screens: {
+                '2xs': '320px',
             },
         },
     },

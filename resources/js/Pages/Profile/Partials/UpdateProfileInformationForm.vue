@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -15,27 +16,51 @@ defineProps({
 });
 
 const user = usePage().props.auth.user;
+const phoneError = ref(null);
 
 const form = useForm({
     name: user.name,
     email: user.email,
+    phone: user.phone ?? '',
 });
+
+const validatePhone = () => {
+    const phone = form.phone;
+    if (!phone) {
+        phoneError.value = null;
+        return true;
+    }
+    if (phone.length !== 10) {
+        phoneError.value = "Le numéro doit contenir 10 chiffres.";
+        return false;
+    }
+    if (phone.startsWith('3')) {
+        phoneError.value = "Format 33 non accepté. Merci de remplacer par 0.";
+        return false;
+    }
+    phoneError.value = null;
+    return true;
+};
+
+const submit = () => {    
+    if (validatePhone()) {
+        form.patch(route('profile.update'))
+    }
+};
 </script>
 
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
-
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Informations du profil</h2>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Update your account's profile information and email address.
+                Modifiez les informations de votre profil et votre adresse e-mail.
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="submit" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="name" value="Name" />
-
+                <InputLabel for="name" value="Nom" />
                 <TextInput
                     id="name"
                     type="text"
@@ -45,13 +70,11 @@ const form = useForm({
                     autofocus
                     autocomplete="name"
                 />
-
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
                 <InputLabel for="email" value="Email" />
-
                 <TextInput
                     id="email"
                     type="email"
@@ -60,8 +83,21 @@ const form = useForm({
                     required
                     autocomplete="username"
                 />
-
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div>
+                <InputLabel for="phone" value="Numéro de Téléphone" />
+                <TextInput
+                    id="phone"
+                    type="tel"
+                    class="mt-1 block w-full"
+                    v-model="form.phone"
+                    maxlength="10"
+                    autocomplete="tel"
+                />
+                <InputError class="mt-2" :message="form.errors.phone" />
+                <p v-if="phoneError" class="!text-red-500 text-sm mt-2">{{ phoneError }}</p>
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
@@ -76,13 +112,13 @@ const form = useForm({
                         Click here to re-send the verification email.
                     </Link>
                 </p>
-
-                <div
-                    v-show="status === 'verification-link-sent'"
-                    class="mt-2 font-medium text-sm text-green-600 dark:text-green-400"
-                >
+                <div v-show="status === 'verification-link-sent'" class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
                     A new verification link has been sent to your email address.
                 </div>
+            </div>
+            
+            <div class="mt-6">
+                <Link :href="route('profile.edit-picture')" class="btn">Modifier la photo de profil</Link>
             </div>
 
             <div class="flex items-center gap-4">
