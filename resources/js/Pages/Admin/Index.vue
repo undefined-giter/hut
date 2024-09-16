@@ -15,7 +15,7 @@
             <tbody>
                 <tr v-for="user in users.data" :key="user.id">                    
                     <td class="flex justify-center items-center h-full">
-                        <img src="{{ asset('storage/profiles' . $user->picture) }}" alt="Photo de profil" class="rounded-full h-8 w-8">
+                        <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="rounded-full h-8 w-8">
                     </td>
                     <td class="px-4 py-2 border" draggable="false">
                         <div class="w-[250px] overflow-x-auto whitespace-nowrap custom-scrollbar">

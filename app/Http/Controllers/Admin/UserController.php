@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(2);
+        $users = User::latest()->paginate(15);
 
         return Inertia::render('Admin/Index', [
             'users' => $users,
@@ -23,5 +23,13 @@ class UserController extends Controller
         return Inertia::render('Admin/Details', [
             'user' => $user,
         ]);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.list')->with('success', 'Utilisateur supprimé avec succès');
     }
 }

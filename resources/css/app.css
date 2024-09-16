@@ -64,7 +64,11 @@ h1{
     font-weight: bold;
     user-select: none;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+}
+
+.btn:hover{
+    color: #0cff00;
 }
 
 .btn:hover:not(:disabled) {

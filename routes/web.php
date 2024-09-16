@@ -10,7 +10,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () { return Inertia::render('Welcome'); })->name('homepage');
 
-Route::get('/gallery', [GalleryController::class, 'index'])->name('book');
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 
 Route::get('/book', [BookingController::class, 'index'])->name('book');
 
@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::get('/list', [UserController::class, 'index'])->name('list');
     Route::get('/user/{id}', [UserController::class, 'show'])->name('details');
+    
+    Route::delete('/user/{id}', [ProfileController::class, 'destroy'])->name('delete');
 });
 
 require __DIR__.'/auth.php';

@@ -4,12 +4,9 @@
     <Layout>
         <h1 class="text-2xl font-semibold mb-6 text-center">Bienvenue</h1>
     
-        <img src="/imgs/hut_front.jpg" alt="Photo de la cabane" draggable="false" class="rounded-lg">
-        <br>
-        <img src="/imgs/hut_side.jpg" alt="Photo de la cabane" draggable="false" class="rounded-lg">
-        <br>
-        <img src="/imgs/hut_porch.jpg" alt="Photo de la cabane" draggable="false" class="rounded-lg">
-        <br><br>
+        <div class="flex justify-center text-center">
+            <p>Réservez directement au 06 XX XX XX XX</p>
+        </div>
     </Layout>
 </template>
 

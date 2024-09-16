@@ -1,22 +1,25 @@
 <template>
-    <div class="min-h-screen mx-auto xl:max-w-4xl">
-        <div class="mx-6">
+    <div class="min-h-screen mx-auto xl:max-w-6xl">
+        <div class="mx-6 flex-grow">
             <header class="font-bold">
-                <div class="py-6 flex justify-between items-center relative">
+                <nav class="py-6 flex justify-between items-center relative">
                     <div class="flex items-center">
-                        <Link href="/" :class="isActive('/') ? 'active btn' : 'btn'">Accueil</Link>
                         <template v-if="auth.user">
-                            <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" alt="Photo de profil" class="rounded-full h-10 w-10 ml-2">
+                            <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" alt="Photo de profil" class="rounded-full h-10 w-10 ml-2" draggable="false">
                             <div class="font-kalnia text-lg px-2 w-[248px] overflow-x-auto whitespace-nowrap select-none">
                                 {{ capitalizeName(auth.user.name) }}
                             </div>
                         </template>
                     </div>
-
-                    <nav class="absolute left-1/2 transform -translate-x-1/2 space-x-2 flex items-center">
+                    
+                    <div class="absolute left-1/2 transform -translate-x-1/2 space-x-2 flex items-center">
+                        <Link href="/" :class="isActive('/') ? 'active btn' : 'btn'">Accueil</Link>
                         <Link href="/book" :class="isActive('/book') ? 'active btn' : 'btn'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active btn' : 'btn'">Gallerie</Link>
-                    </nav>
+                        <span v-if="auth.user && auth.user.role === 'admin'">
+                            <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'">Utilisateurs</Link>
+                        </span>
+                    </div>
 
                     <div class="flex items-center">
                         <template v-if="!auth.user">
@@ -24,19 +27,18 @@
                             <Link href="/login" :class="isActive('/login') ? 'active btn ml-2' : 'btn ml-2'">Connection</Link>
                         </template>
                         <template v-else>
-                            <Link href="/profile" :class="isActive('/list') ? 'active btn' : 'btn'">Profile</Link>
-                            <Link v-if="auth.user.role === 'admin'" href="/list" :class="isActive('/list') ? 'active btn' : 'btn'">Profils</Link>
-                            <button @click="logout" class="btn ml-2">Déconnection</button>
+                            <Link href="/profile" :class="isActive('/profile') ? 'active btn' : 'btn'">Profile</Link>
+                            <button @click="logout" class="btn !bg-pink-200 ml-2">Déconnection</button>
                         </template>
                     </div>
 
                     <div class="absolute top-0 right-0 !bg-transparent">
                         <ThemeSwitcher />
                     </div>
-                </div>
+                </nav>
             </header>
 
-            <main>
+            <main class="mt-4">
                 <slot />
             </main>
 
@@ -97,8 +99,18 @@ const handleScroll = () => {
   }
 };
 
+const checkInitialFooterVisibility = () => {
+  const windowHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+
+  if (documentHeight <= windowHeight) {
+    showFooter.value = true;
+  }
+};
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  checkInitialFooterVisibility();
 });
 
 onUnmounted(() => {
