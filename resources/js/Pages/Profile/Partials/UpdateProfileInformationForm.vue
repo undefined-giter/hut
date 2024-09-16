@@ -122,7 +122,7 @@ const submit = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton :disabled="form.processing">Sauvegarder</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -130,7 +130,7 @@ const submit = () => {
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé.</p>
                 </Transition>
             </div>
         </form>

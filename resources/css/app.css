@@ -53,11 +53,11 @@ h1{
 
 
 .active, th, tr:hover{
-    @apply bg-amber-500 dark:bg-amber-600 !important;
+    @apply bg-orange-500 dark:bg-orange-600 !important;
 }
 
 .btn {
-    background-color: #007bff;
+    background-color: #004acb;
     color: #ccc;
     padding: 10px 20px;
     border-radius: 5px;
@@ -121,5 +121,5 @@ body.dark .btn:hover {
       margin-right: auto;
       text-align: center;
       width: 100%;
-      @apply text-amber-600;
+      @apply text-orange-600;
   }

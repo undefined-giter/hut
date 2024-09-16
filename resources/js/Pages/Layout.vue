@@ -28,7 +28,7 @@
                         </template>
                         <template v-else>
                             <Link href="/profile" :class="isActive('/profile') ? 'active btn' : 'btn'">Profile</Link>
-                            <button @click="logout" class="btn !bg-pink-200 ml-2">Déconnection</button>
+                            <button @click="logout" class="btn !bg-pink-950 ml-2">Déconnection</button>
                         </template>
                     </div>
 
