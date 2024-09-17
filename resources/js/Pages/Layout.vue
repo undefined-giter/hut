@@ -5,20 +5,17 @@
 
                 <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
                     <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.success" :key="index" class="bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                            {{ message }}
+                        <div v-for="(message, index) in $page.props.flash.success" :key="index" class="flash-success bg-green-500 text-white px-4 py-2 rounded shadow-lg text-xl mt-6 select-none" v-html="message.replace(/\n/g, '<br>')">
                         </div>
                     </transition-group>
-                </div>
+                    </div>
 
-                <div v-if="$page.props.flash && $page.props.flash.error" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
+                    <div v-if="$page.props.flash && $page.props.flash.error" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
                     <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="bg-red-500 text-white px-4 py-2 rounded shadow-lg">
-                            {{ message }}
+                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-500 text-white px-4 py-2 rounded shadow-lg text-xl mt-6 select-none" v-html="message.replace(/\n/g, '<br>')">
                         </div>
                     </transition-group>
                 </div>
-
                 <nav class="py-6 flex justify-between items-center relative">
                     <div class="flex items-center">
                         <template v-if="auth.user">
@@ -137,22 +134,32 @@ const checkInitialFooterVisibility = () => {
 };
 
 onMounted(() => {
-    window.addEventListener('scroll', handleScroll);
-    checkInitialFooterVisibility();
+  window.addEventListener('scroll', handleScroll);
+  checkInitialFooterVisibility();
 
-    const pageProps = usePage().props;
+  const pageProps = usePage().props;
 
-    if (pageProps.flash && pageProps.flash.success) {
-        setTimeout(() => {
-            pageProps.flash.success = null;
-        }, 5000);
-    }
+  if (pageProps.flash && pageProps.flash.success) {
+    setTimeout(() => {
+      document.querySelectorAll('.flash-success').forEach(el => {
+        el.classList.add('fade-out');
+      });
+      setTimeout(() => {
+        pageProps.flash.success = null;
+      }, 2000);  // Delay to allow fade out
+    }, 6000);
+  }
 
-    if (pageProps.flash && pageProps.flash.error) {
-        setTimeout(() => {
-            pageProps.flash.error = null;
-        }, 5000);
-    }
+  if (pageProps.flash && pageProps.flash.error) {
+    setTimeout(() => {
+      document.querySelectorAll('.flash-error').forEach(el => {
+        el.classList.add('fade-out');
+      });
+      setTimeout(() => {
+        pageProps.flash.error = null;
+      }, 2000);  // Delay to allow fade out
+    }, 6000);
+  }
 });
 
 onUnmounted(() => {
@@ -160,12 +167,12 @@ onUnmounted(() => {
 });
 </script>
 
-
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease;
+.flash-success, .flash-error {
+  transition: opacity 2s ease-in-out;
 }
-.fade-enter, .fade-leave-to {
+
+.fade-out {
   opacity: 0;
 }
 </style>
