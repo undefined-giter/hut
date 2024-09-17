@@ -21,6 +21,6 @@ class Admin
             return $next($request);
         }
 
-        return redirect('/login')->with('error', 'Access denied.');
+        return redirect('/login')->with('error', ['Accès refusé.']);
     }
 }

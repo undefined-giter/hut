@@ -14,8 +14,7 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 
 Route::middleware('auth')->group(function () {
     Route::get('/book', [ReservationController::class, 'index'])->name('book');
-    Route::get('/reservations', [ReservationController::class, 'getReservations']);
-    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::post('/book', [ReservationController::class, 'store']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

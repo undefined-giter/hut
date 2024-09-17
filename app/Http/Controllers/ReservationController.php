@@ -10,16 +10,12 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        $reservations = Reservation::all();
+        $today = now()->startOfDay();
+        $reservations = Reservation::where('start_date', '>=', $today)->get();
 
         return Inertia::render('Book/index', [
             'reservations' => $reservations
         ]);
-    }
-
-    public function getReservations()
-    {
-        return response()->json(Reservation::all());
     }
 
     public function store(Request $request)
@@ -29,7 +25,7 @@ class ReservationController extends Controller
             'end_date' => 'required|date|after:start_date',
             'nights' => 'required|integer|min:1',
         ]);
-
+    
         Reservation::create([
             'user_id' => auth()->id(),
             'start_date' => $request->start_date,
@@ -37,7 +33,7 @@ class ReservationController extends Controller
             'nights' => $request->nights,
             'status' => 'pending',
         ]);
-
-        return response()->json(['message' => 'Réservation effectuée avec succès']);
+    
+        return redirect()->route('book')->with('success', ["Demande de réservation effectuée avec succès, à très bientôt !"]);
     }
 }

@@ -30,6 +30,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.list')->with('success', 'Utilisateur supprimé avec succès');
+        return redirect()->route('admin.list')->with('success', ['Utilisateur supprimé avec succès']);
     }
 }

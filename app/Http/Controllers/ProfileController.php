@@ -46,7 +46,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile.edit')->with('success', 'Profil modifié 👍');
+        return redirect()->route('profile.edit')->with('success', ['Profil modifié 👍']);
     }
 
     public function editPicture()
@@ -81,7 +81,7 @@ class ProfileController extends Controller
     
         $user->save();
 
-        return redirect()->route('profile.edit')->with('success', 'Photo mise à jour 👍');
+        return redirect()->route('profile.edit')->with('success', ['Photo mise à jour 👍']);
     }
 
     /**
@@ -92,6 +92,6 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.list')->with('success', 'Utilisateur supprimé avec succès');
+        return redirect()->route('admin.list')->with('success', ['Utilisateur supprimé avec succès']);
     }
 }
