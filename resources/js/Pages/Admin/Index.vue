@@ -1,7 +1,7 @@
 <template>
     <Head title="Liste Profils | Admin" />
     <Layout>
-        <h1 class="text-2xl font-semibold mb-6 text-center">Liste des profils</h1>
+        <h1>Liste des profils</h1>
         
         <table class="w-3xl border border-gray-200">
             <thead class="select-none">

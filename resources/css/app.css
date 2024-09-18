@@ -34,27 +34,67 @@
     font-style: normal;
 }
 
-body {
-    @apply bg-htmlLightBg dark:bg-htmlDarkBg;
-}
+body {@apply bg-htmlLightBg dark:bg-htmlDarkBg;}
 
-table{
-    @apply bg-light dark:bg-dark;
-}
+table{@apply bg-light dark:bg-dark;}
 
-h1, p, table td {
-    @apply text-blue-400 dark:text-blue-200;
-}
+h1, p, li, table td {@apply text-blue-400 dark:text-blue-200;}
 
-h1{
+h1 {
+    font-family: 'Kalnia Glaze', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
     text-decoration: underline;
-    user-select: none;
+    text-decoration-color: #68005f;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
 }
 
-
-.active, th, tr:hover{
-    @apply bg-orange-500 dark:bg-orange-600 !important;
+h2{
+    font-family: 'Kalnia Glaze', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-color: #68005f;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 1px;
 }
+
+h3{
+    font-family: 'oleoScript', sans-serif;
+    color: #ccc;
+}
+
+p, li{
+    font-family: 'mirza', 'sans-serif'; 
+    font-size: 1.05em;
+}
+
+.open-menu {
+    width: 130px;
+    position: absolute;
+    right: 0;
+    top: 56px;
+    background-color: #25282a;
+    color: #ccc;
+    text-align: right;
+    z-index: 100;
+    border-radius: 2em;
+    overflow: hidden;
+}
+
+.open-menu a:hover {
+    background-color: rgb(203, 108, 0) !important;
+    color: rgb(0, 21, 159) !important;
+}
+
+a:hover {z-index: 50;}
+
+.active, th, tr:hover{@apply bg-orange-500 dark:bg-orange-600 !important;}
 
 .btn {
     background-color: #004acb;
@@ -62,64 +102,107 @@ h1{
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
-    user-select: none;
     cursor: pointer;
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    font-family: mirza;
 }
 
-.btn:hover{
-    color: #0cff00;
-}
+.btn:hover{color: #0cff00;}
 
 .btn:hover:not(:disabled) {
     background-color: #0056b3;
     box-shadow: 0 3px 5px -1px rgba(255, 193, 7, 0.5);
 }
 
-body.dark .btn {
-    background-color: #4a5568;
-}
+body.dark .btn {background-color: #4a5568;}
 
-body.dark .btn:hover {
-    background-color: #2d3748;
+body.dark .btn:hover {background-color: #2d3748;}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #e0f900 #c98600; /* Couleur de la barre et de la piste */
+    user-select: none;
 }
 
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
-::-webkit-scrollbar-track {
-    background: #b37a00; /* Couleur de la piste (fond) */
-}
+::-webkit-scrollbar-track {background: #c98600; /* Couleur de la piste (fond) */}
 ::-webkit-scrollbar-thumb {
-    background-color: #ca8a04; /* Couleur de la barre */
-    border-radius: 10px; /* Bordures arrondies */
-    border: 2px solid #eaa000; /* Optionnel : bordure autour de la barre */
+    background-color: #c98600; /* Couleur de la barre */
+    border: 2px solid #c98600; /* Optionnel : bordure autour de la barre */
 }
-::-webkit-scrollbar-thumb:hover {
-    background: #ca8a04; /* Couleur de la barre au hover */
+::-webkit-scrollbar-thumb:hover {background: #c98600; /* Couleur de la barre au hover */}
+input[type="search"] {
+    -webkit-appearance: none; /* Enlève l'apparence par défaut sur Chrome */
+    border-radius: 20px; /* Arrondir la barre de recherche */
+    padding: 10px; /* Ajouter du padding pour un meilleur rendu */
+    border: 1px solid #c98600; /* Optionnel : bordure personnalisée */
+    outline: none; /* Enlève l'outline par défaut */
+    width: 100%; /* Pour remplir l'espace disponible (optionnel) */
+    box-sizing: border-box; /* Assure que le padding n'affecte pas la largeur totale */
 }
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #888 #ca8a04; /* Couleur de la barre et de la piste */
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none; /* Supprimer le bouton d'annulation par défaut sur Chrome */
+}
+input[type="search"]:focus {
+    border-color: #e0f900; /* Couleur de la bordure au focus */
+    box-shadow: 0 0 5px #e0f900; /* Optionnel : ajouter un effet de focus */
 }
 
 /* footer */
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s ease;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
-  .footer {
-      background: transparent;
-      position: fixed;
-      bottom: 12px;
-      left: 0;
-      right: 0;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-      width: 100%;
-      @apply text-orange-600;
-  }
+.fade-enter-active, .fade-leave-active {transition: opacity 0.5s ease;}
+.fade-enter, .fade-leave-to {opacity: 0;}
+.footer {
+    background: transparent;
+    position: fixed;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 100%;
+    @apply text-orange-600;
+}
+
+
+@font-face {
+    font-family: 'Danfo';
+    src: url('/fonts/Danfo/static/Danfo-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+font-family: 'Kalnia Glaze';
+src: url('/fonts/Kalnia_Glaze/static/KalniaGlaze-Regular.ttf') format('truetype');
+font-weight: normal;
+font-style: normal;
+}
+@font-face {
+    font-family: 'Kalnia Glaze';
+    src: url('/fonts/Kalnia_Glaze/static/KalniaGlaze-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Mirza';
+    src: url('/fonts/Mirza/Mirza-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Oleo Script';
+    src: url('/fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.danfo {font-family: 'Danfo', sans-serif;}
+
+.kalniaGlaze {font-family: 'Kalnia Glaze', sans-serif;}
+
+.mirza {font-family: 'Mirza', sans-serif;}
+
+.oleoScript {font-family: 'Oleo Script', sans-serif;}

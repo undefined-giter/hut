@@ -50,7 +50,7 @@ const submit = () => {
 </script>
 
 <template>
-    <section>
+    <section class="mx-auto">
         <header>
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Informations du profil</h2>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -117,22 +117,24 @@ const submit = () => {
                 </div>
             </div>
             
-            <div class="mt-6">
-                <Link :href="route('profile.edit-picture')" class="btn">Modifier la photo de profil</Link>
+            <div>
+                <div class="mt-6 flex justify-between">
+                    <Link :href="route('profile.edit-picture')" class="btn">Modifier la photo de profil</Link>
+                    <PrimaryButton :disabled="form.processing" class="ml-auto">Sauvegarder</PrimaryButton>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <Transition
+                        enter-active-class="transition ease-in-out"
+                        enter-from-class="opacity-0"
+                        leave-active-class="transition ease-in-out"
+                        leave-to-class="opacity-0"
+                    >
+                        <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé.</p>
+                    </Transition>
+                </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Sauvegarder</PrimaryButton>
-
-                <Transition
-                    enter-active-class="transition ease-in-out"
-                    enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
-                    leave-to-class="opacity-0"
-                >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé.</p>
-                </Transition>
-            </div>
         </form>
     </section>
 </template>

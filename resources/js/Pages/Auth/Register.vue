@@ -73,7 +73,7 @@ const submit = () => {
 <template>
     <Head title="S'enregistrer | Cabane" />
     <Layout title="S'enregistrer">
-        <h1 class="text-2xl font-semibold mb-6 text-center">S'enregistrer</h1>
+        <h1>S'enregistrer</h1>
 
         <form @submit.prevent="submit" class="mx-4">
             <div>

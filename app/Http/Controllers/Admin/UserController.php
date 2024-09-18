@@ -19,11 +19,13 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('reservations')->findOrFail($id);
+    
         return Inertia::render('Admin/Details', [
             'user' => $user,
+            'reservations' => $user->reservations,
         ]);
-    }
+    }    
 
     public function destroy($id)
     {

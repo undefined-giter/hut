@@ -2,7 +2,7 @@
     <Head title="Gallerie | Cabane" />
 
     <Layout>
-        <h1 class="text-2xl font-semibold mb-6 text-center">Votre voyage</h1>
+        <h1>Votre voyage</h1>
     
         <div class="gallery grid grid-cols-2 gap-4">
             <div v-for="(image, index) in displayedImages" :key="index" class="image-item">

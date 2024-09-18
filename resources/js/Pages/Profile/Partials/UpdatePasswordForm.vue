@@ -34,7 +34,7 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <section>
+    <section class="mx-auto">
         <header>
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Modifier Votre Mot de Passe</h2>
 
@@ -89,7 +89,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Sauvegarder</PrimaryButton>
+                <PrimaryButton :disabled="form.processing" class="ml-auto">Sauvegarder</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"

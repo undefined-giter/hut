@@ -1,18 +1,18 @@
 <template>
-    <div class="min-h-screen mx-auto xl:max-w-6xl">
+    <div class="min-h-screen mx-auto xl:max-w-6xl pb-8">
         <div class="mx-6 flex-grow">
             <header class="font-bold">
 
                 <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
                     <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.success" :key="index" class="flash-success bg-green-500 text-white px-4 py-2 rounded shadow-lg text-xl mt-6 select-none" v-html="message.replace(/\n/g, '<br>')">
+                        <div v-for="(message, index) in $page.props.flash.success" :key="index" class="flash-success bg-green-500 text-white px-4 py-2 rounded shadow-lg text-xl mt-20 select-none" v-html="message.replace(/\n/g, '<br>')">
                         </div>
                     </transition-group>
                     </div>
 
                     <div v-if="$page.props.flash && $page.props.flash.error" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
                     <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-500 text-white px-4 py-2 rounded shadow-lg text-xl mt-6 select-none" v-html="message.replace(/\n/g, '<br>')">
+                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-600 text-white px-4 py-2 rounded shadow-lg text-xl mt-20 select-none" v-html="message.replace(/\n/g, '<br>')">
                         </div>
                     </transition-group>
                 </div>
@@ -31,9 +31,8 @@
                         <Link href="/" :class="isActive('/') ? 'active btn' : 'btn'">Accueil</Link>
                         <Link href="/book" :class="isActive('/book') ? 'active btn' : 'btn'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active btn' : 'btn'">Galerie</Link>
-                        <span v-if="auth.user && auth.user.role === 'admin'">
-                            <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'">Utilisateurs</Link>
-                        </span>
+                            
+                        <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
                     </div>
 
                     <button @click="menuOpen = !menuOpen" class="md:hidden text-gray-700 focus:outline-none">
@@ -43,7 +42,7 @@
                         </svg>
                     </button>
 
-                    <div v-if="menuOpen" class="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg z-50" style="background: #25282a; color:#ccc">
+                    <div v-if="menuOpen" class="open-menu md:hidden">
                         <Link href="/" :class="isActive('/') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Accueil</Link>
                         <Link href="/book" :class="isActive('/book') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Galerie</Link>
@@ -56,7 +55,7 @@
                         </template>
                         <template v-else>
                             <Link href="/profile" :class="isActive('/profile') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Profil</Link>
-                            <button @click="logout" class="block px-4 py-2 text-left !bg-pink-950 text-white w-full hover:text-orange-200">Déconnexion</button>
+                            <button @click="logout" class="block px-4 py-2 text-left !bg-pink-950 w-full hover:text-orange-600 text-right">Déconnexion</button>
                         </template>
                     </div>
 
@@ -67,7 +66,7 @@
                         </template>
                         <template v-else>
                             <Link href="/profile" :class="isActive('/profile') ? 'active btn' : 'btn'">Profil</Link>
-                            <button @click="logout" class="btn !bg-pink-950 ml-2">Déconnexion</button>
+                            <Link href="/logout" method="post" as="button" class="btn !bg-pink-950 ml-2 hover:text-orange-600">Déconnexion</Link>
                         </template>
                     </div>
 
@@ -83,7 +82,7 @@
             </main>
 
             <transition name="fade">
-                <footer v-if="showFooter" class="footer fixed bottom-0 left-0 w-full text-center bg-gray-800 text-white py-4">
+                <footer v-if="showFooter" class="footer fixed bottom-0 left-0 w-full text-center bg-gray-800 text-white">
                     &copy; {{ new Date().getFullYear() }} - Votre moment de tranquilité
                 </footer>
             </transition>

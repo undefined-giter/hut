@@ -32,7 +32,7 @@ const submit = () => {
 <template>
     <Head title="Se Connecter | Cabane" />
     <Layout>
-        <h1 class="text-2xl font-semibold mb-6 text-center">Se connecter</h1>
+        <h1>Se connecter</h1>
 
         <form @submit.prevent="submit">
             <div>

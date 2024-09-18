@@ -8,41 +8,41 @@
 
       <div class="text-center w-[500px] h-[350px] mx-auto">
         <div class="w-[500px] h-[350px] mx-auto">
-            <img :src="form.preview" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
+          <img :src="form.preview" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
         </div>
 
-        <div class="flex justify-between items-center mt-2 mx-3">
-            <div class="text-left -mt-6">
-                <label for="delete_picture" class="inline-flex items-center">
-                    <input
-                      id="delete_picture"
-                      type="checkbox"
-                      class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                      v-model="form.delete_picture"
-                    />
-                    <span class="ml-2 text-sm text-gray-600">Supprimer la photo actuelle</span>
-                </label>
-            </div>
+        <div class="flex justify-between items-center mt-2 mx-2">
+          <div class="text-left -mt-6">
+            <label for="delete_picture" class="inline-flex items-center">
+              <input
+                id="delete_picture"
+                type="checkbox"
+                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                v-model="form.delete_picture"
+              />
+              <span class="ml-2 text-sm text-gray-600">Supprimer la photo actuelle</span>
+            </label>
+          </div>
 
-            <div class="relative overflow-hidden inline-block">
-                <button class="bg-blue-500 text-white py-2 px-4 rounded-lg cursor-pointer">
-                    Choisir un fichier
-                </button>
-                <input 
-                    type="file" 
-                    class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" 
-                    @change="changePicture"
-                />
-            </div>
+          <div class="relative overflow-hidden inline-block">
+            <button class="bg-blue-500 text-white py-2 px-4 rounded-lg cursor-pointer">
+              Choisir un fichier
+            </button>
+            <input
+              type="file" 
+              class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" 
+              @change="changePicture"
+            />
+          </div>
         </div>
 
         <InputError class="mt-2" :message="form.errors.picture" />
 
-        <div class="mt-4 mx-3 text-right">
-            <PrimaryButton :disabled="form.processing" class="!bg-blue-600 !text-gray-200">Enregistrer</PrimaryButton>
+        <div class="mt-4 mx-2 text-right">
+          <PrimaryButton :disabled="form.processing" class="!bg-blue-600 !text-gray-200">Enregistrer</PrimaryButton>
         </div>
       </div>
-
+      
     </form>
   </Layout>
 </template>
