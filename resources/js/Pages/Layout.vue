@@ -1,29 +1,31 @@
 <template>
     <div class="min-h-screen mx-auto xl:max-w-6xl pb-8">
-        <div class="mx-6 flex-grow">
+        <div class="mx-20 flex-grow">
             <header class="font-bold">
 
-                <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
-                    <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.success" :key="index" class="flash-success bg-green-500 text-white px-4 py-2 rounded shadow-lg text-xl mt-20 select-none" v-html="message.replace(/\n/g, '<br>')">
-                        </div>
-                    </transition-group>
-                    </div>
+                <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
+    <transition-group name="fade" tag="div">
+        <div v-for="(message, index) in $page.props.flash.success" :key="index" class="flash-success bg-green-500 text-white px-4 py-2 rounded shadow-lg text-xl select-none" v-html="message.replace(/\n/g, '<br>')"></div>
+    </transition-group>
+</div>
 
-                    <div v-if="$page.props.flash && $page.props.flash.error" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-50">
-                    <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-600 text-white px-4 py-2 rounded shadow-lg text-xl mt-20 select-none" v-html="message.replace(/\n/g, '<br>')">
-                        </div>
-                    </transition-group>
-                </div>
+<div v-if="$page.props.flash && $page.props.flash.error" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
+    <transition-group name="fade" tag="div">
+        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-600 text-white px-4 py-2 rounded shadow-lg text-xl select-none" v-html="message.replace(/\n/g, '<br>')"></div>
+    </transition-group>
+</div>
+
                 <nav class="py-6 flex justify-between items-center relative">
-                    <div class="flex items-center">
+                    <div class="flex items-center w-[300px]">
                         <template v-if="auth.user">
-                            <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
-                                alt="Photo de profil" class="rounded-full h-10 w-10 ml-2" draggable="false">
-                            <div class="font-kalnia text-lg px-2 w-[248px] overflow-x-auto whitespace-nowrap select-none">
-                                {{ capitalizeName(auth.user.name) }}
-                            </div>
+                            <Link href="/profile" 
+                                class="transition-transform duration-200 hover:scale-105 hover:shadow-lg flex items-center">
+                                <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
+                                    alt="Photo de profil" class="rounded-full h-10 w-10 ml-2" draggable="false">
+                                    <p :class="isActive('/profile') ? 'custom-underline' : ''" class="font-kalnia text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
+                                        {{ capitalizeName(auth.user.name) }}
+                                    </p>
+                            </Link>
                         </template>
                     </div>
 
@@ -65,7 +67,6 @@
                             <Link href="/login" :class="isActive('/login') ? 'active btn ml-2' : 'btn ml-2'">Connexion</Link>
                         </template>
                         <template v-else>
-                            <Link href="/profile" :class="isActive('/profile') ? 'active btn' : 'btn'">Profil</Link>
                             <Link href="/logout" method="post" as="button" class="btn !bg-pink-950 ml-2 hover:text-orange-600">Déconnexion</Link>
                         </template>
                     </div>
@@ -74,15 +75,14 @@
                         <ThemeSwitcher />
                     </div>
                 </nav>
-
             </header>
 
-            <main class="mt-4">
+            <main class="mt-6">
                 <slot />
             </main>
 
             <transition name="fade">
-                <footer v-if="showFooter" class="footer fixed bottom-0 left-0 w-full text-center bg-gray-800 text-white">
+                <footer v-if="showFooter">
                     &copy; {{ new Date().getFullYear() }} - Votre moment de tranquilité
                 </footer>
             </transition>
@@ -120,7 +120,7 @@ const handleScroll = () => {
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.scrollY || window.pageYOffset;
 
-    showFooter.value = windowHeight + scrollTop >= documentHeight - 100;
+    showFooter.value = windowHeight + scrollTop >= documentHeight - 80;
 };
 
 const checkInitialFooterVisibility = () => {
@@ -145,7 +145,7 @@ onMounted(() => {
       });
       setTimeout(() => {
         pageProps.flash.success = null;
-      }, 2000);  // Delay to allow fade out
+      }, 1000);
     }, 6000);
   }
 
@@ -156,7 +156,7 @@ onMounted(() => {
       });
       setTimeout(() => {
         pageProps.flash.error = null;
-      }, 2000);  // Delay to allow fade out
+      }, 1000);
     }, 6000);
   }
 });
@@ -168,10 +168,15 @@ onUnmounted(() => {
 
 <style>
 .flash-success, .flash-error {
-  transition: opacity 2s ease-in-out;
+    transition: opacity 3s ease-in-out;
+    pointer-events: none;
 }
 
-.fade-out {
-  opacity: 0;
+.fade-out {opacity: 0;}
+
+.custom-underline {
+    text-decoration: underline;
+    text-decoration-color: #800064;
+    text-underline-offset: 3px;
 }
 </style>

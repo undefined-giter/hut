@@ -75,7 +75,7 @@ const submit = () => {
     <Layout title="S'enregistrer">
         <h1>S'enregistrer</h1>
 
-        <form @submit.prevent="submit" class="mx-4">
+        <form @submit.prevent="submit">
             <div>
                 <InputLabel for="name" value="Nom Complet" />
 
@@ -155,34 +155,37 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="picture" value="Photo de profil" />
-                
-                <div class="flex items-center space-x-4">
-                    <img :src="form.preview ?? 'storage/profiles/default_user.png'" alt="Pré-visuelle de votre photo" class="object-cover w-16 h-16 rounded-xl">
-    
-                    <input
-                        id="picture"
-                        type="file"
-                        class="mt-1 block w-full"
-                        @input="changePicture"
-                    />
+            <div class="flex items-end justify-between">
+                <div>
+                    <br>
+                    <InputLabel for="picture" value="Photo de profil" class="mb-2" />
+                    
+                    <div class="flex items-center space-x-4">
+                        <img :src="form.preview ?? 'storage/profiles/default_user.png'" alt="Pré-visuelle de votre photo" class="object-cover w-16 h-16 rounded-xl">
+        
+                        <input
+                            id="picture"
+                            type="file"
+                            class="mt-8 block w-full"
+                            @input="changePicture"
+                        />
+                    </div>
+
+                    <InputError :message="form.errors.picture" />
                 </div>
 
-                <InputError class="mt-2" :message="form.errors.picture" />
-            </div>
+                <div>
+                    <Link
+                        :href="route('login')"
+                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                    >
+                        Déjà enregistré ?
+                    </Link>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                >
-                    Déjà enregistré ?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    S'enregistrer
-                </PrimaryButton>
+                    <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                        S'enregistrer
+                    </PrimaryButton>
+                </div>
             </div>
         </form>
     </Layout>

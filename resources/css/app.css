@@ -111,7 +111,7 @@ a:hover {z-index: 50;}
 
 .btn:hover:not(:disabled) {
     background-color: #0056b3;
-    box-shadow: 0 3px 5px -1px rgba(255, 193, 7, 0.5);
+    box-shadow: 0 2px 4px -1px rgba(244, 155, 0, 0.756);
 }
 
 body.dark .btn {background-color: #4a5568;}
@@ -122,6 +122,8 @@ body.dark .btn:hover {background-color: #2d3748;}
     scrollbar-width: thin;
     scrollbar-color: #e0f900 #c98600; /* Couleur de la barre et de la piste */
     user-select: none;
+    -webkit-user-drag: none; /* Désactiver le drag pour Safari/Chrome */
+    user-drag: none;
 }
 
 ::-webkit-scrollbar {
@@ -154,7 +156,8 @@ input[type="search"]:focus {
 /* footer */
 .fade-enter-active, .fade-leave-active {transition: opacity 0.5s ease;}
 .fade-enter, .fade-leave-to {opacity: 0;}
-.footer {
+
+footer {
     background: transparent;
     position: fixed;
     bottom: 12px;

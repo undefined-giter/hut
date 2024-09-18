@@ -3,68 +3,66 @@
       <Head title="Réserver | Cabane" />
       <h1>Réserver Votre Bonheur !</h1>
 
-      <div class="mx-12">
-        <vue-cal
-          locale="fr"
-          active-view="month"
-          class="vuecal--rounded-theme vuecal--blue-theme"
-          hide-view-selector
-          @cell-click="handleDateClick"
-          :disable-views="['years', 'year', 'week', 'day']"
-          :dblclick-to-navigate="false"
-          style="color:#ccc;height:300px;"
-          :min-date="today"
-        />
+      <vue-cal
+        locale="fr"
+        active-view="month"
+        class="vuecal--rounded-theme vuecal--blue-theme"
+        hide-view-selector
+        @cell-click="handleDateClick"
+        :disable-views="['years', 'year', 'week', 'day']"
+        :dblclick-to-navigate="false"
+        style="color:#ccc;height:300px;"
+        :min-date="today"
+      />
 
-        <form method="POST" action="/book">
-          <input type="hidden" name="_token" :value="csrfToken" />
-          <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
-          <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
-          <input type="hidden" name="nights" :value="numberOfNights" />
+      <form method="POST" action="/book">
+        <input type="hidden" name="_token" :value="csrfToken" />
+        <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
+        <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
+        <input type="hidden" name="nights" :value="numberOfNights" />
 
-          <div class="flex justify-between items-start mt-4">
-            <div class="min-h-[60px]">
-              <div v-if="arrivalDate && !departureDate">
-                <span v-html="`<p style='display: inline;'>Date d'arrivée sélectionnée: </p><span class='text-green-500'>${formatDate(arrivalDate)}</span>.`"></span>
-                <br>
-                <span class="text-orange-600">Veuillez sélectionner votre date de départ.</span>
-              </div>
-
-              <div v-if="!arrivalDate && !arrivalDate">
-                <p class="!text-orange-600">Sélectionnez votre date d'arrivée</p>
-              </div>
-
-              <div v-if="departureDate" class="text-green-500">
-                <span v-html="`Réservation du <span class='text-xl font-bold'>${formatDate(arrivalDate)}</span> au <span class='text-xl font-bold'>${formatDate(departureDate)}</span>.`"></span>
-                <br>
-                <p class="my-1 text-sm">Nombre de nuit{{ numberOfNights > 1 ? 's' : '' }} : <b>{{ numberOfNights }}</b></p>
-              </div>
-
-              <div v-if="dateError" class="text-red-500">
-                {{ dateError }}
-              </div>
+        <div class="flex justify-between items-start mt-4">
+          <div class="min-h-[60px]">
+            <div v-if="arrivalDate && !departureDate">
+              <span v-html="`<p style='display: inline;'>Date d'arrivée sélectionnée: </p><span class='text-green-500'>${formatDate(arrivalDate)}</span>.`"></span>
+              <br>
+              <span class="text-orange-600">Veuillez sélectionner votre date de départ.</span>
             </div>
-            <div class="flex space-x-3">
-              <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">
-                <small>Réinitialiser</small>
-              </button>
-              <button type="submit" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-400 hover:text-gray-400', 'btn']">Réserver</button>
+
+            <div v-if="!arrivalDate && !arrivalDate">
+              <p class="!text-orange-600">Sélectionnez votre date d'arrivée</p>
+            </div>
+
+            <div v-if="departureDate" class="text-green-500">
+              <span v-html="`Réservation du <span class='text-xl font-bold'>${formatDate(arrivalDate)}</span> au <span class='text-xl font-bold'>${formatDate(departureDate)}</span>.`"></span>
+              <br>
+              <p class="my-1 text-sm">Nombre de nuit{{ numberOfNights > 1 ? 's' : '' }} : <b>{{ numberOfNights }}</b></p>
+            </div>
+
+            <div v-if="dateError" class="text-red-500">
+              {{ dateError }}
             </div>
           </div>
-        </form>
-      
-        <div v-if="sortedReservations.length > 0" class="mt-2">
-          <p class="underline !text-red-600 oleoScript" style="font-size: 1.2rem;">Nuits déjà réservées :</p>
-          <div style="max-height: 350px; overflow-y: auto;">
-            <p><li v-for="(reservation, index) in sortedReservations" :key="index">
-              <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
-              <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's' : '')"></span>
-              <span v-if="auth && auth.user && auth.user.role === 'admin'">
-                - <Link :href="route('admin.details', reservation.user_id)">➡️</Link>
-              </span>
-            </li></p>
+          <div class="flex space-x-2">
+            <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">
+              <small>Réinitialiser</small>
+            </button>
+            <button type="submit" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn']">Réserver</button>
           </div>
-      </div>
+        </div>
+      </form>
+    
+      <div v-if="sortedReservations.length > 0" class="mt-2">
+        <p class="underline !text-red-600 oleoScript" style="font-size: 1.2rem;">Nuits déjà réservées :</p>
+        <div style="max-height: 350px; overflow-y: auto;">
+          <p><li v-for="(reservation, index) in sortedReservations" :key="index">
+            <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
+            <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's' : '')"></span>
+            <span v-if="auth && auth.user && auth.user.role === 'admin'">
+              - <Link :href="route('admin.details', reservation.user_id)">➡️</Link>
+            </span>
+          </li></p>
+        </div>
     </div>
   </Layout>
 </template>

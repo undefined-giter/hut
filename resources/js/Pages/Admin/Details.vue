@@ -1,8 +1,8 @@
 <template>
-    <Head :title="`Détails ${user.name} | Admin`" />
+    <Head :title="`Détails de ${user.name} | Admin`" />
     <Layout>
         <div class="bg-[#181a1b] shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
-            <h1>Détails de {{ user.name }}</h1>
+            <h1>À propos de {{ user.name }}</h1>
             
             <h2>Profile</h2>
             <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">

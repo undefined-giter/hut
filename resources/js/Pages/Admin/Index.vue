@@ -1,35 +1,35 @@
 <template>
-    <Head title="Liste Profils | Admin" />
+    <Head title="Liste des Profils | Admin" />
     <Layout>
-        <h1>Liste des profils</h1>
+        <h1>Liste des Profils</h1>
         
-        <table class="w-3xl border border-gray-200">
-            <thead class="select-none">
+        <table>
+            <thead class="border-x border-[#EA580C]">
                 <tr>
-                    <th class="px-4 py-2 border">Photo</th>
-                    <th class="px-4 py-2 border">Nom</th>
-                    <th class="px-4 py-2 border">Email</th>
-                    <th class="px-4 py-2 border text-center" style="width: 1%;">Actions</th>
+                    <th class="py-2">Photo</th>
+                    <th class="text-left">Nom</th>
+                    <th class="text-left">Email</th>
+                    <th style="width: 1%;">Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr v-for="user in users.data" :key="user.id">                    
-                    <td class="flex justify-center items-center h-full">
-                        <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="rounded-full h-8 w-8">
+            <tbody class="border-x border-[#EA580C]">
+                <tr v-for="user in users.data" :key="user.id">
+                    <td class="px-4 py-1 border-b border-[#EA580C] table-cell text-center w-[100px]">
+                        <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
-                    <td class="px-4 py-2 border" draggable="false">
-                        <div class="w-[250px] overflow-x-auto whitespace-nowrap custom-scrollbar">
+                    <td class="border-b border-[#EA580C] max-w-[150px]" draggable="false">
+                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
                             {{ user.name }}
                         </div>
                     </td>
 
-                    <td class="px-4 py-2 border" draggable="false">
-                        <div class="w-[250px] overflow-x-auto whitespace-nowrap custom-scrollbar">
+                    <td class="border-b max-w-[150px] border-[#EA580C]" draggable="false">
+                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
                             {{ user.email }}
                         </div>
                     </td>
-                    
-                    <td class="px-2 py-2 border text-center" draggable="false">
+
+                    <td class="px-2 py-2 border-b text-center border-[#EA580C] w-[80px]" draggable="false">
                         <div class="flex justify-center">
                             <button 
                                 @click="goTo(`/user/${user.id}`)" 
@@ -42,7 +42,7 @@
             </tbody>
         </table>
 
-        <div class="mt-6 flex justify-between">
+        <div class="mt-1 flex justify-between">
             <button
                 class="py-2 disabled:opacity-50 btn"
                 :disabled="!users.prev_page_url"
