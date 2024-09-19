@@ -96,15 +96,12 @@ const props = defineProps({
 });
 
 const goBack = () => {
-    Inertia.get('/list');
+    window.history.back();
 };
-
-console.log(props.reservations);
-
 
 const deleteUser = () => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-        Inertia.delete(route('admin.delete', props.user.id));
+        Inertia.delete(route('user.delete', props.user.id));
     }
 };
 

@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
 
 const confirmingUserDeletion = ref(false);
@@ -22,7 +22,7 @@ const confirmUserDeletion = () => {
 };
 
 const deleteUser = () => {
-    form.delete(route('profile.destroy'), {
+    form.delete(route('user.delete', { id: usePage().props.auth.user.id }), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
         onError: () => passwordInput.value.focus(),
@@ -40,10 +40,10 @@ const closeModal = () => {
 <template>
     <section class="space-y-6 mx-auto">
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Supprimer Votre Compte</h2>
+            <h2 class="text-lg">Supprimer Votre Compte</h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-               Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement. Avant de supprimer votre compte, veuillez télécharger vos données.
+               Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.<br>Avant de supprimer votre compte, veuillez télécharger vos données.
             </p>
         </header>
 
@@ -51,12 +51,12 @@ const closeModal = () => {
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                <h2 class="text-lg">
                     Etes-vous sûr de vouloir supprimer votre compte ?
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement. Avant de supprimer votre compte, veuillez télécharger vos données.
+                    Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.<br>Avant de supprimer votre compte, veuillez télécharger vos données.
                 </p>
 
                 <div class="mt-6">

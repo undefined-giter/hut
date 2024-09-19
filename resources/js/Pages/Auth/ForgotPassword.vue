@@ -12,8 +12,11 @@ defineProps({
     },
 });
 
+const queryParams = new URLSearchParams(window.location.search);
+const emailFromUrl = queryParams.get('email') || '';
+
 const form = useForm({
-    email: '',
+    email: emailFromUrl,
 });
 
 const submit = () => {

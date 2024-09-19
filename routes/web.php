@@ -20,14 +20,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/edit-picture', [ProfileController::class, 'editPicture'])->name('profile.edit-picture');
     Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update-picture');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    Route::delete('/book/{id}', [ReservationController::class, 'destroy'])->name('reservation.delete');
+    Route::delete('/profile/{id}', [ProfileController::class, 'destroy'])->name('user.delete');
 });
 
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::get('/list', [UserController::class, 'index'])->name('list');
     Route::get('/user/{id}', [UserController::class, 'show'])->name('details');
-    
-    Route::delete('/user/{id}', [ProfileController::class, 'destroy'])->name('delete');
 });
 
 require __DIR__.'/auth.php';
+// ajouter reservation effectuées en auth profil et leur suppression each
+// delete user doit supprimer ses reservations. Cascade : Prévenir annulation réservation pour l'utilisateur qui souhaite supprimer son compte

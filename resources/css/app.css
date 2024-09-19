@@ -120,7 +120,7 @@ body.dark .btn:hover {background-color: #2d3748;}
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: #e0f900 #c98600; /* Couleur de la barre et de la piste */
+    scrollbar-color: #e0f900 #b07501; /* Couleur de la barre et de la piste */
     user-select: none;
     -webkit-user-drag: none; /* Désactiver le drag pour Safari/Chrome */
     user-drag: none;
@@ -130,12 +130,12 @@ body.dark .btn:hover {background-color: #2d3748;}
     width: 8px;
     height: 8px;
 }
-::-webkit-scrollbar-track {background: #c98600; /* Couleur de la piste (fond) */}
+::-webkit-scrollbar-track {background: #b07501; /* Couleur de la piste (fond) */}
 ::-webkit-scrollbar-thumb {
-    background-color: #c98600; /* Couleur de la barre */
-    border: 2px solid #c98600; /* Optionnel : bordure autour de la barre */
+    background-color: #e0f900; /* Couleur de la barre */
+    border: 2px solid #b07501; /* Optionnel : bordure autour de la barre */
 }
-::-webkit-scrollbar-thumb:hover {background: #c98600; /* Couleur de la barre au hover */}
+::-webkit-scrollbar-thumb:hover {background: #b07501; /* Couleur de la barre au hover */}
 input[type="search"] {
     -webkit-appearance: none; /* Enlève l'apparence par défaut sur Chrome */
     border-radius: 20px; /* Arrondir la barre de recherche */

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -87,11 +88,23 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(Request $request, $id): RedirectResponse
     {
         $user = User::findOrFail($id);
+        $currentUser = auth()->user();
+    
+        if ($currentUser->role !== 'admin') {
+            if ($currentUser->id !== $user->id) {
+                return redirect()->route('profile.edit')->with('error', ['Vous n\'êtes pas autorisé à supprimer ce compte.']);
+            }
+    
+            if (!Hash::check($request->password, $currentUser->password)) {
+                return redirect()->route('profile.edit')->with('error', ['Mot de passe incorrect.']);
+            }
+        }
+    
         $user->delete();
-
-        return redirect()->route('admin.list')->with('success', ['Utilisateur supprimé avec succès']);
-    }
+    
+        return redirect()->route('admin.list')->with('success', ['Compte supprimé avec succès']);
+    }  
 }

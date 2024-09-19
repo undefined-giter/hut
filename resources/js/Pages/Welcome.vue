@@ -2,15 +2,68 @@
     <Head title="Bienvenue | Cabane" />
 
     <Layout>
-        <h1>Bienvenue</h1>
-    
-        <div class="flex justify-center text-center">
-            <p>Réservez directement au 06 XX XX XX XX</p>
+        <h1 class="text-5xl font-bold mb-6">Bienvenue</h1>
+
+        <div class="flex justify-between">
+            <div class="text-right opacity-0 hidden lg:block">
+                <p class="oleoScript"> <!--- decoy to center phone -->
+                    Ou par mail : <span class="text-lg text-teal-600 select-text mr-4">aze@gmail.com</span>
+                </p>
+            </div>
+
+            <div class="text-center">
+                <p class="oleoScript">
+                    Réservez directement au <span class="text-xl text-teal-600 select-text">06 XX XX XX XX</span>
+                </p>
+            </div>
+
+            <div class="text-right">
+                <p class="oleoScript">
+                    Ou par mail : <span class="text-lg text-teal-600 select-text mr-4">aze@gmail.com</span>
+                </p>
+            </div>
+        </div>
+        <div class="relative inset-0 h-[820px] overflow-hidden">
+            <div 
+                v-for="(image, index) in images" 
+                :key="index" 
+                class="absolute inset-0 bg-cover bg-center transition-opacity duration-[2500ms] ease-in-out rounded-2xl"
+                :style="{ backgroundImage: `url(${image})`, opacity: currentImageIndex === index ? 1 : 0 }">
+            </div>
         </div>
     </Layout>
 </template>
 
 <script setup>
-import Layout from './Layout.vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import Layout from './Layout.vue';
+
+const images = [
+    '/storage/gallery/hut_front.jpg',
+    '/storage/gallery/hut_porch.jpg',
+    '/storage/gallery/hut_side.jpg'
+];
+
+const currentImageIndex = ref(0);
+
+let intervalId;
+
+const changeImage = () => {
+    currentImageIndex.value = (currentImageIndex.value + 1) % images.length;
+};
+
+onMounted(() => {
+    intervalId = setInterval(changeImage, 6000);
+});
+
+onUnmounted(() => {
+    clearInterval(intervalId);
+});
 </script>
+
+<style scoped>
+.transition-opacity {
+    opacity: 0;
+}
+</style>

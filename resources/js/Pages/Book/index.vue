@@ -59,7 +59,12 @@
             <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
             <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's' : '')"></span>
             <span v-if="auth && auth.user && auth.user.role === 'admin'">
-              - <Link :href="route('admin.details', reservation.user_id)">➡️</Link>
+              => <form method="POST" :action="route('reservation.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
+                  <input type="hidden" name="_token" :value="csrfToken" />
+                  <input type="hidden" name="_method" value="DELETE" />
+                  <button type="submit" class="text-red-500">❌ Supprimer</button>
+              </form>
+              => <Link :href="route('admin.details', reservation.user_id)" target="_blank">➡️ Profil</Link>
             </span>
           </li></p>
         </div>
@@ -142,6 +147,12 @@ const formatDate = (date) => {
 const sortedReservations = computed(() => {
   return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 });
+
+const confirmDelete = (event) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
+        event.target.submit();
+    }
+};
 </script>
   
 <style>

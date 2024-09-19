@@ -52,7 +52,7 @@ const submit = () => {
 <template>
     <section class="mx-auto">
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Informations du profil</h2>
+            <h2 class="text-lg">Informations du profil</h2>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Modifiez les informations de votre profil et votre adresse e-mail.
             </p>
@@ -118,23 +118,24 @@ const submit = () => {
             </div>
             
             <div>
-                <div class="mt-6 flex justify-between">
+                <div class="mt-2 flex justify-between">
                     <Link :href="route('profile.edit-picture')" class="btn">Modifier la photo de profil</Link>
-                    <PrimaryButton :disabled="form.processing" class="ml-auto">Sauvegarder</PrimaryButton>
-                </div>
 
-                <div class="flex items-center gap-4">
-                    <Transition
-                        enter-active-class="transition ease-in-out"
-                        enter-from-class="opacity-0"
-                        leave-active-class="transition ease-in-out"
-                        leave-to-class="opacity-0"
-                    >
-                        <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé.</p>
-                    </Transition>
+                    <div class="flex items-center">
+                        <Transition
+                            enter-active-class="transition ease-in-out"
+                            enter-from-class="opacity-0"
+                            leave-active-class="transition ease-in-out"
+                            leave-to-class="opacity-0"
+                            class="ml-2"
+                        >
+                            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé. </p>
+                        </Transition>
+                        
+                        <PrimaryButton :disabled="form.processing" class="ml-auto">Sauvegarder</PrimaryButton>
+                    </div>
                 </div>
             </div>
-
         </form>
     </section>
 </template>

@@ -2,7 +2,7 @@
   <Head title="Modifier Photo | Cabane" />
 
   <Layout>
-    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 text-center">Modifier votre photo de profil</h2>
+    <h2 class="text-lg">Modifier votre photo de profil</h2>
 
     <form @submit.prevent="submit" class="space-y-6">
 

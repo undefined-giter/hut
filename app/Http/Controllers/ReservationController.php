@@ -26,7 +26,6 @@ class ReservationController extends Controller
             'nights' => 'required|integer|min:1',
         ]);
     
-        // Vérification des conflits en excluant la date de départ des réservations existantes
         $conflictingReservations = Reservation::where('start_date', '<', $validatedData['end_date'])
             ->where('end_date', '>', $validatedData['start_date'])
             ->exists();
@@ -35,7 +34,6 @@ class ReservationController extends Controller
             return back()->with('error', ["Il y a déjà une réservation durant cette période.\nVeuillez choisir une autre période ou n'hésitez pas à nous appeler directement."]);
         }
     
-        // Créer la réservation si aucun conflit
         Reservation::create([
             'user_id' => auth()->id(),
             'start_date' => $validatedData['start_date'],
@@ -44,6 +42,20 @@ class ReservationController extends Controller
             'status' => 'pending',
         ]);
     
-        return redirect()->route('book')->with('success', ['Réservation effectuée avec succès']);
+        return redirect()->route('gallery')->with('success', ['Réservation effectuée avec succès']);
     }
+
+    public function destroy($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $currentUser = auth()->user();
+    
+        if ($currentUser->role !== 'admin' && $currentUser->id !== $reservation->user_id) {
+            return redirect()->route('book')->with('error', ['Vous n\'êtes pas autorisé à supprimer cette réservation.']);
+        }
+    
+        $reservation->delete();
+    
+        return redirect()->route('book')->with('success', ['Réservation supprimée']);
+    } 
 }

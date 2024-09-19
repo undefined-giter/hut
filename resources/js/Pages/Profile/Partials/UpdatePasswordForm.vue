@@ -36,7 +36,7 @@ const updatePassword = () => {
 <template>
     <section class="mx-auto">
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Modifier Votre Mot de Passe</h2>
+            <h2 class="text-lg">Modifier Votre Mot de Passe</h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Assurez-vous d'utiliser un mot de passe long et aléatoire pour sécuriser votre compte.
@@ -88,17 +88,18 @@ const updatePassword = () => {
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
             </div>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing" class="ml-auto">Sauvegarder</PrimaryButton>
-
+            <div class="flex items-center justify-end">
                 <Transition
                     enter-active-class="transition ease-in-out"
                     enter-from-class="opacity-0"
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
+                    class="ml-2"
                 >
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé.</p>
                 </Transition>
+                
+                <PrimaryButton :disabled="form.processing" class="ml-2">Sauvegarder</PrimaryButton>
             </div>
         </form>
     </section>
