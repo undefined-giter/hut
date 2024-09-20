@@ -22,7 +22,7 @@ export default {
                 oleo: ['OleoScript', ...defaultTheme.fontFamily.sans],
               },
             colors: {
-                htmlLightBg: '#555555',
+                htmlLightBg: '#c4c4c4',
                 htmlDarkBg: '#141a23',
                 light: '#f9fafb',
                 dark: '#181a1b',

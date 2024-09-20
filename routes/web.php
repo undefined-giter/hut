@@ -31,5 +31,5 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// ajouter reservation effectuées en auth profil et leur suppression each
-// delete user doit supprimer ses reservations. Cascade : Prévenir annulation réservation pour l'utilisateur qui souhaite supprimer son compte
+// Options
+// Mailing

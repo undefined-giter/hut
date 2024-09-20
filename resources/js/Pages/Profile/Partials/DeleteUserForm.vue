@@ -43,7 +43,8 @@ const closeModal = () => {
             <h2 class="text-lg">Supprimer Votre Compte</h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-               Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.<br>Avant de supprimer votre compte, veuillez télécharger vos données.
+                Supprimer votre compte supprimera toutes vos réservations.
+               <br>Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.
             </p>
         </header>
 
@@ -56,7 +57,8 @@ const closeModal = () => {
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.<br>Avant de supprimer votre compte, veuillez télécharger vos données.
+                    <span class="text-red-600 text-2xl">Supprimer votre compte supprimera toutes vos réservations !</span>
+                    <br>Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.
                 </p>
 
                 <div class="mt-6">

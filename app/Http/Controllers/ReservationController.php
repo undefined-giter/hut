@@ -25,15 +25,17 @@ class ReservationController extends Controller
             'end_date' => 'required|date|after:start_date',
             'nights' => 'required|integer|min:1',
         ]);
-    
+        
+        
+        
         $conflictingReservations = Reservation::where('start_date', '<', $validatedData['end_date'])
-            ->where('end_date', '>', $validatedData['start_date'])
-            ->exists();
-    
+        ->where('end_date', '>', $validatedData['start_date'])
+        ->exists();
+        
         if ($conflictingReservations) {
             return back()->with('error', ["Il y a déjà une réservation durant cette période.\nVeuillez choisir une autre période ou n'hésitez pas à nous appeler directement."]);
         }
-    
+        
         Reservation::create([
             'user_id' => auth()->id(),
             'start_date' => $validatedData['start_date'],

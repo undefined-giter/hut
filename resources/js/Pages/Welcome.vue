@@ -5,8 +5,8 @@
         <h1 class="text-5xl font-bold mb-6">Bienvenue</h1>
 
         <div class="flex justify-between">
-            <div class="text-right opacity-0 hidden lg:block">
-                <p class="oleoScript"> <!--- decoy to center phone -->
+            <div class="text-right opacity-0 hidden lg:block"> <!--- decoy to center phone part -->
+                <p class="oleoScript">
                     Ou par mail : <span class="text-lg text-teal-600 select-text mr-4">aze@gmail.com</span>
                 </p>
             </div>
@@ -47,6 +47,7 @@ const images = [
 
 const currentImageIndex = ref(0);
 
+let timeoutId;
 let intervalId;
 
 const changeImage = () => {
@@ -54,10 +55,16 @@ const changeImage = () => {
 };
 
 onMounted(() => {
-    intervalId = setInterval(changeImage, 6000);
+    timeoutId = setTimeout(() => {
+        changeImage();
+        intervalId = setInterval(() => {
+            changeImage();
+        }, 6500);
+    }, 4000);
 });
 
 onUnmounted(() => {
+    clearTimeout(timeoutId);
     clearInterval(intervalId);
 });
 </script>

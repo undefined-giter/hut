@@ -3,15 +3,16 @@
       <Head title="Réserver | Cabane" />
       <h1>Réserver Votre Bonheur !</h1>
 
+      <p>Les réservation commencent à 14h jusqu'à 12h le lendemain</p>
       <vue-cal
         locale="fr"
         active-view="month"
-        class="vuecal--rounded-theme vuecal--blue-theme"
+        class="vuecal--rounded-theme vuecal--blue-theme dark:text-gray-200"
         hide-view-selector
         @cell-click="handleDateClick"
         :disable-views="['years', 'year', 'week', 'day']"
         :dblclick-to-navigate="false"
-        style="color:#ccc;height:300px;"
+        style="height:300px;"
         :min-date="today"
       />
 
@@ -43,7 +44,7 @@
               {{ dateError }}
             </div>
           </div>
-          <div class="flex space-x-2">
+          <div class="flex flex-col sm:flex-row sm:space-x-2 sm:space-y-0 space-y-2">
             <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">
               <small>Réinitialiser</small>
             </button>
