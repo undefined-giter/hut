@@ -22,12 +22,13 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $user = $request->user();
-        $reservations = $user->reservations()->get();
+        $reservations = $user->reservations()->with('options')->get();
 
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'reservations' => $reservations,
+            'user' => $user->only(['name', 'name2', 'email', 'phone']),
         ]);
     }
 
@@ -38,6 +39,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'name2' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255',
             'phone' => 'nullable|string|size:10',
             'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -46,6 +48,7 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $user->name = $request->name;
+        $user->name2 = $request->name2;
         $user->email = $request->email;
         $user->phone = $request->phone;
 

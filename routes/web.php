@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\OptionController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
@@ -28,6 +29,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::get('/list', [UserController::class, 'index'])->name('list');
     Route::get('/user/{id}', [UserController::class, 'show'])->name('details');
+
+    Route::resource('/options', OptionController::class)->except(['show']);
+    Route::put('/admin/options/{option}/toggle-availability', [OptionController::class, 'toggleAvailability']);
+    Route::put('/admin/options/{option}/toggle-preselected', [OptionController::class, 'togglePreselected']);
 });
 
 require __DIR__.'/auth.php';

@@ -3,25 +3,29 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
     mustVerifyEmail: {
         type: Boolean,
     },
     status: {
         type: String,
     },
+    user: {
+        type: Object,
+        required: true,
+    },
 });
 
-const user = usePage().props.auth.user;
 const phoneError = ref(null);
 
 const form = useForm({
-    name: user.name,
-    email: user.email,
-    phone: user.phone ?? '',
+    name: props.user.name,
+    name2: props.user.name2 || '',
+    email: props.user.email,
+    phone: props.user.phone ?? '',
 });
 
 const validatePhone = () => {
@@ -44,21 +48,22 @@ const validatePhone = () => {
 
 const submit = () => {    
     if (validatePhone()) {
-        form.patch(route('profile.update'))
+        form.patch(route('profile.update'));
     }
 };
 </script>
+
 
 <template>
     <section class="mx-auto">
         <header>
             <h2 class="text-lg">Informations du profil</h2>
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
                 Modifiez les informations de votre profil et votre adresse e-mail.
             </p>
         </header>
 
-        <form @submit.prevent="submit" class="mt-6 space-y-6">
+        <form @submit.prevent="submit" class="mt-6 space-y-6 max-w-sm mx-auto">
             <div>
                 <InputLabel for="name" value="Nom" />
                 <TextInput
@@ -71,6 +76,18 @@ const submit = () => {
                     autocomplete="name"
                 />
                 <InputError class="mt-2" :message="form.errors.name" />
+            </div>
+
+            <div>
+                <InputLabel for="name2" value="Accompagné de" />
+                <TextInput
+                    id="name2"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.name2"
+                    autocomplete="name2"
+                />
+                <InputError class="mt-2" :message="form.errors.name2" />
             </div>
 
             <div>
@@ -97,7 +114,7 @@ const submit = () => {
                     autocomplete="tel"
                 />
                 <InputError class="mt-2" :message="form.errors.phone" />
-                <p v-if="phoneError" class="!text-red-500 text-sm mt-2">{{ phoneError }}</p>
+                <p v-if="phoneError" class="!text-red-600 text-sm mt-2">{{ phoneError }}</p>
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
@@ -118,7 +135,7 @@ const submit = () => {
             </div>
             
             <div>
-                <div class="mt-2 flex justify-between">
+                <div class="-mt-3 flex justify-between">
                     <Link :href="route('profile.edit-picture')" class="btn">Modifier la photo de profil</Link>
 
                     <div class="flex items-center">
@@ -127,9 +144,8 @@ const submit = () => {
                             enter-from-class="opacity-0"
                             leave-active-class="transition ease-in-out"
                             leave-to-class="opacity-0"
-                            class="ml-2"
                         >
-                            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé. </p>
+                            <p v-if="form.recentlySuccessful" class="text-xs text-gray-600 dark:text-gray-400">Sauvegardé. </p>
                         </Transition>
                         
                         <PrimaryButton :disabled="form.processing" class="ml-auto">Sauvegarder</PrimaryButton>

@@ -5,8 +5,9 @@ import UpdateProfileInformationForm from './Partials/UpdateProfileInformationFor
 import { Head } from '@inertiajs/vue3';
 import Layout from './../Layout.vue';
 import Reservations from './../Components/Reservations.vue';
+import { onMounted } from 'vue';
 
-defineProps({
+const props = defineProps({
     mustVerifyEmail: {
         type: Boolean,
     },
@@ -19,9 +20,8 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Modifier Profile | Cabane" />
+    <Head :title="`Profil de ${user.name} | Cabane`" />
 
-    
     <Layout>
         <h1>Votre Profil</h1>
         
@@ -33,6 +33,7 @@ defineProps({
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"
                         :status="status"
+                        :user="user"
                         class="max-w-xl"
                     />
                 </div>

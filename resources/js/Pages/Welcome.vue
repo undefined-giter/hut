@@ -23,13 +23,23 @@
                 </p>
             </div>
         </div>
-        <div class="relative inset-0 h-[820px] overflow-hidden">
+        <div class="relative inset-0 h-[50vh] overflow-hidden mb-4 max-h-[630px] sm:h-[70vh]">
             <div 
                 v-for="(image, index) in images" 
                 :key="index" 
-                class="absolute inset-0 bg-cover bg-center transition-opacity duration-[2500ms] ease-in-out rounded-2xl"
+                class="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out rounded-2xl"
                 :style="{ backgroundImage: `url(${image})`, opacity: currentImageIndex === index ? 1 : 0 }">
             </div>
+        </div>
+
+        <div class="relative w-full pb-[56.25%] mb-4">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1201.9776837990648!2d5.830602617608928!3d44.832094151869775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDTCsDQ5JzU1LjgiTiA1wrA0OSc1MC42IkU!5e1!3m2!1sen!2sfr!4v1727200749894!5m2!1sen!2sfr" 
+                class="absolute inset-0 w-full h-full rounded-2xl border-0"
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
     </Layout>
 </template>

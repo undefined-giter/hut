@@ -11,7 +11,7 @@
 
                 <div v-if="$page.props.flash && $page.props.flash.error" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
                     <transition-group name="fade" tag="div">
-                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-600 text-white px-4 py-2 rounded shadow-lg text-xl select-none" v-html="message.replace(/\n/g, '<br>')"></div>
+                        <div v-for="(message, index) in $page.props.flash.error" :key="index" class="flash-error bg-red-700 text-white px-4 py-2 rounded shadow-lg text-xl select-none" v-html="message.replace(/\n/g, '<br>')"></div>
                     </transition-group>
                 </div>
 
@@ -22,7 +22,7 @@
                                 class="transition-transform duration-200 hover:scale-105 hover:shadow-lg flex items-center">
                                 <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
                                     alt="Photo de profil" class="rounded-full h-10 w-10 ml-2" draggable="false">
-                                    <p :class="isActive('/profile') ? 'custom-underline' : ''" class="font-kalnia text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
+                                    <p :class="isActive('/profile') ? 'custom-underline' : ''" class="kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
                                         {{ capitalizeName(auth.user.name) }}
                                     </p>
                             </Link>
@@ -34,6 +34,7 @@
                         <Link href="/book" :class="isActive('/book') ? 'active btn' : 'btn'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active btn' : 'btn'">Galerie</Link>
                             
+                        <Link href="/options" :class="isActive('/options') ? 'active btn !ml-6' : 'btn !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
                         <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
                     </div>
 

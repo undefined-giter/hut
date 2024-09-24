@@ -6,8 +6,8 @@
 
     <form @submit.prevent="submit" class="space-y-6">
 
-      <div class="text-center w-[500px] h-[350px] mx-auto">
-        <div class="w-[500px] h-[350px] mx-auto">
+      <div class="text-center w-[384px] h-[250px] mx-auto">
+        <div class="w-[384px] h-[250px] mx-auto">
           <img :src="form.preview" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
         </div>
 

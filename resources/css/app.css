@@ -5,21 +5,15 @@
 
 @font-face {
     font-family: 'Danfo';
-    src: url('/fonts/Danfo/Danfo-Regular-VariableFont_ELSH.ttf') format('truetype');
+    src: url('/fonts/Danfo/static/Danfo-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-    font-family: 'JacquesFrancoisShadow';
-    src: url('/fonts/Jacques_Francois_Shadow/JacquesFrancoisShadow-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'KalniaGlaze';
-    src: url('/fonts/Kalnia_Glaze/KalniaGlaze-VariableFont_wdth,wght.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+font-family: 'Kalnia Glaze';
+src: url('/fonts/Kalnia_Glaze/static/KalniaGlaze-Regular.ttf') format('truetype');
+font-weight: normal;
+font-style: normal;
 }
 @font-face {
     font-family: 'Mirza';
@@ -28,11 +22,18 @@
     font-style: normal;
 }
 @font-face {
-    font-family: 'OleoScript';
+    font-family: 'Oleo Script';
     src: url('/fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
+.danfo {font-family: 'Danfo', sans-serif;}
+
+.kalniaGlaze {font-family: 'Kalnia Glaze', sans-serif;}
+
+.mirza {font-family: 'Mirza', sans-serif;}
+
+.oleoScript {font-family: 'Oleo Script', sans-serif;}
 
 body {@apply bg-htmlLightBg dark:bg-htmlDarkBg;}
 
@@ -65,7 +66,7 @@ h2{
 }
 
 h3{
-    font-family: 'oleoScript', sans-serif;
+    font-family: 'Oleo Script', sans-serif;
     color: #ccc;
 }
 
@@ -170,43 +171,3 @@ footer {
     width: 100%;
     @apply text-orange-600;
 }
-
-
-@font-face {
-    font-family: 'Danfo';
-    src: url('/fonts/Danfo/static/Danfo-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-font-family: 'Kalnia Glaze';
-src: url('/fonts/Kalnia_Glaze/static/KalniaGlaze-Regular.ttf') format('truetype');
-font-weight: normal;
-font-style: normal;
-}
-@font-face {
-    font-family: 'Kalnia Glaze';
-    src: url('/fonts/Kalnia_Glaze/static/KalniaGlaze-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Mirza';
-    src: url('/fonts/Mirza/Mirza-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Oleo Script';
-    src: url('/fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-.danfo {font-family: 'Danfo', sans-serif;}
-
-.kalniaGlaze {font-family: 'Kalnia Glaze', sans-serif;}
-
-.mirza {font-family: 'Mirza', sans-serif;}
-
-.oleoScript {font-family: 'Oleo Script', sans-serif;}

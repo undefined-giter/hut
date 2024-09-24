@@ -12,16 +12,19 @@
                 <div class="mt-2">
                     <div class="ml-48">
                         <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[70ch]"><strong class="font-semibold">Nom :</strong> {{ user.name }}</p>
+                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Nom :</strong> {{ user.name }}</p>
                         </div>
                         <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[70ch]">
+                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Second :</strong> {{ user.name2 ? user.name2 : 'non renseigné' }}</p>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-gray-700 break-words w-full max-w-[28ch]">
                                 <strong class="font-semibold">Téléphone :</strong>
                                 {{ user.phone ? user.phone.replace(/(\d{2})(?=\d)/g, '$1 ') : 'Non renseigné' }}
                             </p>
                         </div>
                         <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[70ch]">
+                            <p class="text-gray-700 break-words w-full max-w-[28ch]">
                                 <strong class="font-semibold">Email :</strong> <span class="!select-text">{{ user.email }}</span>
                             </p>
                         </div>
@@ -40,7 +43,7 @@
                     </div>
                 
                     <div class="flex justify-end">
-                        <button @click="deleteUser" class="btn !bg-red-500 text-white mr-4">
+                        <button @click="deleteUser" class="btn !bg-red-700 text-white mr-4">
                             Supprimer
                         </button>
                         <button @click="goBack" class="btn mr-4 py-2">

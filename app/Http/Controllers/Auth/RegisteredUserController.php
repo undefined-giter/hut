@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
         
         $request->validate([
             'name' => 'required|string|min:2|max:255',
+            'name2' => 'nullable|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'phone' => ['nullable', 'string', 'size:10'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -47,6 +48,7 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'name' => ucwords(strtolower($request->name)),
+            'name2' => ucwords(strtolower($request->name2)),
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),

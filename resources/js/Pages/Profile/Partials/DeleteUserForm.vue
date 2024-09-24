@@ -38,17 +38,17 @@ const closeModal = () => {
 </script>
 
 <template>
-    <section class="space-y-6 mx-auto">
+    <section class="space-y-6 max-w-sm mx-auto">
         <header>
             <h2 class="text-lg">Supprimer Votre Compte</h2>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
                 Supprimer votre compte supprimera toutes vos réservations.
-               <br>Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.
+               <br>Toutes vos données seront supprimées définitivement.
             </p>
         </header>
 
-        <DangerButton @click="confirmUserDeletion">Supprimer Compte</DangerButton>
+        <DangerButton @click="confirmUserDeletion" class="ml-24 !mt-4">Supprimer Compte</DangerButton>
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">

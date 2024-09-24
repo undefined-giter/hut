@@ -38,12 +38,12 @@ const updatePassword = () => {
         <header>
             <h2 class="text-lg">Modifier Votre Mot de Passe</h2>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Assurez-vous d'utiliser un mot de passe long et aléatoire pour sécuriser votre compte.
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
+                Assurez-vous d'utiliser un mot de passe long et aléatoire.
             </p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+        <form @submit.prevent="updatePassword" class="mt-6 space-y-6 max-w-sm mx-auto">
             <div>
                 <InputLabel for="current_password" value="Mot de Passe Actuel" />
 
@@ -96,10 +96,10 @@ const updatePassword = () => {
                     leave-to-class="opacity-0"
                     class="ml-2"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Sauvegardé.</p>
+                    <p v-if="form.recentlySuccessful" class="text-xs text-gray-600 dark:text-gray-400">Sauvegardé. </p>
                 </Transition>
                 
-                <PrimaryButton :disabled="form.processing" class="ml-2">Sauvegarder</PrimaryButton>
+                <PrimaryButton :disabled="form.processing" class="-mt-3">Sauvegarder</PrimaryButton>
             </div>
         </form>
     </section>
