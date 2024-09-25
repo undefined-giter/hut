@@ -29,8 +29,7 @@ const submit = () => {
         <Head title="Mot de Passe Oublié | Cabane" />
 
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
+            Vous avez oublié votre mot de passe ? Pas de souci, entrez votre adresse email et nous vous enverrons un mail pour réinitialiser votre mot de passe.
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">

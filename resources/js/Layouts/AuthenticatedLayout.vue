@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('/')">
-                                    <small>Retour à l'Accueil</small>
+                                    Retour à l'Accueil
                                 </Link>
                             </div>
 

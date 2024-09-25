@@ -1,5 +1,5 @@
 <template>
-    <span @click="toggleDarkMode" class="text-xl cursor-pointer">
+    <span @click="toggleDarkMode" class="text-2xl cursor-pointer">
         {{ isDarkMode ? '☀️' : '🌑' }}
     </span>
 </template>

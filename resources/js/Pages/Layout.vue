@@ -15,11 +15,10 @@
                     </transition-group>
                 </div>
 
-                <nav class="py-6 flex justify-between items-center relative">
+                <nav class="fixed top-0 left-0 w-full mt-3 px-2 flex justify-between items-center z-50 bg-transparent">
                     <div class="flex items-center w-[300px]">
                         <template v-if="auth.user">
-                            <Link href="/profile" 
-                                class="transition-transform duration-200 hover:scale-105 hover:shadow-lg flex items-center">
+                            <Link href="/profile" class="transition-transform duration-200 hover:scale-105 hover:shadow-lg flex items-center hidden md:flex items-center origin-left w-auto">
                                 <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
                                     alt="Photo de profil" class="rounded-full h-10 w-10 ml-2" draggable="false">
                                     <p :class="isActive('/profile') ? 'custom-underline' : ''" class="kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
@@ -38,14 +37,14 @@
                         <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
                     </div>
 
-                    <button @click="menuOpen = !menuOpen" class="md:hidden text-gray-700 focus:outline-none">
+                    <button id="menuButton" ref="menuButtonRef" @click="menuOpen = !menuOpen" class="md:hidden text-gray-700 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                 d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
 
-                    <div v-if="menuOpen" class="open-menu md:hidden">
+                    <div v-if="menuOpen" ref="menuRef" class="open-menu md:hidden mr-0.5 !rounded-tr-none">
                         <Link href="/" :class="isActive('/') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Accueil</Link>
                         <Link href="/book" :class="isActive('/book') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Galerie</Link>
@@ -73,13 +72,13 @@
                         </template>
                     </div>
 
-                    <div class="absolute top-0 right-0 !bg-transparent">
+                    <div class="absolute -top-5 right-0 !-mr-1.5 !bg-transparent">
                         <ThemeSwitcher />
                     </div>
                 </nav>
             </header>
 
-            <main class="mt-6">
+            <main class="md:pt-20 pt-6">
                 <slot />
             </main>
 
@@ -101,6 +100,8 @@ import ThemeSwitcher from './Components/DarkMode.vue';
 const { auth } = usePage().props;
 
 const menuOpen = ref(false);
+const menuRef = ref(null);
+const menuButtonRef = ref(null);
 
 const isActive = (path) => window.location.pathname === path;
 
@@ -134,37 +135,50 @@ const checkInitialFooterVisibility = () => {
     }
 };
 
+const handleDocumentClick = (event) => {
+  if (
+    menuOpen.value &&
+    menuRef.value && !menuRef.value.contains(event.target) &&
+    menuButtonRef.value && !menuButtonRef.value.contains(event.target)
+  ) {
+    menuOpen.value = false;
+  }
+};
+
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-  checkInitialFooterVisibility();
-
-  const pageProps = usePage().props;
-
-  if (pageProps.flash && pageProps.flash.success) {
-    setTimeout(() => {
-      document.querySelectorAll('.flash-success').forEach(el => {
-        el.classList.add('fade-out');
-      });
-      setTimeout(() => {
-        pageProps.flash.success = null;
-      }, 1000);
+    window.addEventListener('scroll', handleScroll);
+    checkInitialFooterVisibility();
+    
+    const pageProps = usePage().props;
+    
+    if (pageProps.flash && pageProps.flash.success) {
+            setTimeout(() => {
+                document.querySelectorAll('.flash-success').forEach(el => {
+                    el.classList.add('fade-out');
+                });
+                setTimeout(() => {
+                    pageProps.flash.success = null;
+        }, 1000);
     }, 6000);
-  }
+    }
 
-  if (pageProps.flash && pageProps.flash.error) {
-    setTimeout(() => {
-      document.querySelectorAll('.flash-error').forEach(el => {
-        el.classList.add('fade-out');
-      });
-      setTimeout(() => {
-        pageProps.flash.error = null;
-      }, 1000);
-    }, 6000);
-  }
+    if (pageProps.flash && pageProps.flash.error) {
+        setTimeout(() => {
+            document.querySelectorAll('.flash-error').forEach(el => {
+                el.classList.add('fade-out');
+            });
+            setTimeout(() => {
+                pageProps.flash.error = null;
+            }, 1000);
+        }, 6000);
+    }
+
+    document.addEventListener('click', handleDocumentClick);
 });
 
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
+    document.removeEventListener('click', handleDocumentClick);
 });
 </script>
 

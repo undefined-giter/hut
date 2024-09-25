@@ -39,7 +39,15 @@ body {@apply bg-htmlLightBg dark:bg-htmlDarkBg;}
 
 table{@apply bg-light dark:bg-dark;}
 
-h1, p, li, table td {@apply text-blue-500 dark:text-blue-200;}
+table tr:hover span, table tr:hover td{
+    color: black !important;
+}
+
+p, table td {
+    @apply text-blue-800 dark:text-blue-400;
+    font-family: 'mirza', 'sans-serif'; 
+    font-size: 1.15em;
+}
 
 h1 {
     font-family: 'Kalnia Glaze', sans-serif;
@@ -68,11 +76,6 @@ h2{
 h3{
     font-family: 'Oleo Script', sans-serif;
     color: #ccc;
-}
-
-p, li{
-    font-family: 'mirza', 'sans-serif'; 
-    font-size: 1.05em;
 }
 
 .open-menu {

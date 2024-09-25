@@ -10,7 +10,7 @@
                     :src="`/storage/gallery/${image}`" 
                     alt="Photo de la cabane" 
                     draggable="false" 
-                    class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-50 relative"
+                    class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-40 relative"
                 >
             </div>
         </div>

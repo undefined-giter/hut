@@ -5,22 +5,34 @@
 
         <Reservations :reservations="reservations" />
 
-        <div class="bg-[#181a1b] shadow-lg rounded-lg p-8 mx-auto">            
+        <div class="bg-[#131516] shadow-lg rounded-lg p-8 mx-auto">            
             <h2>Profile</h2>
             <div class="max-w-2xl mx-auto p-8 pt-0">
                 <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
                 <div class="mt-2">
                     <div class="ml-48">
                         <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Nom :</strong> {{ user.name }}</p>
+                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Nom : </strong><span class="!select-text">{{ user.name }}</span></p>
                         </div>
                         <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Second :</strong> {{ user.name2 ? user.name2 : 'non renseigné' }}</p>
+                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Second : </strong> 
+                                <span v-if="user.phone" class="!select-text">
+                                    {{ user.name2 ? user.name2 : 'non renseigné' }}
+                                </span>
+                                <span v-else class="!select-none">
+                                    Non renseigné
+                                </span>
+                            </p>
                         </div>
                         <div class="mb-4">
                             <p class="text-gray-700 break-words w-full max-w-[28ch]">
-                                <strong class="font-semibold">Téléphone :</strong>
-                                {{ user.phone ? user.phone.replace(/(\d{2})(?=\d)/g, '$1 ') : 'Non renseigné' }}
+                                <strong class="font-semibold">Téléphone : </strong>
+                                <span v-if="user.phone" class="!select-text">
+                                    {{ user.phone.replace(/(\d{2})(?=\d)/g, '$1 ') }}
+                                </span>
+                                <span v-else class="!select-none">
+                                    Non renseigné
+                                </span>
                             </p>
                         </div>
                         <div class="mb-4">

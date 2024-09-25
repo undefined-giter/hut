@@ -1,27 +1,29 @@
 <template>
-    <div v-if="reservations.length > 0" class="bg-[#181a1b] shadow-lg rounded-lg pt-4 mx-auto mb-4">
+    <div v-if="reservations.length > 0" class="dark:bg-[#131516] shadow-lg rounded-lg pt-4 mx-auto mb-4 hover:scale-105 transform transition-transform duration-300">
         <h2 class="text-lg">Réservations</h2>
 
         <div class="max-w-sm mx-auto pb-6">
             <div style="max-height: 350px; overflow-y: auto;">
-                <h3 class="text-center text-[#EA580C]" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
+                <h3 class="text-center dark:text-[#EA580C]" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
                 <ul v-if="currentReservations.length > 0" class="mb-6">
-                    <li v-for="reservation in currentReservations" :key="reservation.id" class="!text-blue-400">
+                    <li v-for="reservation in currentReservations" :key="reservation.id" class="dark:text-blue-400">
                     {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : 
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
                     pour {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <span class="text-blue-600">Options demandées :</span>
+                            <span class="dark:text-blue-600">Options demandées :</span>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="!text-blue-400">
+                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
                                 </li>
                             </ul>
                         </div>
                         <div v-else>
                             <em><span class="text-blue-600">Aucune option demandée</span></em>
-                        </div> 
+                        </div>
+
+                        <Price :resNights="reservation.nights" :resOptions="reservation.options" />
                     </li>
                 </ul>
         
@@ -31,7 +33,7 @@
                 <ul v-if="upcomingReservations.length > 0" :class="{ 'mb-6': !isLastList }">
                     <li v-for="(reservation, index) in upcomingReservations" 
                         :key="reservation.id" 
-                        :class="{ 'mb-6': index !== upcomingReservations.length - 1 }" class="!text-blue-400">
+                        :class="{ 'mb-6': index !== upcomingReservations.length - 1 }" class="dark:text-blue-400 hover:dark:bg-zinc-900">
                         <div class="flex justify-between">
                             <div>
                                 {{ formatDateShort(new Date(reservation.start_date)) }} - 
@@ -41,7 +43,7 @@
                             
                             <div class="flex text-sm mt-1">
                                 <Link :href="route('book.edit', reservation.id)">
-                                    <span class="text-xs">✏️</span><span class="!text-blue-700">Modifier</span>
+                                    <span class="text-xs">✏️</span><span class="dark:text-blue-700">Modifier</span>
                                 </Link>
                                 <span class="text-zinc-800 mx-1">|</span>
                                 <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
@@ -58,40 +60,44 @@
                         </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <span class="text-blue-600">Options demandées :</span>
+                            <span class="dark:text-blue-600">Options demandées :</span>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="!text-blue-400">
+                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
                                 </li>
                             </ul>
                         </div>
                         <div v-else>
-                            <em><span class="text-blue-600">Aucune option demandée</span></em>
+                            <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
+
+                        <Price :resNights="reservation.nights" :resOptions="reservation.options" />
                     </li>
                 </ul>
 
-                <h3 class="text-center text-[#EA580C]" v-if="pastReservations.length > 0">
+                <h3 class="text-center dark:text-[#EA580C]" v-if="pastReservations.length > 0">
                     {{ pastReservations.length === 1 ? 'Réservation passée :' : 'Réservations passées :' }}
                 </h3>
                 <ul v-if="pastReservations.length > 0">
                     <li v-for="(reservation, index) in pastReservations" 
                         :key="reservation.id" 
-                        :class="{ 'mb-3': index !== pastReservations.length - 1 }" class="!text-blue-400">
+                        :class="{ 'mb-3': index !== pastReservations.length - 1 }" class="dark:text-blue-400">
                     {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : pour {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }} <br>
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
                     
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <span class="text-blue-600">Options demandées :</span>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="!text-blue-400">
+                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
                                 </li>
                             </ul>
                         </div>
                         <div v-else>
-                            <em><span class="text-blue-600">Aucune option demandée</span></em>
+                            <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
+
+                        <Price :resNights="reservation.nights" :resOptions="reservation.options" />
                     </li>
                 </ul>
             </div>
@@ -102,6 +108,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import Price from './Price.vue';
 
 const csrfToken = ref(null);
 

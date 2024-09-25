@@ -1,7 +1,7 @@
 <template>
     <Head title="Liste des Options | Admin" />
     <Layout>
-        <h1 class="text-xl font-bold text-center mb-4">Liste des Options</h1>
+        <h1>Liste des Options</h1>
 
         <div class="flex justify-between mb-4">
             <Link :href="route('admin.options.create')" class="btn !bg-blue-700 text-white -mb-3 rounded-lg shadow">
@@ -10,18 +10,18 @@
         </div>
 
         <table class="mx-auto w-full border border-[#EA580C] rounded-lg">
-            <thead class="border-x border-[#EA580C] bg-[#EA580C]">
+            <thead class="border-x border-[#EA580C]">
                 <tr>
                     <th class="text-left pl-2 py-1">Nom</th>
                     <th class="text-left">Description</th>
-                    <th class="text-center">Prix (€)</th>
+                    <th class="text-center">Prix<span class="text-sm mx-0.5">€</span></th>
                     <th class="text-center">Disponible</th>
                     <th class="text-center">Présélectionnée</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
-            <tbody class="border-x border-[#EA580C] bg-[#1f1f1f] text-white">
-                <tr v-for="option in options" :key="option.id" class="hover:bg-[#333333] transition h-[3.5rem]">
+            <tbody class="border-x border-[#EA580C]">
+                <tr v-for="option in options" :key="option.id" class="hover:bg-[#333333] !important transition h-[3.5rem]">
                     <td class="border-b border-[#EA580C] px-2">
                         {{ option.name }}
                     </td>
@@ -52,11 +52,11 @@
                     <td class="border-b text-center border-[#EA580C] w-[200px]">
                         <div class="flex justify-center space-x-1.5">
                             <button @click="goTo(route('admin.options.edit', option.id))"
-                                class="btn text-sm bg-blue-700 text-white px-2 rounded shadow hover:bg-blue-600">
+                                class="btn text-sm bg-blue-700 text-white px-2 rounded shadow">
                                 Modifier
                             </button>
                             <button @click="deleteOption(option.id)" 
-                                class="btn text-sm !bg-red-700 text-white px-2 rounded shadow hover:bg-red-600">
+                                class="btn text-sm !bg-red-700 text-white px-2 rounded shadow hover:text-orange-300">
                                 Supprimer
                             </button>
                         </div>

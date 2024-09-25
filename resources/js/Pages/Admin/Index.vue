@@ -18,13 +18,13 @@
                         <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
                     <td class="border-b border-[#EA580C] max-w-[150px]" draggable="false">
-                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
+                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
                             {{ user.name }}
                         </div>
                     </td>
 
                     <td class="border-b max-w-[150px] border-[#EA580C]" draggable="false">
-                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
+                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
                             {{ user.email }}
                         </div>
                     </td>

@@ -42,5 +42,5 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// Coût réservation
+// couleur du calendrier / replacer btn réserver
 // Mailing
