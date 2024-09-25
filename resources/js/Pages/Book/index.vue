@@ -3,7 +3,9 @@
       <Head title="Réserver | Cabane" />
       <h1>Réserver Votre Bonheur !</h1>
 
-      <p>Les réservation commencent à 14h jusqu'à 12h le lendemain - parking gratuit inclu</p>
+      <div class="flex justify-between">
+        <p>Les réservations commencent à 14h, jusqu'à 12h le jour du départ</p><p>Parking inclu</p>
+      </div>
       <vue-cal
         locale="fr"
         active-view="month"
@@ -16,7 +18,7 @@
         :min-date="today"
       />
 
-      <form method="POST" action="/book">
+      <form method="POST" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
         <input type="hidden" name="_token" :value="csrfToken" />
         <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
         <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
@@ -49,7 +51,7 @@
             <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">
               <small>Réinitialiser</small>
             </button>
-            <button type="submit" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn']">Réserver</button>
+            <button type="submit" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
           </div>
         </div>
 
@@ -58,9 +60,8 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <label
               v-for="option in options" 
-              :key="option.id" 
-              @click="toggleOption(option.id)" 
-              :class="['mb-2 p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer transition', selectedOptions.includes(option.id) ? 'dark:bg-green-600' : 'dark:bg-orange-500']"
+              :key="option.id"
+              :class="['h-[140px] mb-2 p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer transition', selectedOptions.includes(option.id) ? 'dark:bg-green-600' : 'dark:bg-orange-500']"
             >
               <div class="flex items-center w-full">
                 <input 
@@ -73,10 +74,13 @@
                 <div class="flex justify-between w-full">
                   <div class="oleoScript text-xl">{{ option.name }}</div> 
                   <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
-                  <div v-if="option.price === '0.00'">Gratuit</div>
+                  <div v-if="option.price === '0.00'">Inclu</div>
                 </div>
               </div>
-              <p :class="selectedOptions.includes(option.id) ? 'text-green-600 dark:text-gray-200' : 'text-orange-600 dark:text-grey-200'">
+              <p 
+                :class="selectedOptions.includes(option.id) ? 'text-green-600 dark:text-gray-200 whitespace-pre-wrap' : 'text-orange-600 dark:text-grey-200 whitespace-pre-wrap'"
+                class="overflow-y-auto h-[90px]"
+              >
                 {{ option.description }}
               </p>
             </label>
@@ -91,13 +95,13 @@
             <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
             <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's' : '')"></span>
             <span v-if="auth && auth.user && auth.user.role === 'admin'">
-              => <form method="POST" :action="route('reservation.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
+              => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
                   <input type="hidden" name="_token" :value="csrfToken" />
                   <input type="hidden" name="_method" value="DELETE" />
                   <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
               </form>
               <span class="text-zinc-800 text-sm"> | </span> 
-              <Link :href="route('admin.details', reservation.user_id)" target="_blank"><span class="text-xs">➡️</span><span class="text-blue-600">Profil</span></Link>
+              <Link :href="route('admin.details', reservation.user_id)" target="_blank"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
             </span>
           </li></p>
         </div>
@@ -112,23 +116,29 @@ import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import { ref, onMounted, computed } from 'vue';
 
-const { auth, reservations, options } = usePage().props;
+const { auth, reservations, options, reservationEdit } = usePage().props;
 
 const arrivalDate = ref(null);
 const departureDate = ref(null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
-const isReservationValid = ref(false);
+const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();
 const selectedOptions = ref([]);
-
 
 onMounted(() => {
   options.sort((a, b) => b.preselected - a.preselected);
   selectedOptions.value = options.filter(option => option.preselected).map(option => option.id);
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  if (reservationEdit) {
+    arrivalDate.value = new Date(reservationEdit.start_date);
+    departureDate.value = new Date(reservationEdit.end_date);
+    numberOfNights.value = reservationEdit.nights;
+    selectedOptions.value = reservationEdit.options.map(option => option.id);
+  }
 });
 
 const handleDateClick = (cell) => {

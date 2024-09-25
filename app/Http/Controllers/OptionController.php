@@ -18,7 +18,7 @@ class OptionController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Options/Create');
+        return Inertia::render('Admin/OptionCreateEdit');
     }
 
     public function store(Request $request)
@@ -32,12 +32,12 @@ class OptionController extends Controller
         ]);
 
         Option::create($validated);
-        return redirect()->route('options.index')->with('success', ['Option ajoutée avec succès']);
+        return redirect()->route('admin.options.index')->with('success', ['Option ajoutée']);
     }
 
     public function edit(Option $option)
     {
-        return Inertia::render('Admin/Options/Edit', [
+        return Inertia::render('Admin/OptionCreateEdit', [
             'option' => $option
         ]);
     }
@@ -46,14 +46,14 @@ class OptionController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'price' => 'nullable|numeric',
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
         ]);
 
         $option->update($validated);
-        return redirect()->route('options.index')->with('success', ['Option mise à jour avec succès']);
+        return redirect()->route('admin.options.index')->with('success', ['Option mise à jour']);
     }
 
     public function toggleAvailability(Request $request, Option $option)
@@ -62,7 +62,7 @@ class OptionController extends Controller
             'available' => $request->available,
         ]);
 
-        return redirect()->back()->with('success', ['Disponibilité mise à jour avec succès']);
+        return redirect()->back()->with('success', ['Disponibilité mise à jour']);
     }
 
     public function togglePreselected(Request $request, Option $option)
@@ -71,12 +71,12 @@ class OptionController extends Controller
             'preselected' => $request->preselected,
         ]);
 
-        return redirect()->back()->with('success', ['Statut de présélection mis à jour avec succès']);
+        return redirect()->back()->with('success', ['Statut de présélection mis à jour']);
     }
 
     public function destroy(Option $option)
     {
         $option->delete();
-        return redirect()->route('options.index')->with('success', ['Option supprimée avec succès']);
+        return redirect()->route('admin.options.index')->with('success', ['Option supprimée.']);
     }
 }

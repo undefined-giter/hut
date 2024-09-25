@@ -46,7 +46,7 @@
                         <button @click="deleteUser" class="btn !bg-red-700 text-white mr-4">
                             Supprimer
                         </button>
-                        <button @click="goBack" class="btn mr-4 py-2">
+                        <button @click="window.history.back();" class="btn mr-4 py-2">
                             Retour
                         </button>
                     </div>
@@ -66,10 +66,6 @@ const props = defineProps({
   user: Object,
   reservations: Array,
 });
-
-const goBack = () => {
-  window.history.back();
-};
 
 const deleteUser = () => {
   if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {

@@ -39,7 +39,7 @@
         <InputError class="mt-2" :message="form.errors.picture" />
 
         <div class="mt-4 mx-2 text-right">
-          <PrimaryButton :disabled="form.processing" class="!bg-blue-600 !text-gray-200">Enregistrer</PrimaryButton>
+          <PrimaryButton :disabled="form.processing" class="!bg-blue-700 !text-gray-200">Enregistrer</PrimaryButton>
         </div>
       </div>
       

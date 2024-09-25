@@ -50,6 +50,7 @@
                         <Link href="/book" :class="isActive('/book') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Galerie</Link>
                         <span v-if="auth.user && auth.user.role === 'admin'">
+                            <Link href="/options" :class="isActive('/options') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Options</Link>
                             <Link href="/list" :class="isActive('/list') ? 'active block px-4 py-2 hover:text-green-200' : 'block px-4 py-2 hover:bg-gray-200'">Utilisateurs</Link>
                         </span>
                         <template v-if="!auth.user">

@@ -9,7 +9,7 @@
                     <th class="py-2">Photo</th>
                     <th class="text-left">Nom</th>
                     <th class="text-left">Email</th>
-                    <th style="width: 1%;">Actions</th>
+                    <th style="width: 1%;" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody class="border-x border-[#EA580C]">

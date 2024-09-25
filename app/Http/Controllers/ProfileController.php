@@ -112,6 +112,6 @@ class ProfileController extends Controller
     
         $user->delete();
     
-        return redirect()->route('admin.list')->with('success', ['Compte supprimé avec succès']);
+        return redirect()->route('admin.list')->with('success', ['Le compte a été supprimé.']);
     }  
 }

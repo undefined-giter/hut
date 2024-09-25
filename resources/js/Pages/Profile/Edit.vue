@@ -5,7 +5,6 @@ import UpdateProfileInformationForm from './Partials/UpdateProfileInformationFor
 import { Head } from '@inertiajs/vue3';
 import Layout from './../Layout.vue';
 import Reservations from './../Components/Reservations.vue';
-import { onMounted } from 'vue';
 
 const props = defineProps({
     mustVerifyEmail: {

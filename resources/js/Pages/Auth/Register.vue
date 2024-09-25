@@ -78,7 +78,9 @@ const submit = () => {
 
         <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8">
             <div>
-                <InputLabel for="name" value="Nom & Prénom" />
+                <div class="flex">
+                    <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
+                </div>
 
                 <TextInput
                     id="name"
@@ -94,9 +96,8 @@ const submit = () => {
             </div>
 
             <div>
-                <div style="display: flex; align-items: center; margin-top:14px">
+                <div class="mt-4">
                     <InputLabel for="name2" value="Nom & Prénom seconde personne" />
-                    <span style="margin-left: 5px; font-size:12px; vertical-align: bottom;">(facultatif)</span>
                 </div>
 
                 <TextInput
@@ -110,7 +111,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <div class="flex">
+                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
+                </div>
 
                 <TextInput
                     id="email"
@@ -143,7 +146,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Mot de Passe" />
+                <div class="flex">
+                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                </div>
 
                 <TextInput
                     id="password"
@@ -158,7 +163,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirmez votre Mot de Passe" />
+                <div class="flex">
+                    <InputLabel for="password_confirmation" value="Confirmez votre Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                </div>
 
                 <TextInput
                     id="password_confirmation"

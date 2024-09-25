@@ -1,60 +1,62 @@
 <template>
     <Head title="Liste des Options | Admin" />
     <Layout>
-        <h1>Liste des Options</h1>
+        <h1 class="text-xl font-bold text-center mb-4">Liste des Options</h1>
 
-        <table>
-            <thead class="border-x border-[#EA580C]">
+        <div class="flex justify-between mb-4">
+            <Link :href="route('admin.options.create')" class="btn !bg-blue-700 text-white -mb-3 rounded-lg shadow">
+                Ajouter une Option
+            </Link>
+        </div>
+
+        <table class="mx-auto w-full border border-[#EA580C] rounded-lg">
+            <thead class="border-x border-[#EA580C] bg-[#EA580C]">
                 <tr>
-                    <th class="py-2">Nom</th>
+                    <th class="text-left pl-2 py-1">Nom</th>
                     <th class="text-left">Description</th>
-                    <th class="text-left">Prix (€)</th>
-                    <th class="text-left">Disponible</th>
-                    <th class="text-left">Présélectionnée</th>
-                    <th style="width: 1%;">Actions</th>
+                    <th class="text-center">Prix (€)</th>
+                    <th class="text-center">Disponible</th>
+                    <th class="text-center">Présélectionnée</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
-            <tbody class="border-x border-[#EA580C]">
-                <tr v-for="option in options" :key="option.id">
-                    <td class="px-4 py-1 border-b border-[#EA580C] table-cell">
-                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
-                            {{ option.name }}
+            <tbody class="border-x border-[#EA580C] bg-[#1f1f1f] text-white">
+                <tr v-for="option in options" :key="option.id" class="hover:bg-[#333333] transition h-[3.5rem]">
+                    <td class="border-b border-[#EA580C] px-2">
+                        {{ option.name }}
+                    </td>
+                    <td class="border-b border-[#EA580C] max-w-[250px] overflow-hidden">
+                        <div class="custom-scrollbar overflow-y-auto overflow-x-hidden text-ellipsis">
+                            <span class="line-clamp-2 whitespace-pre-wrap">
+                                {{ option.description || 'Aucune description' }}
+                            </span>
                         </div>
                     </td>
-                    <td class="border-b border-[#EA580C] max-w-[250px]" draggable="false">
-                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
-                            {{ option.description || 'Aucune description' }}
-                        </div>
+                    <td class="border-b border-[#EA580C] max-w-[100px] text-center">
+                        {{ option.price !== null ? option.price == 0.00 ? 'offert' : Number(option.price).toFixed(2) : 'Vide' }}
                     </td>
-                    <td class="border-b max-w-[100px] border-[#EA580C]" draggable="false">
-                        <div class="overflow-x-auto whitespace-nowrap custom-scrollbar">
-                            {{ option.price !== null ? Number(option.price).toFixed(2) : 'Gratuit' }}
-                        </div>
-                    </td>
-                    <td class="border-b border-[#EA580C] max-w-[100px]" draggable="false">
+                    <td class="border-b border-[#EA580C] text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.available" class="sr-only peer" 
                                    @change="toggleAvailability(option.id, option.available)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                         </label>
                     </td>
-                    <td class="border-b border-[#EA580C] max-w-[100px]" draggable="false">
+                    <td class="border-b border-[#EA580C] text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.preselected" class="sr-only peer" 
                                    @change="togglePreselected(option.id, option.preselected)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
                         </label>
                     </td>
-                    <td class="px-2 py-2 border-b text-center border-[#EA580C] w-[80px]" draggable="false">
-                        <div class="flex justify-center">
-                            <button 
-                                @click="goTo(`/admin/options/${option.id}/edit`)" 
-                                class="btn -m-1 text-sm rounded-xs" style="padding: 6px 18px;">
+                    <td class="border-b text-center border-[#EA580C] w-[200px]">
+                        <div class="flex justify-center space-x-1.5">
+                            <button @click="goTo(route('admin.options.edit', option.id))"
+                                class="btn text-sm bg-blue-700 text-white px-2 rounded shadow hover:bg-blue-600">
                                 Modifier
                             </button>
-                            <button 
-                                @click="deleteOption(option.id)" 
-                                class="btn -m-1 text-sm rounded-xs !bg-red-700 text-white ml-2" style="padding: 6px 18px;">
+                            <button @click="deleteOption(option.id)" 
+                                class="btn text-sm !bg-red-700 text-white px-2 rounded shadow hover:bg-red-600">
                                 Supprimer
                             </button>
                         </div>
@@ -68,26 +70,26 @@
 <script setup>
 import { Inertia } from '@inertiajs/inertia';
 import Layout from '../Layout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     options: Array
 });
 
 const toggleAvailability = (id, currentState) => {
-    Inertia.put(`/admin/options/${id}/toggle-availability`, { available: !currentState }, {
+    Inertia.put(route('admin.options.toggle-availability', id), { available: !currentState }, {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Disponibilité mise à jour avec succès.');
+            alert('Disponibilité mise à jour');
         }
     });
 };
 
 const togglePreselected = (id, currentState) => {
-    Inertia.put(`/admin/options/${id}/toggle-preselected`, { preselected: !currentState }, {
+    Inertia.put(route('admin.options.toggle-preselected', id), { preselected: !currentState }, {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Statut de présélection mis à jour avec succès.');
+            alert('Statut de présélection mis à jour');
         }
     });
 };
@@ -98,9 +100,9 @@ const goTo = (url) => {
 
 const deleteOption = (id) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette option ?')) {
-        Inertia.delete(`/admin/options/${id}`, {
+        Inertia.delete(route('admin.options.destroy', id), {
             onSuccess: () => {
-                alert('Option supprimée avec succès.');
+                alert('Option supprimée.');
             }
         });
     }
