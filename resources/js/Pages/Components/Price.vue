@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="!text-green-400 text-right mr-4 -mt-">Total : {{ totalPriceDisplay }}<span class="text-sm">€</span></p>
+        <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ totalPriceDisplay }}<span class="text-sm">€</span></p>
     </div>
 </template>
 

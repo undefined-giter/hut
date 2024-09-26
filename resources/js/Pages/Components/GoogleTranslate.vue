@@ -45,14 +45,8 @@ const openDropdown = () => {
 
     setInterval(() => {
         const targetElement = document.querySelector("#\\:2\\.container");
-        const overInfos = document.querySelector("goog-gt-tt");
-        const overInfos2 = document.querySelector(".VIpgJd-suEOdc");
-        const overInfos3 = document.querySelector(".VIpgJd-yAWNEb-L7lbkb");
         if (targetElement) {
             targetElement.style.display = 'none';
-            if (overInfos) overInfos.style.display = 'none';
-            if (overInfos2) overInfos2.style.display = 'none';
-            if (overInfos3) overInfos3.style.display = 'none';
         }
     }, 1500);
 };

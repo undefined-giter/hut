@@ -18,7 +18,7 @@
       :min-date="today"
     />
 
-    <form method="POST" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
+    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
       <input type="hidden" name="_token" :value="csrfToken" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
@@ -47,22 +47,13 @@
             {{ dateError }}
           </div>
         </div>
-        <div class="flex flex-col sm:flex-row sm:space-x-2 sm:space-y-0 space-y-2">
-          <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">
-            <small>Réinitialiser</small>
-          </button>
-          <button type="submit" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
-        </div>
+        <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">Réinitialiser</button>
       </div>
 
       <div class="mt-4">
         <h3 class="underline text-blue-700 dark:text-blue-500 text-xl">Options disponibles :</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <label
-            v-for="option in options" 
-            :key="option.id"
-            :class="['h-[140px] mb-2 p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer transition hover:scale-105 transform transition-transform duration-300', selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']"
-            >
+        <div ref="gridContainer" class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto p-2">
+          <label v-for="option in options" :key="option.id" :class="['relative h-[140px] p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer transition-transform duration-300 transform hover:scale-105 hover:z-10', selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
             <div class="flex items-center w-full">
               <input
                 type="checkbox"
@@ -71,22 +62,24 @@
                 class="mr-2 form-checkbox h-6 w-6 rounded-full text-blue-600 border-gray-300"
               />
               <div class="flex justify-between w-full">
-                <div class="oleoScript text-xl">{{ option.name }}</div> 
+                <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
                 <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
                 <div v-if="option.price === '0.00'">Inclu</div>
               </div>
             </div>
-            <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 whitespace-pre-wrap' : 'text-orange-600 dark:text-gray-200 whitespace-pre-wrap'" class="overflow-y-auto h-[90px]">
-            {{ option.description }}
-          </p>
+            <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words' : 'text-orange-600 dark:text-gray-200 break-words'"
+              class="overflow-y-scroll max-h-[80px] hide-scrollbar">{{ option.description }}
+            </p>
           </label>
         </div>
       </div>
     </form>
 
-    <div class="h-[80px]">
+    <div class="h-[32px]">
       <Price :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
     </div>
+
+    <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn ml-auto block']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
     
     <div v-if="sortedReservations.length > 0" class="mt-4">
       <h3 class="underline text-red-600 text-xl">Nuits déjà réservées :</h3>
@@ -111,8 +104,8 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed, watch } from 'vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
-import { ref, onMounted, computed } from 'vue';
 import Price from './../Components/Price.vue';
 import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
@@ -127,13 +120,13 @@ const numberOfNights = ref(0);
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();
-const selectedOptionsObjects = ref([]);
+const selectedOptionsObjects = ref([]);  
 const selectedOptionsIds = ref([]);  
 
 onMounted(() => {
   options.sort((a, b) => b.preselected - a.preselected);
-  selectedOptionsObjects.value = options.filter(option => option.preselected); // for Price component
-  selectedOptionsIds.value = options.filter(option => option.preselected).map(option => option.id); // for Form submition
+  selectedOptionsObjects.value = options.filter(option => option.preselected);
+  selectedOptionsIds.value = options.filter(option => option.preselected).map(option => option.id);
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -141,9 +134,13 @@ onMounted(() => {
     arrivalDate.value = new Date(reservationEdit.start_date);
     departureDate.value = new Date(reservationEdit.end_date);
     numberOfNights.value = reservationEdit.nights;
-    selectedOptionsIds.value = reservationEdit.options ? reservationEdit.options.map(option => option.id) : [] // for Form submition
-    selectedOptionsObjects.value = reservationEdit.options || []; // for Price component
+    selectedOptionsIds.value = reservationEdit.options ? reservationEdit.options.map(option => option.id) : [];
+    selectedOptionsObjects.value = reservationEdit.options || [];
   }
+});
+
+watch(selectedOptionsIds, (newSelectedIds) => {
+  selectedOptionsObjects.value = options.filter(option => newSelectedIds.includes(option.id));
 });
 
 const handleDateClick = (cell) => {
@@ -181,14 +178,6 @@ const resetReservation = () => {
   isReservationValid.value = false;
 };
 
-const formatDateShort = (date) => {
-  return date.toLocaleDateString('fr-FR', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
-  });
-};
-
 const formatDate = (date) => {
   return date.toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -197,14 +186,22 @@ const formatDate = (date) => {
   }) + ` <small>${date.getFullYear()}</small>`;
 };
 
+const formatDateShort = (date) => {
+  return date.toLocaleDateString('fr-FR', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+  });
+};
+
 const sortedReservations = computed(() => {
   return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 });
 
 const confirmDelete = (event) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
-        event.target.submit();
-    }
+  if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
+    event.target.submit();
+  }
 };
 </script>
 
@@ -223,4 +220,8 @@ const confirmDelete = (event) => {
 .vuecal__cell--out-of-scope{color:grey;}
 .vuecal__cell--disabled {text-decoration:line-through;}
 .vuecal__cell--before-min {color: orangered;}
+
+.hide-scrollbar::-webkit-scrollbar {display: none;}
+.hide-scrollbar {scrollbar-width: none;}
+.hide-scrollbar {-ms-overflow-style: none;}
 </style>

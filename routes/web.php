@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\OptionController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
@@ -39,8 +40,11 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::resource('/options', OptionController::class)->except(['show']);
     Route::put('/options/{option}/toggle-availability', [OptionController::class, 'toggleAvailability'])->name('options.toggle-availability');
     Route::put('/options/{option}/toggle-preselected', [OptionController::class, 'togglePreselected'])->name('options.toggle-preselected');
+
+    Route::get('/prices', [PriceController::class, 'getPrices'])->name('prices');
+    Route::post('/prices/update', [PriceController::class, 'updatePrices'])->name('prices.update');
 });
 
 require __DIR__.'/auth.php';
-// couleur du calendrier / replacer btn réserver
+// couleur du calendrier
 // Mailing

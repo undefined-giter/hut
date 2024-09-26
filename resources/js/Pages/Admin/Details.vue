@@ -58,7 +58,7 @@
                         <button @click="deleteUser" class="btn !bg-red-700 text-white mr-4">
                             Supprimer
                         </button>
-                        <button @click="window.history.back();" class="btn mr-4 py-2">
+                        <button type="button" @click="goBack();" class="btn mr-4 py-2">
                             Retour
                         </button>
                     </div>
@@ -69,15 +69,23 @@
 </template>
 
 <script setup>
-import Layout from '../Layout.vue';
 import Reservations from './../Components/Reservations.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head } from '@inertiajs/vue3';
+import Layout from '../Layout.vue';
 
 const props = defineProps({
   user: Object,
   reservations: Array,
 });
+
+const goBack = () => {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        Inertia.visit('/list');
+    }
+};
 
 const deleteUser = () => {
   if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {

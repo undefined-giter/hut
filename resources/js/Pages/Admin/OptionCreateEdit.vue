@@ -39,9 +39,9 @@
                 </div>
 
                 <div class="flex justify-between">
-                    <button @click="window.history.back();" class="btn bg-gray-500 hover:bg-gray-600 text-white font-bold px-6 py-2 rounded-lg shadow focus:outline-none focus:ring focus:ring-gray-300">
-                            Retour
-                        </button>
+                    <button type="button" @click="goBack();" class="btn bg-gray-500 hover:bg-gray-600 text-white font-bold px-6 py-2 rounded-lg shadow focus:outline-none focus:ring focus:ring-gray-300">
+                        Retour
+                    </button>
 
                     <button type="submit" class="btn bg-blue-700 hover:bg-blue-600 text-white font-bold px-6 py-2 rounded-lg shadow focus:outline-none focus:ring focus:ring-blue-300">
                         {{ option ? 'Modifier' : 'Ajouter' }} l'Option
@@ -87,6 +87,15 @@ const handleKeyDown = (event) => {
         submitForm();
     }
 };
+
+const goBack = () => {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        Inertia.visit('/options');
+    }
+};
+
 onMounted(() => {
     window.addEventListener('keydown', handleKeyDown);
 });

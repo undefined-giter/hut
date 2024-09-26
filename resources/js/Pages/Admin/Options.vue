@@ -4,6 +4,9 @@
         <h1>Liste des Options</h1>
 
         <div class="flex justify-between mb-4">
+            <Link :href="route('admin.prices')" class="btn !bg-blue-700 text-white -mb-3 rounded-lg shadow">
+                Modifier Prix Réservation
+            </Link>
             <Link :href="route('admin.options.create')" class="btn !bg-blue-700 text-white -mb-3 rounded-lg shadow">
                 Ajouter une Option
             </Link>
@@ -22,8 +25,12 @@
             </thead>
             <tbody class="border-x border-[#EA580C]">
                 <tr v-for="option in options" :key="option.id" class="hover:bg-[#333333] !important transition h-[3.5rem]">
-                    <td class="border-b border-[#EA580C] px-2">
-                        {{ option.name }}
+                    <td class="border-b border-[#EA580C] px-2 max-w-[250px] overflow-hidden">
+                        <div class="custom-scrollbar overflow-y-auto overflow-x-hidden text-ellipsis">
+                            <span class="line-clamp-2 whitespace-pre-wrap">
+                                {{ option.name }}
+                            </span>
+                        </div>
                     </td>
                     <td class="border-b border-[#EA580C] max-w-[250px] overflow-hidden">
                         <div class="custom-scrollbar overflow-y-auto overflow-x-hidden text-ellipsis">

@@ -29,7 +29,7 @@ class ReservationController extends Controller
             return back()->with('error', 'Erreur dans les options sélectionnées.');
         }
         $request->merge(['options' => $options]);
-    
+
         $validatedData = $request->validate([
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
@@ -37,27 +37,39 @@ class ReservationController extends Controller
             'options' => 'array',
             'options.*' => 'exists:options,id',
         ]);
-    
+
+        if($reservationId == null){
+            $existingReservation = Reservation::where('user_id', auth()->id())
+                ->where('start_date', '<', $validatedData['end_date'])
+                ->where('end_date', '>', $validatedData['start_date'])
+                ->first();
+                
+            if ($existingReservation) {
+                return redirect()->route('profile.edit')
+                ->with('error', ['Vous avez déjà une réservation durant cette période. Veuillez modifier votre réservation existante.']);
+            }
+        }
+                
         $conflictingReservations = Reservation::where('user_id', '!=', auth()->id())
             ->where('start_date', '<', $validatedData['end_date'])
             ->where('end_date', '>', $validatedData['start_date'])
             ->exists();
-    
+
         if ($conflictingReservations) {
-            return back()->with('error', ["Il y a déjà une réservation durant cette période. Veuillez choisir une autre période."]);
+            return back()->with('error', ["Il y a déjà une réservation durant cette période. Veuillez choisir une autre date ou non contacter directement."]);
         }
-    
+
         if ($reservationId) {
             $existingReservation = Reservation::where('user_id', auth()->id())
                 ->where('id', $reservationId)
                 ->first();
-    
+
             if ($existingReservation) {
                 if ($existingReservation->start_date == $validatedData['start_date'] && $existingReservation->end_date == $validatedData['end_date']) {
                     if (isset($validatedData['options'])) {
                         $existingReservation->options()->sync($validatedData['options']);
                     }
-    
+
                     return redirect()->route('gallery')->with('success', ['Vos options ont bien été mises à jour']);
                 } else {
                     $existingReservation->update([
@@ -65,16 +77,16 @@ class ReservationController extends Controller
                         'end_date' => $validatedData['end_date'],
                         'nights' => $validatedData['nights'],
                     ]);
-    
+
                     if (isset($validatedData['options'])) {
                         $existingReservation->options()->sync($validatedData['options']);
                     }
-    
+
                     return redirect()->route('gallery')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
                 }
             }
         }
-    
+
         $reservation = Reservation::create([
             'user_id' => auth()->id(),
             'start_date' => $validatedData['start_date'],
@@ -82,11 +94,11 @@ class ReservationController extends Controller
             'nights' => $validatedData['nights'],
             'status' => 'pending',
         ]);
-    
+
         if (isset($validatedData['options'])) {
             $reservation->options()->sync($validatedData['options']);
         }
-    
+
         return redirect()->route('gallery')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }
 
