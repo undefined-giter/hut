@@ -1,13 +1,22 @@
 <template>
-    <span @click="toggleDarkMode" class="text-2xl cursor-pointer">
+    <span 
+        @click="toggleDarkMode" 
+        class="text-2xl -ml-3 transform hover:scale-110 origin-top-left cursor-pointer transition-transform" 
+        :class="{'mr-0': windowWidth < 768, 'mr-4': windowWidth >= 768}" 
+        style="transition: margin-right 1.5s ease;">
         {{ isDarkMode ? '☀️' : '🌑' }}
     </span>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const isDarkMode = ref(true);
+const windowWidth = ref(window.innerWidth);
+
+const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+};
 
 const toggleDarkMode = () => {
     isDarkMode.value = !isDarkMode.value;
@@ -24,5 +33,10 @@ onMounted(() => {
         isDarkMode.value = false;
         document.documentElement.classList.remove('dark');
     }
+    window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
 });
 </script>

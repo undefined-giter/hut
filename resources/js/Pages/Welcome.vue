@@ -12,7 +12,7 @@
             </div>
 
             <div class="text-center">
-                <p class="oleoScript">
+                <p class="oleoScript pl-3 lg:pl-0">
                     Réservez directement au <span class="text-xl text-teal-600 select-text">06 XX XX XX XX</span>
                 </p>
             </div>
@@ -80,7 +80,5 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.transition-opacity {
-    opacity: 0;
-}
+.transition-opacity { opacity: 0; }
 </style>

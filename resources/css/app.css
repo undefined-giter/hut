@@ -79,11 +79,11 @@ h3{
 }
 
 .open-menu {
-    width: 130px;
+    width: 118px;
     position: absolute;
     right: 0;
     top: 56px;
-    background-color: #25282a;
+    background-color: rgba(37, 40, 42, 0.66);
     color: #ccc;
     text-align: right;
     z-index: 100;
@@ -99,6 +99,8 @@ h3{
 a:hover {z-index: 50;}
 
 .active, th, tr:hover{@apply bg-orange-500 dark:bg-orange-600 !important;}
+
+.open-menu .active{background-color: rgba(249, 115, 22, 0.66) !important;}
 
 .btn {
     background-color: #004acb;
