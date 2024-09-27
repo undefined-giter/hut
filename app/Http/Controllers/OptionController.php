@@ -29,6 +29,8 @@ class OptionController extends Controller
             'price' => 'nullable|numeric',
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
+            'by_day' => 'required|boolean',
+            'by_day_preselected' => 'required|boolean',
         ]);
 
         Option::create($validated);
@@ -50,6 +52,8 @@ class OptionController extends Controller
             'price' => 'nullable|numeric',
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
+            'by_day' => 'required|boolean',
+            'by_day_preselected' => 'required|boolean',
         ]);
 
         $option->update($validated);
@@ -72,6 +76,24 @@ class OptionController extends Controller
         ]);
 
         return redirect()->back()->with('success', ['Statut de présélection mis à jour']);
+    }
+
+    public function toggleByDay(Request $request, Option $option)
+    {
+        $option->update([
+            'by_day' => $request->by_day,
+        ]);
+
+        return redirect()->back()->with('success', ['Statut "Par jour" mis à jour']);
+    }
+
+    public function toggleByDayPreselected(Request $request, Option $option)
+    {
+        $option->update([
+            'by_day_preselected' => $request->by_day_preselected,
+        ]);
+
+        return redirect()->back()->with('success', ['Statut "Présélection par jour" mis à jour']);
     }
 
     public function destroy(Option $option)

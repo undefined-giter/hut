@@ -20,10 +20,10 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
     Route::post('/book/{id}/update', [ReservationController::class, 'store'])->name('book.update');
+    Route::get('/get-prices', [PriceController::class, 'getPrices'])->defaults('return_json', true);
 
     Route::delete('/book/{id}', [ReservationController::class, 'destroy'])->name('book.delete');
 
-    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
@@ -40,6 +40,8 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::resource('/options', OptionController::class)->except(['show']);
     Route::put('/options/{option}/toggle-availability', [OptionController::class, 'toggleAvailability'])->name('options.toggle-availability');
     Route::put('/options/{option}/toggle-preselected', [OptionController::class, 'togglePreselected'])->name('options.toggle-preselected');
+    Route::put('/options/{option}/toggle-by-day', [OptionController::class, 'toggleByDay'])->name('options.toggle-by-day');
+    Route::put('/options/{option}/toggle-by-day-preselected', [OptionController::class, 'toggleByDayPreselected'])->name('options.toggle-by-day-preselected');
 
     Route::get('/prices', [PriceController::class, 'getPrices'])->name('prices');
     Route::post('/prices/update', [PriceController::class, 'updatePrices'])->name('prices.update');

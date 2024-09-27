@@ -28,15 +28,31 @@
                     </p>
                 </div>
 
-                <div class="flex items-center mb-4">
-                    <input v-model="form.available" type="checkbox" id="available" class="form-checkbox h-4 w-4 text-blue-600 border-orange-500 rounded focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white" />
-                    <label for="available" class="ml-2 text-blue-500 dark:text-blue-200 font-mirza">Disponible</label>
+                <div class="flex justify-between space-x-6">
+                    <div>
+                        <div class="flex items-center mb-4">
+                            <input v-model="form.available" type="checkbox" id="available" class="form-checkbox h-4 w-4 text-blue-600 border-orange-500 rounded focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white" />
+                            <label for="available" class="ml-2 text-blue-500 dark:text-blue-200 font-mirza">Disponible</label>
+                        </div>
+        
+                        <div class="flex items-center mb-4">
+                            <input v-model="form.preselected" type="checkbox" id="preselected" class="form-checkbox h-4 w-4 text-blue-600 border-orange-500 rounded focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white" />
+                            <label for="preselected" class="ml-2 text-blue-500 dark:text-blue-200 font-mirza">Présélectionnée</label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-4">
+                            <input v-model="form.by_day" type="checkbox" id="by_day" class="form-checkbox h-4 w-4 text-blue-600 border-orange-500 rounded focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white" />
+                            <label for="by_day" class="ml-2 text-blue-500 dark:text-blue-200 font-mirza">Par Jour</label>
+                        </div>
+        
+                        <div class="flex items-center mb-4">
+                            <input v-model="form.by_day_preselected" type="checkbox" id="by_day_preselected" class="form-checkbox h-4 w-4 text-blue-600 border-orange-500 rounded focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white" />
+                            <label for="by_day_preselected" class="ml-2 text-blue-500 dark:text-blue-200 font-mirza">Présélectionnée Par Jour</label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex items-center mb-4">
-                    <input v-model="form.preselected" type="checkbox" id="preselected" class="form-checkbox h-4 w-4 text-blue-600 border-orange-500 rounded focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white" />
-                    <label for="preselected" class="ml-2 text-blue-500 dark:text-blue-200 font-mirza">Présélectionnée</label>
-                </div>
 
                 <div class="flex justify-between">
                     <button type="button" @click="goBack();" class="btn bg-gray-500 hover:bg-gray-600 text-white font-bold px-6 py-2 rounded-lg shadow focus:outline-none focus:ring focus:ring-gray-300">
@@ -69,8 +85,10 @@ const form = reactive({
     name: props.option ? props.option.name : '',
     description: props.option ? props.option.description : '',
     price: props.option ? props.option.price : '',
-    available: props.option ? Boolean(props.option.available) : false,
-    preselected: props.option ? Boolean(props.option.preselected) : false
+    available: props.option ? Boolean(props.option.available) : true,
+    preselected: props.option ? Boolean(props.option.preselected) : false,
+    by_day: props.option ? Boolean(props.option.by_day) : false,
+    by_day_preselected: props.option ? Boolean(props.option.by_day_preselected) : false,
 });
 
 const submitForm = () => {

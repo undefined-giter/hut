@@ -15,7 +15,6 @@ class ReservationController extends Controller
         $reservations = Reservation::where('end_date', '>', $today)->get();
 
         $options = Option::where('available', true)->get();
-
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
@@ -26,7 +25,7 @@ class ReservationController extends Controller
     {
         $options = json_decode($request->input('options'), true);
         if (!is_array($options)) {
-            return back()->with('error', 'Erreur dans les options sélectionnées.');
+            return back()->with('error', ['Erreur dans les options sélectionnées.']);
         }
         $request->merge(['options' => $options]);
 
@@ -36,6 +35,7 @@ class ReservationController extends Controller
             'nights' => 'required|integer|min:1',
             'options' => 'array',
             'options.*' => 'exists:options,id',
+            'res_price' => 'required|numeric',
         ]);
 
         if($reservationId == null){
@@ -68,21 +68,24 @@ class ReservationController extends Controller
                 if ($existingReservation->start_date == $validatedData['start_date'] && $existingReservation->end_date == $validatedData['end_date']) {
                     if (isset($validatedData['options'])) {
                         $existingReservation->options()->sync($validatedData['options']);
+
+                        $existingReservation->update(['res_price' => $validatedData['res_price']]);
                     }
 
-                    return redirect()->route('gallery')->with('success', ['Vos options ont bien été mises à jour']);
+                    return redirect()->route('profile.edit')->with('success', ['Vos options ont bien été mises à jour']);
                 } else {
                     $existingReservation->update([
                         'start_date' => $validatedData['start_date'],
                         'end_date' => $validatedData['end_date'],
                         'nights' => $validatedData['nights'],
+                        'res_price' => $validatedData['res_price'],
                     ]);
 
                     if (isset($validatedData['options'])) {
                         $existingReservation->options()->sync($validatedData['options']);
                     }
 
-                    return redirect()->route('gallery')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
+                    return redirect()->route('profile.edit')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
                 }
             }
         }
@@ -92,6 +95,7 @@ class ReservationController extends Controller
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
             'nights' => $validatedData['nights'],
+            'res_price' => $validatedData['res_price'],
             'status' => 'pending',
         ]);
 
@@ -99,7 +103,7 @@ class ReservationController extends Controller
             $reservation->options()->sync($validatedData['options']);
         }
 
-        return redirect()->route('gallery')->with('success', ['Réservation effectuée ! À très vite 🌞']);
+        return redirect()->route('profile.edit')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }
 
 

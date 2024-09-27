@@ -9,7 +9,7 @@
                     <li v-for="reservation in currentReservations" :key="reservation.id" class="dark:text-blue-400">
                     {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : 
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
-                    pour {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
+                    {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
 
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <span class="dark:text-blue-600">Options demandées :</span>
@@ -23,7 +23,7 @@
                             <em><span class="text-blue-600">Aucune option demandée</span></em>
                         </div>
 
-                        <Price :resNights="reservation.nights" :resOptions="reservation.options" />
+                        <p class="!text-green-400 text-right mr-1.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                     </li>
                 </ul>
         
@@ -38,7 +38,7 @@
                             <div>
                                 {{ formatDateShort(new Date(reservation.start_date)) }} - 
                                 {{ formatDateShort(new Date(reservation.end_date)) }} : 
-                                pour {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
+                                {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
                             </div>
                             
                             <div class="flex text-sm mt-1">
@@ -49,7 +49,7 @@
                                 <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
                                     <input type="hidden" name="_token" :value="csrfToken" />
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="text-red-600">
+                                    <button type="submit" class="text-red-600 mr-1">
                                         <span class="text-xs">❌</span>Annuler
                                     </button>
                                 </form>
@@ -71,7 +71,7 @@
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
 
-                        <Price :resNights="reservation.nights" :resOptions="reservation.options" />
+                        <p class="!text-green-400 text-right mr-1.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                     </li>
                 </ul>
 
@@ -82,7 +82,7 @@
                     <li v-for="(reservation, index) in pastReservations" 
                         :key="reservation.id" 
                         :class="{ 'mb-3': index !== pastReservations.length - 1 }" class="dark:text-blue-400">
-                    {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : pour {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }} <br>
+                    {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }} <br>
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
                     
                         <div v-if="reservation.options && reservation.options.length > 0">
@@ -97,7 +97,7 @@
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
 
-                        <Price :resNights="reservation.nights" :resOptions="reservation.options" />
+                        <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                     </li>
                 </ul>
             </div>

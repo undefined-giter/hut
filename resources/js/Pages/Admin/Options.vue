@@ -20,6 +20,8 @@
                     <th class="text-center">Prix<span class="text-sm mx-0.5">€</span></th>
                     <th class="text-center">Disponible</th>
                     <th class="text-center">Présélectionnée</th>
+                    <th class="text-center">Par jour</th>
+                    <th class="text-center">Présélect/jour</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -53,6 +55,20 @@
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.preselected" class="sr-only peer" 
                                    @change="togglePreselected(option.id, option.preselected)" />
+                            <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
+                        </label>
+                    </td>
+                    <td class="border-b border-[#EA580C] text-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" :checked="option.by_day" class="sr-only peer" 
+                                   @change="toggleByDay(option.id, option.by_day)" />
+                            <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-700"></div>
+                        </label>
+                    </td>
+                    <td class="border-b border-[#EA580C] text-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" :checked="option.by_day_preselected" class="sr-only peer" 
+                                   @change="toggleByDayPreselected(option.id, option.by_day_preselected)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
                         </label>
                     </td>
@@ -97,6 +113,24 @@ const togglePreselected = (id, currentState) => {
         preserveScroll: true,
         onSuccess: () => {
             alert('Statut de présélection mis à jour');
+        }
+    });
+};
+
+const toggleByDay = (id, currentState) => {
+    Inertia.put(route('admin.options.toggle-by-day', id), { by_day: !currentState }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Statut "Par jour" mis à jour');
+        }
+    });
+};
+
+const toggleByDayPreselected = (id, currentState) => {
+    Inertia.put(route('admin.options.toggle-by-day-preselected', id), { by_day_preselected: !currentState }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Statut "Présélection par jour" mis à jour');
         }
     });
 };

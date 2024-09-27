@@ -24,6 +24,7 @@
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="nights" :value="numberOfNights" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsIds)" />
+      <input type="hidden" name="res_price" :value="calculatedPrice" />
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -52,8 +53,8 @@
 
       <div class="mt-4">
         <h3 class="underline text-blue-700 dark:text-blue-500 text-xl">Options disponibles :</h3>
-        <div ref="gridContainer" class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto p-2">
-          <label v-for="option in options" :key="option.id" :class="['relative h-[140px] p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer transition-transform duration-300 transform hover:scale-105 hover:z-10', selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
+        <div ref="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto p-1">
+          <label v-for="option in options" :key="option.id" :class="['relative h-[154px] option_hover p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10', selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
             <div class="flex items-center w-full">
               <input
                 type="checkbox"
@@ -67,16 +68,25 @@
                 <div v-if="option.price === '0.00'">Inclu</div>
               </div>
             </div>
-            <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words' : 'text-orange-600 dark:text-gray-200 break-words'"
+            <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words mb-0.5' : 'text-orange-600 dark:text-gray-200 break-words mb-0.5'"
               class="overflow-y-scroll max-h-[80px] hide-scrollbar">{{ option.description }}
             </p>
+            <label @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
+              <span class="text-sm absolute right-12 w-[60px] flex text-gray-800">Par jour ?</span>
+              <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
+              <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-['']
+                after:absolute after:top-[2px] after:left-[3px] peer-checked:bg-green-800 
+                peer-checked:after:bg-green-300 after:bg-gray-300 
+                peer-checked:before:bg-green-800 after:rounded-full after:h-5 after:w-5
+                after:transition-all border border-black border-[1.5px]"></div>
+            </label>
           </label>
         </div>
       </div>
     </form>
 
     <div class="h-[32px]">
-      <Price :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
+      <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
     </div>
 
     <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn ml-auto block']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
@@ -95,7 +105,7 @@
             </form>
             <span class="text-zinc-800 text-sm"> | </span> 
             <Link :href="route('admin.details', reservation.user_id)" target="_blank"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
-            <Price :resNights="reservation.nights" :resOptions="reservation.options" class="-mt-7" />
+            <p class="!text-green-400 text-right mr-1.5 -mt-8">Total : {{ reservation.res_price }}<span class="text-sm -mt-7">€</span></p>
           </span>
         </li></p>
       </div>
@@ -122,11 +132,18 @@ const csrfToken = ref(null);
 const today = new Date();
 const selectedOptionsObjects = ref([]);  
 const selectedOptionsIds = ref([]);  
+const calculatedPrice = ref(0);
 
 onMounted(() => {
-  options.sort((a, b) => b.preselected - a.preselected);
-  selectedOptionsObjects.value = options.filter(option => option.preselected);
-  selectedOptionsIds.value = options.filter(option => option.preselected).map(option => option.id);
+  if (Array.isArray(options)) {
+    options.forEach(option => {
+      option.by_day = option.by_day_preselected == 1;
+    });
+
+    options.sort((a, b) => b.preselected - a.preselected);
+    selectedOptionsObjects.value = options.filter(option => option.preselected);
+    selectedOptionsIds.value = options.filter(option => option.preselected).map(option => option.id);
+  }
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -134,13 +151,12 @@ onMounted(() => {
     arrivalDate.value = new Date(reservationEdit.start_date);
     departureDate.value = new Date(reservationEdit.end_date);
     numberOfNights.value = reservationEdit.nights;
-    selectedOptionsIds.value = reservationEdit.options ? reservationEdit.options.map(option => option.id) : [];
-    selectedOptionsObjects.value = reservationEdit.options || [];
-  }
-});
 
-watch(selectedOptionsIds, (newSelectedIds) => {
-  selectedOptionsObjects.value = options.filter(option => newSelectedIds.includes(option.id));
+    if (Array.isArray(reservationEdit.options)) {
+      selectedOptionsIds.value = reservationEdit.options.map(option => option.id);
+      selectedOptionsObjects.value = reservationEdit.options;
+    }
+  }
 });
 
 const handleDateClick = (cell) => {
@@ -198,30 +214,39 @@ const sortedReservations = computed(() => {
   return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 });
 
+watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
+  const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));
+
+  if (JSON.stringify(updatedOptions) !== JSON.stringify(selectedOptionsObjects.value)) {
+    selectedOptionsObjects.value = updatedOptions;
+  }
+
+  options.forEach(option => {
+    if (newSelectedIds.includes(option.id)) {
+      if (!option.by_day) {
+        option.by_day = option.by_day_preselected == 1;
+      }
+    } else {
+      if (option.by_day) {
+        option.by_day = false;
+      }
+    }
+  });
+});
+
+const handleOptionChange = (option) => {
+  if (selectedOptionsIds.value.includes(option.id)) {
+    selectedOptionsObjects.value = options.filter(opt => selectedOptionsIds.value.includes(opt.id));
+  }
+};
+
+const updateCalculatedPrice = (price) => {
+  calculatedPrice.value = price;
+};
+
 const confirmDelete = (event) => {
   if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
     event.target.submit();
   }
 };
 </script>
-
-<style>
-.vuecal__cell-date {
-    color: #ccc;
-    background: blue;
-    border-radius: 50%;
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    line-height: 1.8rem;
-    text-align: center;
-}
-.vuecal__cell-events-count{display: none;}
-.vuecal__cell--out-of-scope{color:grey;}
-.vuecal__cell--disabled {text-decoration:line-through;}
-.vuecal__cell--before-min {color: orangered;}
-
-.hide-scrollbar::-webkit-scrollbar {display: none;}
-.hide-scrollbar {scrollbar-width: none;}
-.hide-scrollbar {-ms-overflow-style: none;}
-</style>
