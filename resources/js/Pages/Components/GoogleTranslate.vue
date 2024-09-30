@@ -16,11 +16,12 @@
 import { onMounted } from 'vue';
 
 const openDropdown = () => {
+    const worldImg = document.querySelector('#worldImg');
+    const googleTranslateElement = document.querySelector('#google_translate_element');
+
     if (window.innerWidth < 768) {
         const googleTradWaiter = document.querySelector('#googleTradWaiter');
-        if (googleTradWaiter) {
-            const googleTranslateElement = document.querySelector('#google_translate_element');
-            
+        if (googleTradWaiter && googleTranslateElement) {
             if (!googleTradWaiter.contains(googleTranslateElement)) {
                 googleTradWaiter.appendChild(googleTranslateElement);
             }
@@ -28,20 +29,37 @@ const openDropdown = () => {
             googleTranslateElement.style.display = 'block';
         }
     } else {
-        const googleTranslateElement = document.querySelector('#google_translate_element');
         if (googleTranslateElement) {
             googleTranslateElement.style.display = 'block';
         }
     }
 
-    document.querySelector('#worldImg').style.display = 'none';
-    document.querySelector("#\\:0\\.targetLanguage > img").style.display = 'none';
-    document.querySelector("#\\:0\\.targetLanguage").style.height = '20px';
-    document.querySelector("#\\:0\\.targetLanguage > span > a > span:nth-child(5)").style.display = 'none';
-    document.querySelector('#google_translate_element > div').style.height = '0';
-    document.querySelector("#\\:0\\.targetLanguage").style.backgroundColor = 'blue';
-    document.querySelector("#\\:0\\.targetLanguage > span > a").style.color = '#b07501';
-    document.querySelector("#\\:0\\.targetLanguage").style.border = 'none';
+    if (worldImg) {
+        worldImg.style.display = 'none';
+    }
+
+    const targetLanguage = document.querySelector("#\\:0\\.targetLanguage");
+    if (targetLanguage) {
+        const targetLanguageImg = targetLanguage.querySelector('img');
+        const targetLanguageSpan = targetLanguage.querySelector('span > a > span:nth-child(5)');
+
+        if (targetLanguageImg) targetLanguageImg.style.display = 'none';
+        if (targetLanguageSpan) targetLanguageSpan.style.display = 'none';
+
+        targetLanguage.style.height = '20px';
+        targetLanguage.style.backgroundColor = 'blue';
+        targetLanguage.style.border = 'none';
+
+        const targetLanguageLink = targetLanguage.querySelector('span > a');
+        if (targetLanguageLink) {
+            targetLanguageLink.style.color = '#b07501';
+        }
+    }
+
+    const googleTranslateElementDiv = googleTranslateElement?.querySelector('div');
+    if (googleTranslateElementDiv) {
+        googleTranslateElementDiv.style.height = '0';
+    }
 
     setInterval(() => {
         const targetElement = document.querySelector("#\\:2\\.container");
@@ -51,13 +69,12 @@ const openDropdown = () => {
     }, 1500);
 };
 
+
 onMounted(() => {
     const googleTranslateScript = document.createElement('script');
     googleTranslateScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     googleTranslateScript.async = true;
     document.head.appendChild(googleTranslateScript);
-
-    document.querySelector('#google_translate_element').style.display = 'none';
 
     window.googleTranslateElementInit = () => {
         if (window.google && window.google.translate) {
@@ -67,6 +84,11 @@ onMounted(() => {
                 layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
             }, 'google_translate_element');
+            
+            const googleTranslateElement = document.querySelector('#google_translate_element');
+            if (googleTranslateElement) {
+                googleTranslateElement.style.display = 'none';
+            }
         } else {
             console.error('Google Translate API failed to load.');
         }

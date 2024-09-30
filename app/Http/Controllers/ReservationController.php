@@ -18,6 +18,8 @@ class ReservationController extends Controller
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
+
+            'reserved_in_out' => '2024-10-02',
         ]);
     }
 
@@ -116,10 +118,14 @@ class ReservationController extends Controller
         
         $reservationEdit = Reservation::with('options')->findOrFail($id);
 
+        $arrivalDate = $reservationEdit->start_date;
+        $showMonth = $showMonth = date('Y-m-01', strtotime($arrivalDate));
+
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
             'reservationEdit' => $reservationEdit,
+            'showMonthEdit' => $showMonth,
         ]);
     }    
 

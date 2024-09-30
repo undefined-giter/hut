@@ -176,27 +176,3 @@ footer {
     width: 100%;
     @apply text-orange-600;
 }
-
-
-/* Book.index - Réservations */
-.option_hover {transition: transform 0.3s ease;}
-.option_hover:hover {transform: scale(1.02);}
-
-.vuecal__cell-date {
-    color: #ccc;
-    background: blue;
-    border-radius: 50%;
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    line-height: 1.8rem;
-    text-align: center;
-}
-.vuecal__cell-events-count{display: none;}
-.vuecal__cell--out-of-scope{color:grey;}
-.vuecal__cell--disabled {text-decoration:line-through;}
-.vuecal__cell--before-min {color: orangered;}
-
-.hide-scrollbar::-webkit-scrollbar {display: none;}
-.hide-scrollbar {scrollbar-width: none;}
-.hide-scrollbar {-ms-overflow-style: none;}

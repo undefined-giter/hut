@@ -9,14 +9,25 @@
     <vue-cal
       locale="fr"
       active-view="month"
-      class="vuecal--rounded-theme vuecal--blue-theme dark:text-gray-200 text-blue-700"
+      class="vuecal--rounded-theme vuecal--blue-theme"
       hide-view-selector
       @cell-click="handleDateClick"
       :disable-views="['years', 'year', 'week', 'day']"
       :dblclick-to-navigate="false"
       style="height:300px;"
       :min-date="today"
-    />
+      :selected-date="showMonth"
+    >
+      <template #cell-content="{ cell, view, events }">
+        <span
+          :style="isSpecialDate(cell.startDate) ? 
+            'background: linear-gradient(to bottom, blue, blue, blue, blue, red, red, red, red); color: white;' : ''"
+          :class="['vuecal__cell-date']"
+        >
+          {{ cell.content }}
+        </span>
+      </template>
+    </vue-cal>
 
     <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
       <input type="hidden" name="_token" :value="csrfToken" />
@@ -53,7 +64,7 @@
 
       <div class="mt-4">
         <h3 class="underline text-blue-700 dark:text-blue-500 text-xl">Options disponibles :</h3>
-        <div ref="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto p-1">
+        <div ref="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto" style="padding:3px">
           <label v-for="option in options" :key="option.id" :class="['relative h-[154px] option_hover p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10', selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
             <div class="flex items-center w-full">
               <input
@@ -121,10 +132,11 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit } = usePage().props;
+const { auth, reservations, options, reservationEdit, showMonthEdit, reserved_in_out } = usePage().props;
 
 const arrivalDate = ref(null);
 const departureDate = ref(null);
+const showMonth = ref(showMonthEdit ?? null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
 const isReservationValid = ref(reservationEdit ? true : false);
@@ -134,7 +146,18 @@ const selectedOptionsObjects = ref([]);
 const selectedOptionsIds = ref([]);  
 const calculatedPrice = ref(0);
 
-onMounted(() => {
+
+const specialDate = reserved_in_out
+
+const isSpecialDate = (cellDate) => {
+  const cell = cellDate.getFullYear() + '-' + String(cellDate.getMonth() + 1).padStart(2, '0') + '-' + String(cellDate.getDate()).padStart(2, '0');
+  return cell === specialDate;
+};
+
+
+
+onMounted(() => {  
+
   if (Array.isArray(options)) {
     options.forEach(option => {
       option.by_day = option.by_day_preselected == 1;
@@ -192,6 +215,7 @@ const resetReservation = () => {
   dateError.value = null;
   numberOfNights.value = 0;
   isReservationValid.value = false;
+  document.querySelector('.vuecal__cell--selected').classList.remove('vuecal__cell--selected')
 };
 
 const formatDate = (date) => {
@@ -223,7 +247,7 @@ watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
 
   options.forEach(option => {
     if (newSelectedIds.includes(option.id)) {
-      if (!option.by_day) {
+      if (oldSelectedIds.includes(option.id) === false) {
         option.by_day = option.by_day_preselected == 1;
       }
     } else {
@@ -250,3 +274,44 @@ const confirmDelete = (event) => {
   }
 };
 </script>
+
+<style>
+/* Book.index - Réservations */
+.option_hover {transition: transform 0.3s ease;}
+.option_hover:hover {transform: scale(1.02);}
+
+.vuecal__cell-date {
+  color: #ccc;
+  background: blue;
+  border-radius: 50%;
+  width: 1.8rem;
+  height: 1.8rem;
+  line-height: 2rem;
+  font-weight: 500;
+  font-size: 1.1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vuecal__cell--before-min .vuecal__cell-content .vuecal__cell-date{
+  color: #ccc; 
+  background: rgb(144, 0, 0);
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.reserved-event {
+  background-color: yellow !important;
+  color: black !important;
+}
+
+/* .vuecal__cell-events-count{display: none;} */
+/* .vuecal__cell--selected {;} */
+/* .vuecal__cell--out-of-scope{;} */
+/* .vuecal__cell--disabled {;} */
+
+.hide-scrollbar::-webkit-scrollbar {display: none;}
+.hide-scrollbar {scrollbar-width: none;}
+.hide-scrollbar {-ms-overflow-style: none;}
+</style>
