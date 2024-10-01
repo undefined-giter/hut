@@ -9,21 +9,54 @@
     <vue-cal
       locale="fr"
       active-view="month"
-      class="vuecal--rounded-theme vuecal--blue-theme"
+      class="vuecal--rounded-theme vuecal--blue-theme text-black dark:text-[#ccc]"
       hide-view-selector
       @cell-click="handleDateClick"
       :disable-views="['years', 'year', 'week', 'day']"
       :dblclick-to-navigate="false"
-      style="height:300px;"
+      style="height:400px;"
       :min-date="today"
       :selected-date="showMonth"
     >
-      <template #cell-content="{ cell, view, events }">
-        <span
-          :style="isSpecialDate(cell.startDate) ? 
-            'background: linear-gradient(to bottom, blue, blue, blue, blue, red, red, red, red); color: white;' : ''"
-          :class="['vuecal__cell-date']"
-        >
+      <template #cell-content="{ cell }">
+        <span :style="(() => {
+              const userIn = Array.isArray(user_in_date) && user_in_date.includes(cell.formattedDate);
+              const userInner = Array.isArray(user_inner_date) && user_inner_date.includes(cell.formattedDate);
+              const userOut = Array.isArray(user_out_date) && user_out_date.includes(cell.formattedDate);
+              const userSwitch = Array.isArray(user_switch_date) && user_switch_date.includes(cell.formattedDate);
+              const userSwitchToOther = Array.isArray(user_switch_to_other) && user_switch_to_other.includes(cell.formattedDate);
+              const otherSwitchToUser = Array.isArray(other_switch_to_user) && other_switch_to_user.includes(cell.formattedDate);
+
+              const result = isReservedDate(cell.formattedDate);
+              
+              if (userIn) {
+                return 'background: linear-gradient(to right, blue, blue, blue, blue, green, green, green, green);';
+              } else if (userInner) {
+                return 'background: green;';
+              } else if (userOut) {
+                return 'background: linear-gradient(to right, green, green, green, green, blue, blue, blue, blue);';
+              } else if (userSwitch) {
+                return 'background: linear-gradient(to right, green, green, green, green, purple, green, green, green, green);';
+              } else if (userSwitchToOther) {
+                return 'background: linear-gradient(to right, green, green, green, green, purple, red, red, red, red);';
+              } else if (otherSwitchToUser) {
+                return 'background: linear-gradient(to right, red, red, red, red, purple, green, green, green, green);';
+              }
+
+              switch (result) {
+                  case 'in':
+                      return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                  case 'inner':
+                      return 'background: red;';
+                  case 'out':
+                      return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                  case 'switch':
+                      return 'background: linear-gradient(to right, red, red, red, purple, red, red, red);';
+                  default:
+                      return '';
+              }
+          })()"
+          :class="['vuecal__cell-date text-white']">
           {{ cell.content }}
         </span>
       </template>
@@ -62,37 +95,33 @@
         <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">Réinitialiser</button>
       </div>
 
-      <div class="mt-4">
-        <h3 class="underline text-blue-700 dark:text-blue-500 text-xl">Options disponibles :</h3>
-        <div ref="gridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto" style="padding:3px">
-          <label v-for="option in options" :key="option.id" :class="['relative h-[154px] option_hover p-4 border border-blue-600 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10', selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
-            <div class="flex items-center w-full">
-              <input
-                type="checkbox"
-                :value="option.id"
-                v-model="selectedOptionsIds"
-                class="mr-2 form-checkbox h-6 w-6 rounded-full text-blue-600 border-gray-300"
-              />
-              <div class="flex justify-between w-full">
-                <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
-                <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
-                <div v-if="option.price === '0.00'">Inclu</div>
-              </div>
+      <h3 class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
+      <div :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '6px' : '0'}`, paddingRight: isScrollbarVisible ? '1px' : '0' }">
+        <label v-for="(option, index) in options" :key="option.id"
+              class="relative h-[154px] option_hover p-4 border rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
+              :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
+          <div class="flex items-center w-full">
+            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-2 form-checkbox h-6 w-6 rounded-full text-blue-600 border-gray-300"/>
+            <div class="flex justify-between w-full">
+              <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
+              <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
+              <div v-if="option.price === '0.00'">Inclu</div>
             </div>
-            <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words mb-0.5' : 'text-orange-600 dark:text-gray-200 break-words mb-0.5'"
-              class="overflow-y-scroll max-h-[80px] hide-scrollbar">{{ option.description }}
-            </p>
-            <label @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
-              <span class="text-sm absolute right-12 w-[60px] flex text-gray-800">Par jour ?</span>
-              <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
-              <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-['']
-                after:absolute after:top-[2px] after:left-[3px] peer-checked:bg-green-800 
-                peer-checked:after:bg-green-300 after:bg-gray-300 
-                peer-checked:before:bg-green-800 after:rounded-full after:h-5 after:w-5
-                after:transition-all border border-black border-[1.5px]"></div>
-            </label>
+          </div>
+
+          <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words mb-0.5' : 'text-orange-600 dark:text-gray-200 break-words mb-0.5'" class="overflow-y-scroll max-h-[80px] whitespace-pre-wrap hide-scrollbar">
+            {{ option.description }}
+          </p>
+
+          <label @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
+            <span class="text-sm absolute right-12 w-[60px] flex text-gray-800">Par jour ?</span>
+            <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
+            <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] 
+              after:absolute after:top-[2px] after:left-[3px] peer-checked:bg-green-800 peer-checked:after:bg-green-300 
+              after:bg-gray-300 peer-checked:before:bg-green-800 after:rounded-full after:h-5 after:w-5 after:transition-all border border-black border-[1.5px]"
+            ></div>
           </label>
-        </div>
+        </label>
       </div>
     </form>
 
@@ -125,14 +154,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
 import Price from './../Components/Price.vue';
 import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, reserved_in_out } = usePage().props;
+const { auth, reservations, options, reservationEdit, showMonthEdit, 
+  in_date, inner_date, out_date, switch_date, 
+  user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user  } = usePage().props;
 
 const arrivalDate = ref(null);
 const departureDate = ref(null);
@@ -145,19 +176,11 @@ const today = new Date();
 const selectedOptionsObjects = ref([]);  
 const selectedOptionsIds = ref([]);  
 const calculatedPrice = ref(0);
-
-
-const specialDate = reserved_in_out
-
-const isSpecialDate = (cellDate) => {
-  const cell = cellDate.getFullYear() + '-' + String(cellDate.getMonth() + 1).padStart(2, '0') + '-' + String(cellDate.getDate()).padStart(2, '0');
-  return cell === specialDate;
-};
-
+const gridClass = ref('three-columns');
+const isScrollbarVisible = ref(false);
 
 
 onMounted(() => {  
-
   if (Array.isArray(options)) {
     options.forEach(option => {
       option.by_day = option.by_day_preselected == 1;
@@ -180,7 +203,24 @@ onMounted(() => {
       selectedOptionsObjects.value = reservationEdit.options;
     }
   }
+
+  updateGridClass();
+  window.addEventListener('resize', updateGridClass);
 });
+
+const isReservedDate = (cellDate) => {
+  if (in_date.includes(cellDate)) {
+    return 'in';
+  } else if (inner_date.includes(cellDate)) {
+    return 'inner';
+  } else if (out_date.includes(cellDate)) {
+    return 'out';
+  } else if (switch_date.includes(cellDate)) {
+    return 'switch';
+  } else {
+    return false;
+  }
+};
 
 const handleDateClick = (cell) => {
   const selectedDate = new Date(cell);
@@ -238,6 +278,27 @@ const sortedReservations = computed(() => {
   return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 });
 
+
+const updateGridClass = () => {
+  const windowWidth = window.innerWidth;
+  
+  if (windowWidth >= 1024) {
+    gridClass.value = 'three-columns';
+  } else if (windowWidth >= 640) {
+    gridClass.value = 'two-columns';
+  } else {
+    gridClass.value = 'one-column';
+  }
+
+  checkScrollbar();
+};
+
+const checkScrollbar = () => {
+  const container = document.querySelector('.grid');
+  isScrollbarVisible.value = container.scrollHeight > container.clientHeight;
+};
+
+
 watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
   const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));
 
@@ -273,12 +334,27 @@ const confirmDelete = (event) => {
     event.target.submit();
   }
 };
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateGridClass);
+});
 </script>
 
 <style>
-/* Book.index - Réservations */
 .option_hover {transition: transform 0.3s ease;}
 .option_hover:hover {transform: scale(1.02);}
+
+.one-column .option_hover {transform-origin: center;}
+
+.two-columns .option_hover:nth-child(even) {transform-origin: right;}
+
+.two-columns .option_hover:nth-child(odd) {transform-origin: left;}
+
+.three-columns .option_hover:nth-child(3n + 1) {transform-origin: left;}
+
+.three-columns .option_hover:nth-child(3n + 2) {transform-origin: center;}
+
+.three-columns .option_hover:nth-child(3n) {transform-origin: right;}
 
 .vuecal__cell-date {
   color: #ccc;
@@ -310,7 +386,9 @@ const confirmDelete = (event) => {
 /* .vuecal__cell--selected {;} */
 /* .vuecal__cell--out-of-scope{;} */
 /* .vuecal__cell--disabled {;} */
+</style>
 
+<style scoped>
 .hide-scrollbar::-webkit-scrollbar {display: none;}
 .hide-scrollbar {scrollbar-width: none;}
 .hide-scrollbar {-ms-overflow-style: none;}

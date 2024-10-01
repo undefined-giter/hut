@@ -58,6 +58,28 @@
                 Suivant
             </button>
         </div>
+
+        <h2 class="text-xl font-bold underline mb-2 mt-8">Statistiques Moyennes</h2>
+        <p class="text-lg font-semibold text-center">Réservation demandées ces 12 derniers mois</p>
+        <p class="text-xs font-light text-center text-gray-800" title="Pour une meilleure visualisation des activités du site">La date ou l'utilisateur a passer commande est prise en compte - pas seulement les réservations passées</p>
+        <table class="mx-auto">
+            <thead class="border-x border-[#EA580C]">
+                <tr>
+                    <th class="py-2 md:min-w-[150px]">PanierTT/res</th>
+                    <th class="md:min-w-[150px]">Options/res</th>
+                    <th class="md:min-w-[150px]">Jours/res</th>
+                    <th class="md:min-w-[150px]">Rés/mois</th>
+                </tr>
+            </thead>
+            <tbody class="border-x border-[#EA580C]">
+                <tr>
+                    <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageTtcBasket }}</td>
+                    <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageOptionBasket }}</td>
+                    <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageDaysReserved }}</td>
+                    <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageReservationsPerMonth }}</td>
+                </tr>
+            </tbody>
+        </table>
     </Layout>
 </template>
 
@@ -67,7 +89,11 @@ import Layout from '../Layout.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
-    users: Object
+    users: Object,
+    averageTtcBasket: Number,
+    averageOptionBasket: Number,
+    averageDaysReserved: Number,
+    averageReservationsPerMonth: Number,
 });
 
 const goTo = (url) => {
