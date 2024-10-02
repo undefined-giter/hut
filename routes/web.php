@@ -48,5 +48,5 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// Possibilité d'utiliser $resId sur le calendar
+// Fixer bug others users startDate et endDate -> jour rouge-violet-rouge devrait etre blue-rouge ou rouge-blue en sortie.
 // Mailing

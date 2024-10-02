@@ -19,7 +19,40 @@
       :selected-date="showMonth"
     >
       <template #cell-content="{ cell }">
-        <span :style="(() => {
+        <span 
+            :class="['vuecal__cell-date cursor-pointer', edit_reservation_dates.map(date => new Date(date).toISOString().split('T')[0])
+              .includes(new Date(cell.formattedDate).toISOString().split('T')[0]) 
+              ? '!text-[#cca5cc] font-bold underline decoration-black underline-offset-2 shadow-[0_0_10px_#b700b7]'
+              : '',
+              (() => {
+                const cellDateFormatted = cell.formattedDate;
+                const arrivalDateFormatted = arrivalDate ? arrivalDate.toISOString().split('T')[0] : null;
+                const departureDateFormatted = departureDate ? departureDate.toISOString().split('T')[0] : null;
+
+                const innerDates = [];
+                if (arrivalDateFormatted && departureDateFormatted) {
+                  let currentDate = new Date(arrivalDateFormatted);
+                  currentDate.setDate(currentDate.getDate() + 1);
+
+                  while (currentDate.toISOString().split('T')[0] < departureDateFormatted) {
+                    innerDates.push(currentDate.toISOString().split('T')[0]);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                  }
+                }
+
+                if (
+                  arrivalDateFormatted === cellDateFormatted || 
+                  departureDateFormatted === cellDateFormatted ||
+                  innerDates.includes(cellDateFormatted)
+                ) {
+                  return 'selected-range';
+                }
+
+                return '';
+              })()
+            ]"
+
+            :style="(() => {
               const userIn = Array.isArray(user_in_date) && user_in_date.includes(cell.formattedDate);
               const userInner = Array.isArray(user_inner_date) && user_inner_date.includes(cell.formattedDate);
               const userOut = Array.isArray(user_out_date) && user_out_date.includes(cell.formattedDate);
@@ -28,35 +61,40 @@
               const otherSwitchToUser = Array.isArray(other_switch_to_user) && other_switch_to_user.includes(cell.formattedDate);
 
               const result = isReservedDate(cell.formattedDate);
+
+              let baseStyle = '';
               
               if (userIn) {
-                return 'background: linear-gradient(to right, blue, blue, blue, blue, green, green, green, green);';
+                baseStyle += 'background: linear-gradient(to right, blue, blue, blue, blue, green, green, green, green);';
               } else if (userInner) {
-                return 'background: green;';
+                baseStyle += 'background: green;';
               } else if (userOut) {
-                return 'background: linear-gradient(to right, green, green, green, green, blue, blue, blue, blue);';
+                baseStyle += 'background: linear-gradient(to right, green, green, green, green, blue, blue, blue, blue);';
               } else if (userSwitch) {
-                return 'background: linear-gradient(to right, green, green, green, green, #410045, green, green, green, green);';
+                baseStyle += 'background: linear-gradient(to right, green, green, green, green, #410045, green, green, green, green);';
               } else if (userSwitchToOther) {
-                return 'background: linear-gradient(to right, green, green, green, green, #410045, red, red, red, red);';
+                baseStyle += 'background: linear-gradient(to right, green, green, green, green, #410045, red, red, red, red);';
               } else if (otherSwitchToUser) {
-                return 'background: linear-gradient(to right, red, red, red, red, #410045, green, green, green, green);';
+                baseStyle += 'background: linear-gradient(to right, red, red, red, red, #410045, green, green, green, green);';
               }
 
-              switch (result) {
-                  case 'in':
-                      return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
-                  case 'inner':
-                      return 'background: red;';
-                  case 'out':
-                      return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
-                  case 'switch':
-                      return 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);';
-                  default:
-                      return '';
+              if(!userIn && !userInner && !userOut && !userSwitch && !userSwitchToOther && !otherSwitchToUser){
+                switch (result) {
+                    case 'in':
+                        baseStyle += 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                    case 'inner':
+                        baseStyle += 'background: red;';
+                    case 'out':
+                        baseStyle += 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                    case 'switch':
+                        baseStyle += 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);';
+                    default:
+                        break;
+                }
               }
-          })()"
-          :class="['vuecal__cell-date text-white']">
+
+              return baseStyle;
+          })()">
           {{ cell.content }}
         </span>
       </template>
@@ -163,8 +201,9 @@ import VueCal from 'vue-cal';
 
 const { auth, reservations, options, reservationEdit, showMonthEdit, 
   in_date, inner_date, out_date, switch_date, 
-  user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user  } = usePage().props;
-
+  user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
+  edit_reservation_dates = []  } = usePage().props;
+  
 const arrivalDate = ref(null);
 const departureDate = ref(null);
 const showMonth = ref(showMonthEdit ?? null);
@@ -362,10 +401,9 @@ onUnmounted(() => {
   border-radius: 50%;
   width: 1.8rem;
   height: 1.8rem;
-  line-height: 2rem;
-  font-weight: 500;
-  font-size: 1.1rem;
-
+  font-size: 1.2rem;
+  padding-top: 2.5px;
+  font-family: 'Oleo Script', cursive;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -377,9 +415,10 @@ onUnmounted(() => {
   font-size: 1rem;
 }
 
-.reserved-event {
-  background-color: yellow !important;
-  color: black !important;
+.selected-range {
+  background: rgba(0, 150, 136, 0.4);
+  border: 2px solid #009688;
+  color: rgb(0, 165, 0);
 }
 
 /* .vuecal__cell-events-count{display: none;} */

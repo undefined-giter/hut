@@ -23,11 +23,22 @@ class ReservationController extends Controller
         $user_switch_to_other = [];
         $other_switch_to_user = [];
 
+        $edit_reservation_dates = [];
+
         foreach ($reservations as $reservation) {
             $startDate = \Carbon\Carbon::parse($reservation->start_date)->toDateString();
             $endDate = \Carbon\Carbon::parse($reservation->end_date)->toDateString();
-        
+
             if ($reservation->user_id === auth()->id()) {
+
+                if ($reservation->id == $resId) {
+                    $currentDate = \Carbon\Carbon::parse($startDate);
+                    while ($currentDate->lte(\Carbon\Carbon::parse($endDate))) {
+                        $edit_reservation_dates[] = $currentDate->toDateString();
+                        $currentDate->addDay();
+                    }
+                }
+
                 if (in_array($startDate, $user_out_date)) {
                     $user_switch_date[] = $startDate;
                     $user_out_date = array_diff($user_out_date, [$startDate]);
@@ -108,7 +119,8 @@ class ReservationController extends Controller
             'user_out_date' => $user_out_date,
             'user_switch_date' => $user_switch_date,
             'user_switch_to_other' => $user_switch_to_other,
-            'other_switch_to_user' => $other_switch_to_user,
+            'other_switch_to_user' => $other_switch_to_user,            
+            'edit_reservation_dates' => $edit_reservation_dates,            
         ];
     }
 
@@ -257,6 +269,8 @@ class ReservationController extends Controller
             'user_switch_date' => array_values($calendarColors['user_switch_date']),
             'user_switch_to_other' => array_values($calendarColors['user_switch_to_other']),
             'other_switch_to_user' => array_values($calendarColors['other_switch_to_user']),
+
+            'edit_reservation_dates' => array_values($calendarColors['edit_reservation_dates']),
         ]);
     }    
 

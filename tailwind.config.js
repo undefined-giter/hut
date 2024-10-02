@@ -28,6 +28,7 @@ export default {
                 dark: '#131516',
             },
             screens: {
+                'xs': '480px',
                 '2xs': '320px',
             },
         },

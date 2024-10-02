@@ -22,12 +22,12 @@
                             <ThemeSwitcher class="-mt-1" />
                             <GoogleTranslate />
                         </div>
-                        <div class="flex items-center w-[300px]">
+                        <div class="flex items-center w-[50px] md:w-[300px] ">
                             <template v-if="auth.user">
-                                <Link href="/profile" class="hidden md:flex transition-transform duration-200 hover:scale-105 hover:shadow-lg items-center items-center origin-left w-auto">
+                                <Link href="/profile" class="flex transition-transform duration-300 hover:scale-105 hover:shadow-lg items-center items-center origin-left w-auto hidden xs:block">
                                     <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
-                                        alt="Photo de profil" class="rounded-full h-10 w-10 ml-2" draggable="false">
-                                        <p :class="isActive('/profile') ? 'custom-underline' : ''" class="kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
+                                        alt="Photo de profil" class="rounded-full h-7 w-7 md:h-10 md:w-10 ml-2 mt-1 transition-all duration-700 md:mt-0" draggable="false">
+                                        <p :class="isActive('/profile') ? 'custom-underline' : ''" class="hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
                                             {{ capitalizeName(auth.user.name) }}
                                         </p>
                                 </Link>
