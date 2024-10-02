@@ -48,5 +48,5 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// Logique couleurs reservation calendar a retravailler
+// Possibilité d'utiliser $resId sur le calendar
 // Mailing

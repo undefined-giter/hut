@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
-    private function getCalendarColors($reservations, $userId)
+    private function getCalendarColors($reservations, $resId = null)
     {
         $in_date = [];
         $inner_date = [];
@@ -26,63 +26,77 @@ class ReservationController extends Controller
         foreach ($reservations as $reservation) {
             $startDate = \Carbon\Carbon::parse($reservation->start_date)->toDateString();
             $endDate = \Carbon\Carbon::parse($reservation->end_date)->toDateString();
-
-            if ($reservation->user_id === $userId) {
-                // Cas où le même utilisateur a des réservations consécutives
+        
+            if ($reservation->user_id === auth()->id()) {
                 if (in_array($startDate, $user_out_date)) {
-                    $user_switch_date[] = $startDate; // Green to purple to green for consecutive reservations
+                    $user_switch_date[] = $startDate;
                     $user_out_date = array_diff($user_out_date, [$startDate]);
                 } else {
                     $user_in_date[] = $startDate;
                 }
-
+        
                 if (in_array($endDate, $user_in_date)) {
                     $user_switch_date[] = $endDate;
                     $user_in_date = array_diff($user_in_date, [$endDate]);
                 } else {
                     $user_out_date[] = $endDate;
                 }
-
-                // Cas où l'utilisateur chevauche la réservation d'un autre utilisateur
+        
                 if (in_array($endDate, $in_date)) {
-                    $user_switch_to_other[] = $endDate; // Green to red
+                    $user_switch_to_other[] = $endDate;
                     $in_date = array_diff($in_date, [$endDate]);
+                    $user_out_date = array_diff($user_out_date, [$endDate]);
                 }
-
-                if (in_array($startDate, $out_date)) {
-                    $other_switch_to_user[] = $startDate; // Red to green
-                    $out_date = array_diff($out_date, [$startDate]);
+        
+                if (in_array($startDate, $user_in_date) && in_array($startDate, $out_date)) {
+                    $other_switch_to_user[] = $startDate;
+                    $user_in_date = array_diff($user_in_date, [$startDate]);
                 }
-
-                // Gestion des dates intermédiaires pour l'utilisateur
+        
                 $userCurrentDate = \Carbon\Carbon::parse($startDate)->addDay();
                 while ($userCurrentDate->lt(\Carbon\Carbon::parse($endDate))) {
                     $user_inner_date[] = $userCurrentDate->toDateString();
                     $userCurrentDate->addDay();
                 }
             } else {
-                // Gestion des dates pour les autres utilisateurs
-                if (in_array($startDate, $user_out_date)) {
-                    $user_switch_to_other[] = $startDate; // Green to red
-                    $user_out_date = array_diff($user_out_date, [$startDate]);
+                if (in_array($startDate, $out_date) && in_array($endDate, $in_date)) {
+                    $switch_date[] = $startDate;
+                    $out_date = array_diff($out_date, [$startDate]);
+                } elseif (in_array($startDate, $out_date)) {
+                    $switch_date[] = $startDate;
+                    $out_date = array_diff($out_date, [$startDate]);
                 } else {
                     $in_date[] = $startDate;
                 }
-
+        
+                if (in_array($startDate, $user_out_date)) {
+                    $user_switch_to_other[] = $startDate;
+                    $user_out_date = array_diff($user_out_date, [$startDate]);
+                }
+        
                 if (in_array($endDate, $user_in_date)) {
-                    $other_switch_to_user[] = $endDate; // Red to green
+                    $other_switch_to_user[] = $endDate;
                     $user_in_date = array_diff($user_in_date, [$endDate]);
+                } elseif ($endDate == $startDate) {
+                    $other_switch_to_user[] = $startDate;
+                    $out_date = array_diff($out_date, [$startDate]);
                 } else {
                     $out_date[] = $endDate;
                 }
 
+                if (in_array($endDate, $in_date) ) {
+                    $switch_date[] = $endDate;
+                    $out_date = array_diff($out_date, [$endDate]);
+                    $in_date = array_diff($in_date, [$endDate]);
+                }
+        
                 $currentDate = \Carbon\Carbon::parse($startDate)->addDay();
                 while ($currentDate->lt(\Carbon\Carbon::parse($endDate))) {
                     $inner_date[] = $currentDate->toDateString();
                     $currentDate->addDay();
                 }
             }
-        }
+        }           
 
         return [
             'in_date' => $in_date,
@@ -103,9 +117,8 @@ class ReservationController extends Controller
     {
         $today = now()->startOfDay();
         $reservations = Reservation::where('end_date', '>', $today)->orderBy('start_date')->get();
-        $userId = auth()->id();
 
-        $calendarColors = $this->getCalendarColors($reservations, $userId);
+        $calendarColors = $this->getCalendarColors($reservations);
 
         $options = Option::where('available', true)->get();
         
@@ -218,8 +231,7 @@ class ReservationController extends Controller
         $today = now()->startOfDay();
         $reservations = Reservation::where('end_date', '>', $today)->get();
 
-        $userId = auth()->id();
-        $calendarColors = $this->getCalendarColors($reservations, $userId);
+        $calendarColors = $this->getCalendarColors($reservations, $id);
 
         $options = Option::all();
         
@@ -233,18 +245,18 @@ class ReservationController extends Controller
             'options' => $options,
             'reservationEdit' => $reservationEdit,
             'showMonthEdit' => $showMonth,
-
-            'in_date' => $calendarColors['in_date'],
-            'inner_date' => $calendarColors['inner_date'],
-            'out_date' => $calendarColors['out_date'],
-            'switch_date' => $calendarColors['switch_date'],
-            
-            'user_in_date' => $calendarColors['user_in_date'],
-            'user_inner_date' => $calendarColors['user_inner_date'],
-            'user_out_date' => $calendarColors['user_out_date'],
-            'user_switch_date' => $calendarColors['user_switch_date'],
-            'user_switch_to_other' => $calendarColors['user_switch_to_other'],
-            'other_switch_to_user' => $calendarColors['other_switch_to_user'],
+        
+            'in_date' => array_values($calendarColors['in_date']),
+            'inner_date' => array_values($calendarColors['inner_date']),
+            'out_date' => array_values($calendarColors['out_date']),
+            'switch_date' => array_values($calendarColors['switch_date']),
+        
+            'user_in_date' => array_values($calendarColors['user_in_date']),
+            'user_inner_date' => array_values($calendarColors['user_inner_date']),
+            'user_out_date' => array_values($calendarColors['user_out_date']),
+            'user_switch_date' => array_values($calendarColors['user_switch_date']),
+            'user_switch_to_other' => array_values($calendarColors['user_switch_to_other']),
+            'other_switch_to_user' => array_values($calendarColors['other_switch_to_user']),
         ]);
     }    
 

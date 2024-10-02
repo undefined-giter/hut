@@ -36,11 +36,11 @@
               } else if (userOut) {
                 return 'background: linear-gradient(to right, green, green, green, green, blue, blue, blue, blue);';
               } else if (userSwitch) {
-                return 'background: linear-gradient(to right, green, green, green, green, purple, green, green, green, green);';
+                return 'background: linear-gradient(to right, green, green, green, green, #410045, green, green, green, green);';
               } else if (userSwitchToOther) {
-                return 'background: linear-gradient(to right, green, green, green, green, purple, red, red, red, red);';
+                return 'background: linear-gradient(to right, green, green, green, green, #410045, red, red, red, red);';
               } else if (otherSwitchToUser) {
-                return 'background: linear-gradient(to right, red, red, red, red, purple, green, green, green, green);';
+                return 'background: linear-gradient(to right, red, red, red, red, #410045, green, green, green, green);';
               }
 
               switch (result) {
@@ -51,7 +51,7 @@
                   case 'out':
                       return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
                   case 'switch':
-                      return 'background: linear-gradient(to right, red, red, red, purple, red, red, red);';
+                      return 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);';
                   default:
                       return '';
               }
