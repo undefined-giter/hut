@@ -33,10 +33,12 @@ const submit = () => {
     <Head title="Se Connecter | Cabane" />
     <Layout>
         <h1>Se Connecter</h1>
-
-        <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8">
+        
+        <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
             <div>
-                <InputLabel for="email" value="Email" />
+                <div class="flex">
+                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
+                </div>
 
                 <TextInput
                     id="email"
@@ -52,7 +54,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Mot de Passe" />
+                <div class="flex">
+                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                </div>
 
                 <TextInput
                     id="password"

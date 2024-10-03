@@ -177,7 +177,7 @@ class ReservationController extends Controller
                 
             if ($existingReservation) {
                 return redirect()->route('profile.edit')
-                ->with('error', ['Vous avez déjà une réservation durant cette période. Veuillez modifier votre réservation existante.']);
+                ->with('error', ['Vous avez déjà une réservation durant cette période.<br><span style="color: #fc8003;">Veuillez modifier votre réservation existante.</span>']);
             }
         }
                 
@@ -187,7 +187,7 @@ class ReservationController extends Controller
             ->exists();
 
         if ($conflictingReservations) {
-            return back()->with('error', ["Il y a déjà une réservation durant cette période. Veuillez choisir une autre date ou non contacter directement."]);
+            return back()->with('error', ["Il y a déjà une réservation durant cette période.<br><span style='color: #fc8003;'>Veuillez choisir une autre date ou non contacter directement.</span>"]);
         }
 
         if ($reservationId) {

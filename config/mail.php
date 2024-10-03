@@ -1,5 +1,10 @@
 <?php
 
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(base_path(), '.env.perso');
+$dotenv->safeLoad();
+
 return [
 
     /*
@@ -109,8 +114,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'leo.ripert@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Cabane'),
     ],
 
 ];

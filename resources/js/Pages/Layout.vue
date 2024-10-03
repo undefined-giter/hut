@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen mx-auto xl:max-w-6xl pb-8">
         <div class="md:mx-20 mx-4 flex-grow">
-            <header class="font-bold">
+            <header class="font-bold md:pb-20">
 
                 <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
                     <transition-group name="fade" tag="div">
@@ -24,7 +24,7 @@
                         </div>
                         <div class="flex items-center w-[50px] md:w-[300px] ">
                             <template v-if="auth.user">
-                                <Link href="/profile" class="flex transition-transform duration-300 hover:scale-105 hover:shadow-lg items-center items-center origin-left w-auto hidden xs:block">
+                                <Link href="/profile" class="flex transition-transform duration-300 hover:scale-105 hover:shadow-lg items-center items-center origin-left w-auto hidden xs:flex">
                                     <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
                                         alt="Photo de profil" class="rounded-full h-7 w-7 md:h-10 md:w-10 ml-2 mt-1 transition-all duration-700 md:mt-0" draggable="false">
                                         <p :class="isActive('/profile') ? 'custom-underline' : ''" class="hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
@@ -37,9 +37,10 @@
 
                     <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-2 items-center">
                         <Link href="/" :class="isActive('/') ? 'active btn' : 'btn'">Accueil</Link>
-                        <Link href="/book" :class="isActive('/book') ? 'active btn' : 'btn'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active btn' : 'btn'">Galerie</Link>
-                            
+                        <Link href="/book" :class="isActive('/book') ? 'active btn' : 'btn'">Réserver</Link>
+                        <Link href="/contact" :class="isActive('/contact') ? 'active btn' : 'btn'">Contact</Link>
+
                         <Link href="/options" :class="isActive('/options') ? 'active btn !ml-6' : 'btn !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
                         <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
                     </div>
@@ -63,8 +64,9 @@
 
                     <div v-if="menuOpen" ref="menuRef" class="open-menu md:hidden mr-0.5 -mt-9 !rounded-tr-none">
                         <Link href="/" :class="isActive('/') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Accueil</Link>
-                        <Link href="/book" :class="isActive('/book') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Réserver</Link>
                         <Link href="/gallery" :class="isActive('/gallery') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Galerie</Link>
+                        <Link href="/book" :class="isActive('/book') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Réserver</Link>
+                        <Link href="/contact" :class="isActive('/contact') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Contact</Link>
                         <span v-if="auth.user && auth.user.role === 'admin'">
                             <Link href="/options" :class="isActive('/options') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Options</Link>
                             <Link href="/list" :class="isActive('/list') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Utilisateurs</Link>
@@ -81,7 +83,7 @@
                 </nav>
             </header>
 
-            <main class="md:pt-20 pt-6">
+            <main class="max-w-6xl mx-auto bg-light dark:bg-dark p-6 rounded-lg shadow-lg border border-[#EA580C]">
                 <slot />
             </main>
 
@@ -173,7 +175,7 @@ onMounted(() => {
             setTimeout(() => {
                 pageProps.flash.error = null;
             }, 1000);
-        }, 6000);
+        }, 8000);
     }
 
     document.addEventListener('click', handleDocumentClick);

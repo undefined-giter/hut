@@ -17,11 +17,11 @@
                 <tr>
                     <th class="text-left pl-2 py-1">Nom</th>
                     <th class="text-left">Description</th>
-                    <th class="text-center">Prix<span class="text-sm mx-0.5">€</span></th>
-                    <th class="text-center">Disponible</th>
-                    <th class="text-center">Présélectionnée</th>
-                    <th class="text-center">Par jour</th>
-                    <th class="text-center">Présélect/jour</th>
+                    <th class="text-center">€</th>
+                    <th class="text-center">Dispo</th>
+                    <th class="text-center">Présélect</th>
+                    <th class="text-center">/jour</th>
+                    <th class="text-center">Présél/j</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>

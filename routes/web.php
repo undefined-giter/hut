@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ReservationController;
@@ -13,6 +14,9 @@ use Inertia\Inertia;
 Route::get('/', function () { return Inertia::render('Welcome'); })->name('homepage');
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::middleware('auth')->group(function () {
     Route::get('/book', [ReservationController::class, 'index'])->name('book');
@@ -48,5 +52,7 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// Fixer bug others users startDate et endDate -> jour rouge-violet-rouge devrait etre blue-rouge ou rouge-blue en sortie.
 // Mailing
+// page expirée
+// ajouter commentaire pour ceux qui réservent + commentaires cachés par réservation pour l'admin
+// retravailler la gallery a la facon options dans reservation (+si impaire mettre dernière au centre)

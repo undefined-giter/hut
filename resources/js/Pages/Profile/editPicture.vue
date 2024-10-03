@@ -25,11 +25,11 @@
           </div>
 
           <div class="relative overflow-hidden inline-block">
-            <button class="bg-blue-500 text-white py-2 px-4 rounded-lg cursor-pointer">
+            <button class="bg-blue-500 text-white py-2 px-4 rounded-lg cursor-pointer focus:outline-none" id="input-file">
               Choisir un fichier
             </button>
             <input
-              type="file" 
+              type="file"
               class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" 
               @change="changePicture"
             />

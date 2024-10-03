@@ -27,7 +27,7 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Mot de Passe Oublié | Cabane" />
-
+        
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
             Vous avez oublié votre mot de passe ? Pas de souci, entrez votre adresse email et nous vous enverrons un mail pour réinitialiser votre mot de passe.
         </div>

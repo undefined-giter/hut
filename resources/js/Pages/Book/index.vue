@@ -22,7 +22,7 @@
         <span 
             :class="['vuecal__cell-date cursor-pointer', edit_reservation_dates.map(date => new Date(date).toISOString().split('T')[0])
               .includes(new Date(cell.formattedDate).toISOString().split('T')[0]) 
-              ? '!text-[#cca5cc] font-bold underline decoration-black underline-offset-2 shadow-[0_0_10px_#b700b7]'
+              ? 'text-[#cca5cc] font-bold underline decoration-black underline-offset-2 shadow-[0_0_10px_#b700b7]'
               : '',
               (() => {
                 const cellDateFormatted = cell.formattedDate;
@@ -44,10 +44,7 @@
                   arrivalDateFormatted === cellDateFormatted || 
                   departureDateFormatted === cellDateFormatted ||
                   innerDates.includes(cellDateFormatted)
-                ) {
-                  return 'selected-range';
-                }
-
+                ) { return 'selected-range'; }
                 return '';
               })()
             ]"
@@ -61,39 +58,33 @@
               const otherSwitchToUser = Array.isArray(other_switch_to_user) && other_switch_to_user.includes(cell.formattedDate);
 
               const result = isReservedDate(cell.formattedDate);
-
-              let baseStyle = '';
               
               if (userIn) {
-                baseStyle += 'background: linear-gradient(to right, blue, blue, blue, blue, green, green, green, green);';
+                return 'background: linear-gradient(to right, blue, blue, blue, blue, green, green, green, green);';
               } else if (userInner) {
-                baseStyle += 'background: green;';
+                return 'background: green;';
               } else if (userOut) {
-                baseStyle += 'background: linear-gradient(to right, green, green, green, green, blue, blue, blue, blue);';
+                return 'background: linear-gradient(to right, green, green, green, green, blue, blue, blue, blue);';
               } else if (userSwitch) {
-                baseStyle += 'background: linear-gradient(to right, green, green, green, green, #410045, green, green, green, green);';
+                return 'background: linear-gradient(to right, green, green, green, green, #410045, green, green, green, green);';
               } else if (userSwitchToOther) {
-                baseStyle += 'background: linear-gradient(to right, green, green, green, green, #410045, red, red, red, red);';
+                return 'background: linear-gradient(to right, green, green, green, green, #410045, red, red, red, red);';
               } else if (otherSwitchToUser) {
-                baseStyle += 'background: linear-gradient(to right, red, red, red, red, #410045, green, green, green, green);';
+                return 'background: linear-gradient(to right, red, red, red, red, #410045, green, green, green, green);';
               }
 
-              if(!userIn && !userInner && !userOut && !userSwitch && !userSwitchToOther && !otherSwitchToUser){
-                switch (result) {
-                    case 'in':
-                        baseStyle += 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
-                    case 'inner':
-                        baseStyle += 'background: red;';
-                    case 'out':
-                        baseStyle += 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
-                    case 'switch':
-                        baseStyle += 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);';
-                    default:
-                        break;
-                }
+              switch (result) {
+                  case 'in':
+                      return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                  case 'inner':
+                      return 'background: red;';
+                  case 'out':
+                      return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                  case 'switch':
+                      return 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);';
+                  default:
+                      return '';
               }
-
-              return baseStyle;
           })()">
           {{ cell.content }}
         </span>
@@ -134,12 +125,13 @@
       </div>
 
       <h3 class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
-      <div :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '6px' : '0'}`, paddingRight: isScrollbarVisible ? '1px' : '0' }">
+      <div :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
+        paddingRight: isScrollbarVisible && gridClass == 'one-column' ? '7px' : isScrollbarVisible ? '1px' : '0'}">
         <label v-for="(option, index) in options" :key="option.id"
-              class="relative h-[154px] option_hover p-4 border rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
+              class="relative h-[154px] option_hover p-4 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
               :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
           <div class="flex items-center w-full">
-            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-2 form-checkbox h-6 w-6 rounded-full text-blue-600 border-gray-300"/>
+            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-2 form-checkbox !h-6 !w-6 !rounded-full !text-blue-600"/>
             <div class="flex justify-between w-full">
               <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
@@ -152,7 +144,7 @@
           </p>
 
           <label @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
-            <span class="text-sm absolute right-12 w-[60px] flex text-gray-800">Par jour ?</span>
+            <span class="text-sm absolute right-12 w-[60px] flex text-gray-800 mirza font-semibold">Par jour ?</span>
             <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] 
               after:absolute after:top-[2px] after:left-[3px] peer-checked:bg-green-800 peer-checked:after:bg-green-300 
@@ -167,7 +159,7 @@
       <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
     </div>
 
-    <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400', 'btn ml-auto block']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
+    <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400 opacity-75', 'btn ml-auto block']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
     
     <div v-if="sortedReservations.length > 0" class="mt-4">
       <h3 class="underline text-red-600 text-xl">Nuits déjà réservées :</h3>
@@ -183,7 +175,7 @@
             </form>
             <span class="text-zinc-800 text-sm"> | </span> 
             <Link :href="route('admin.details', reservation.user_id)" target="_blank"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
-            <p class="!text-green-400 text-right mr-1.5 -mt-8">Total : {{ reservation.res_price }}<span class="text-sm -mt-7">€</span></p>
+            <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ reservation.res_price }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
           </span>
         </li></p>
       </div>
@@ -416,9 +408,9 @@ onUnmounted(() => {
 }
 
 .selected-range {
-  background: rgba(0, 150, 136, 0.4);
-  border: 2px solid #009688;
-  color: rgb(0, 165, 0);
+  background: rgba(0, 150, 136, 0.8);
+  border: 3px solid #009688;
+  color: rgb(104, 252, 104);
 }
 
 /* .vuecal__cell-events-count{display: none;} */

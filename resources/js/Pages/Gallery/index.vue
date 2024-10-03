@@ -4,7 +4,7 @@
     <Layout>
         <h1>Votre Voyage</h1>
     
-        <div class="gallery grid grid-cols-2 gap-4">
+        <div class="gallery grid grid-cols-2 gap-4 px-2">
             <div v-for="(image, index) in displayedImages" :key="index" class="image-item">
                 <img 
                     :src="`/storage/gallery/${image}`" 
@@ -54,11 +54,13 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
+  handleScroll()
+
   loadImages();
   window.addEventListener('scroll', handleScroll);
 });
 
-onBeforeUnmount(() => {
+onBeforeUnmount(() => {  
   window.removeEventListener('scroll', handleScroll);
 });
 </script>

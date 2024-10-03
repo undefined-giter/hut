@@ -120,16 +120,24 @@ a:hover {z-index: 50;}
     box-shadow: 0 2px 4px -1px rgba(244, 155, 0, 0.756);
 }
 
-body.dark .btn {background-color: #4a5568;}
-
-body.dark .btn:hover {background-color: #2d3748;}
-
 * {
     scrollbar-width: thin;
     scrollbar-color: #e0f900 #b07501; /* Couleur de la barre et de la piste */
     user-select: none;
     -webkit-user-drag: none; /* Désactiver le drag pour Safari/Chrome */
     user-drag: none;
+}
+
+input, textarea {
+    @apply w-full p-2 border border-orange-500 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white;
+}
+
+label {
+    @apply text-blue-500 dark:text-blue-200 font-mirza;
+}
+
+input[type="checkbox"] {
+    @apply h-4 w-4 border-orange-500 rounded;
 }
 
 ::-webkit-scrollbar {
@@ -158,7 +166,21 @@ input[type="search"]:focus {
     border-color: #e0f900; /* Couleur de la bordure au focus */
     box-shadow: 0 0 5px #e0f900; /* Optionnel : ajouter un effet de focus */
 }
-
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px #9ca3af inset !important;
+}
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important;
+    -webkit-text-fill-color: #ccc !important;
+}
+textarea{background:rgb(156, 163, 175); font-weight: 600;}
+.dark textarea{background:#111827; color: #ccc;}
 
 /* footer */
 .fade-enter-active, .fade-leave-active {transition: opacity 0.5s ease;}

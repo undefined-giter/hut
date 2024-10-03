@@ -76,7 +76,7 @@ const submit = () => {
     <Layout title="S'enregistrer">
         <h1>S'enregistrer</h1>
 
-        <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8">
+        <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
             <div>
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
@@ -97,7 +97,7 @@ const submit = () => {
 
             <div>
                 <div class="mt-4">
-                    <InputLabel for="name2" value="Nom & Prénom seconde personne" />
+                    <InputLabel for="name2" value="Nom & Prénom de la seconde personne" />
                 </div>
 
                 <TextInput
@@ -189,7 +189,7 @@ const submit = () => {
                     <input
                     id="picture"
                     type="file"
-                    class="mt-8 !ml-1 block w-full text-white rounded-full"
+                    class="mt-8 !ml-1 block w-full dark:text-white"
                     @input="changePicture"
                     />
                 </div>
