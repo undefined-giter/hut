@@ -16,6 +16,7 @@ class Reservation extends Model
         'nights',
         'res_price',
         'status',
+        'res_comment',
     ];
 
     public function options()

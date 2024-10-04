@@ -164,6 +164,7 @@ class ReservationController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'nights' => 'required|integer|min:1',
+            'res_comment' => 'nullable|max:510',
             'options' => 'array',
             'options.*' => 'exists:options,id',
             'res_price' => 'required|numeric',
@@ -200,7 +201,10 @@ class ReservationController extends Controller
                     if (isset($validatedData['options'])) {
                         $existingReservation->options()->sync($validatedData['options']);
 
-                        $existingReservation->update(['res_price' => $validatedData['res_price']]);
+                        $existingReservation->update([
+                            'res_price' => $validatedData['res_price'],
+                            'res_comment' => $validatedData['res_comment'],
+                        ]);
                     }
 
                     return redirect()->route('profile.edit')->with('success', ['Vos options ont bien été mises à jour']);
@@ -210,6 +214,7 @@ class ReservationController extends Controller
                         'end_date' => $validatedData['end_date'],
                         'nights' => $validatedData['nights'],
                         'res_price' => $validatedData['res_price'],
+                        'res_comment' => $validatedData['res_comment'],
                     ]);
 
                     if (isset($validatedData['options'])) {
@@ -226,6 +231,7 @@ class ReservationController extends Controller
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
             'nights' => $validatedData['nights'],
+            'res_comment' => $validatedData['res_comment'],
             'res_price' => $validatedData['res_price'],
             'status' => 'pending',
         ]);

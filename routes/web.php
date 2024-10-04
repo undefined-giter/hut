@@ -53,5 +53,4 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 
 require __DIR__.'/auth.php';
 // Mailing
-// page expirée
-// ajouter commentaire pour ceux qui réservent + commentaires cachés par réservation pour l'admin
+// page expirée : @csrf ?

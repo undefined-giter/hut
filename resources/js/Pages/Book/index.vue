@@ -4,7 +4,7 @@
     <h1>Réserver Votre Bonheur !</h1>
 
     <div class="flex justify-between">
-      <p>Les réservations commencent à 14h, jusqu'à 12h le jour du départ</p><p>Parking inclu</p>
+      <p>Les réservations commencent à 14h, jusqu'à 12h le jour du départ.</p><p>Parking inclu</p>
     </div>
     <vue-cal
       locale="fr"
@@ -96,6 +96,7 @@
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="nights" :value="numberOfNights" />
+      <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsIds)" />
       <input type="hidden" name="res_price" :value="calculatedPrice" />
 
@@ -153,13 +154,21 @@
           </label>
         </label>
       </div>
+      <div class="flex">
+        <div class="flex-1 mr-4 relative">
+          <label for="res_comment">Quelque chose à nous demander ?</label>
+          <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5"></textarea>
+          <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', res_comment.length === 510 ? '!text-orange-600' : '']">{{ res_comment.length }}/510<small> caractères</small></p>
+        </div>
+        <div class="ml-auto mt-auto mb-1">
+          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
+          <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400 opacity-75', 'btn ml-auto block']">
+            {{ reservationEdit ? 'Modifier' : 'Réserver' }}
+          </button>
+        </div>
+      </div>
     </form>
-
-    <div class="h-[32px]">
-      <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
-    </div>
-
-    <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400 opacity-75', 'btn ml-auto block']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
+      
     
     <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
       <h3 class="underline text-red-600 text-xl">Nuits déjà réservées :</h3>
@@ -201,6 +210,8 @@ const departureDate = ref(null);
 const showMonth = ref(showMonthEdit ?? null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
+const res_comment = ref('');
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour (h arrivée envisagée, ...)";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();
@@ -224,15 +235,18 @@ onMounted(() => {
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+  
   if (reservationEdit) {
     arrivalDate.value = new Date(reservationEdit.start_date);
     departureDate.value = new Date(reservationEdit.end_date);
     numberOfNights.value = reservationEdit.nights;
-
+    
     if (Array.isArray(reservationEdit.options)) {
       selectedOptionsIds.value = reservationEdit.options.map(option => option.id);
       selectedOptionsObjects.value = reservationEdit.options;
     }
+    
+    if (reservationEdit.res_comment) { res_comment.value = reservationEdit.res_comment; }
   }
 
   updateGridClass();

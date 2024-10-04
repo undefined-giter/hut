@@ -12,7 +12,7 @@
                     {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <span class="dark:text-blue-600">Options demandées :</span>
+                            <em><span class="dark:text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
@@ -21,6 +21,13 @@
                         </div>
                         <div v-else>
                             <em><span class="text-blue-600">Aucune option demandée</span></em>
+                        </div>
+
+                        <div v-if="reservation.res_comment">
+                            <em><button @click="toggleComment" class="text-orange-500 underline">
+                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} le commentaire
+                            </button></em>
+                            <p v-if="isCommentVisible" class="whitespace-pre-wrap mt-2">{{ reservation.res_comment }}</p>
                         </div>
 
                         <p class="!text-green-400 text-right mr-1.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
@@ -60,7 +67,7 @@
                         </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <span class="dark:text-blue-600">Options demandées :</span>
+                            <em><span class="dark:text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
@@ -69,6 +76,13 @@
                         </div>
                         <div v-else>
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
+                        </div>
+
+                        <div v-if="reservation.res_comment">
+                            <em><button @click="toggleComment" class="text-orange-500 underline">
+                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} le commentaire
+                            </button></em>
+                            <p v-if="isCommentVisible" class="whitespace-pre-wrap mt-2">{{ reservation.res_comment }}</p>
                         </div>
 
                         <p class="!text-green-400 text-right mr-1.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
@@ -86,7 +100,7 @@
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
                     
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <span class="text-blue-600">Options demandées :</span>
+                            <em><span class="text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
@@ -95,6 +109,13 @@
                         </div>
                         <div v-else>
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
+                        </div>
+
+                        <div v-if="reservation.res_comment">
+                            <em><button @click="toggleComment" class="text-orange-500 underline">
+                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} le commentaire
+                            </button></em>
+                            <p v-if="isCommentVisible" class="whitespace-pre-wrap mt-2">{{ reservation.res_comment }}</p>
                         </div>
 
                         <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
@@ -110,6 +131,7 @@ import { ref, onMounted, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 
 const csrfToken = ref(null);
+const isCommentVisible = ref(false);
 
 onMounted(() => {
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -135,6 +157,10 @@ const formatDate = (date) => {
         month: 'long',
         day: 'numeric',
     });
+};
+
+const toggleComment = () => {
+  isCommentVisible.value = !isCommentVisible.value;
 };
 
 const currentReservations = computed(() => {

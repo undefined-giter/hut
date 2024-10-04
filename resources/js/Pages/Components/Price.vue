@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ totalPriceDisplay }}<span class="text-sm">€</span></p>
-    </div>
+    <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ totalPriceDisplay }}<span class="text-sm">€</span></p>
 </template>
 
 <script setup>

@@ -4,6 +4,7 @@
         <h1>Modifier les prix</h1>
 
         <form @submit.prevent="updatePrices" class="max-w-sm mx-auto">
+            
             <div class="mb-4">
                 <label for="price_per_night"> Prix par nuit :</label>
                 <input 
