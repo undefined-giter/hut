@@ -15,13 +15,13 @@
         <table class="mx-auto w-full border border-[#EA580C] rounded-lg">
             <thead class="border-x border-[#EA580C]">
                 <tr>
-                    <th class="text-left pl-2 py-1">Nom</th>
-                    <th class="text-left">Description</th>
-                    <th class="text-center">€</th>
-                    <th class="text-center">Dispo</th>
-                    <th class="text-center">Présélect</th>
-                    <th class="text-center">/jour</th>
-                    <th class="text-center">Présél/j</th>
+                    <th class="text-left pl-2 py-1" title="Nom de l'option">Nom</th>
+                    <th class="text-left" title="Description de l'option">Description</th>
+                    <th class="text-center" title="Si vide = rien de n'affiche; Si 0.00 = 'offert' s'affichera dans l'option;">€</th>
+                    <th class="text-center" title="Décocher pour ne plus rendre l'option disponible, sans la supprimée pour autant.">Dispo</th>
+                    <th class="text-center" title="Présélectionner l'option par défault">Présélect</th>
+                    <!-- <th class="text-center" title="Prix payé par jour ou pour le séjour entier ? Exemple si '/jour' est séléctionné : 2 nuits = 2 x le prix de l'option à régler">/jour</th> -->
+                    <th class="text-center" title="Prix payé par jour ou pour le séjour entier. Exemple si '/jour' est séléctionné : 2 nuits = 2 x le prix de l'option à régler. Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle sera prise tous les jours de la réservation -> Peut être déselectionné par l'utilisateur lors de sa réservation.">Présél/jr</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -58,13 +58,13 @@
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
                         </label>
                     </td>
-                    <td class="border-b border-[#EA580C] text-center">
+                    <!-- <td class="border-b border-[#EA580C] text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.by_day" class="sr-only peer" 
                                    @change="toggleByDay(option.id, option.by_day)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-700"></div>
                         </label>
-                    </td>
+                    </td> -->
                     <td class="border-b border-[#EA580C] text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.by_day_preselected" class="sr-only peer" 
@@ -117,14 +117,14 @@ const togglePreselected = (id, currentState) => {
     });
 };
 
-const toggleByDay = (id, currentState) => {
-    Inertia.put(route('admin.options.toggle-by-day', id), { by_day: !currentState }, {
-        preserveScroll: true,
-        onSuccess: () => {
-            alert('Statut "Par jour" mis à jour');
-        }
-    });
-};
+// const toggleByDay = (id, currentState) => {
+//     Inertia.put(route('admin.options.toggle-by-day', id), { by_day: !currentState }, {
+//         preserveScroll: true,
+//         onSuccess: () => {
+//             alert('Statut "Par jour" mis à jour');
+//         }
+//     });
+// };
 
 const toggleByDayPreselected = (id, currentState) => {
     Inertia.put(route('admin.options.toggle-by-day-preselected', id), { by_day_preselected: !currentState }, {

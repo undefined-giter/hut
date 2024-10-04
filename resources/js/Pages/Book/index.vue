@@ -125,13 +125,13 @@
       </div>
 
       <h3 class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
-      <div :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
+      <div :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto shadow-sm overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
         paddingRight: isScrollbarVisible && gridClass == 'one-column' ? '7px' : isScrollbarVisible ? '1px' : '0'}">
         <label v-for="(option, index) in options" :key="option.id"
-              class="relative h-[154px] option_hover p-4 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
+              class="relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
               :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
           <div class="flex items-center w-full">
-            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-2 form-checkbox !h-6 !w-6 !rounded-full !text-blue-600"/>
+            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1.5 -mt-0.5 form-checkbox"/>
             <div class="flex justify-between w-full">
               <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
@@ -144,10 +144,10 @@
           </p>
 
           <label @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
-            <span class="text-sm absolute right-12 w-[60px] flex text-gray-800 mirza font-semibold">Par jour ?</span>
+            <span class="text-sm absolute right-12 w-[60px] flex text-gray-800 mirza font-semibold -mr-2 -mt-1">Par jour ?</span>
             <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] 
-              after:absolute after:top-[2px] after:left-[3px] peer-checked:bg-green-800 peer-checked:after:bg-green-300 
+              after:absolute after:top-[2px] after:left-[4px] peer-checked:bg-green-800 peer-checked:after:bg-green-300 
               after:bg-gray-300 peer-checked:before:bg-green-800 after:rounded-full after:h-5 after:w-5 after:transition-all border border-black border-[1.5px]"
             ></div>
           </label>
@@ -161,10 +161,10 @@
 
     <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400 opacity-75', 'btn ml-auto block']">{{ reservationEdit ? 'Modifier' : 'Réserver' }}</button>
     
-    <div v-if="sortedReservations.length > 0" class="mt-4">
+    <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
       <h3 class="underline text-red-600 text-xl">Nuits déjà réservées :</h3>
-      <div style="max-height: 350px; overflow-y: auto;">
-        <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-400': index % 2 !== 0}">
+      <div style="max-height: 350px; overflow-y: auto; padding-left:2px;">
+        <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
           <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
           <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's' : '')"></span>
           <span v-if="auth && auth.user && auth.user.role === 'admin'">
@@ -175,7 +175,7 @@
             </form>
             <span class="text-zinc-800 text-sm"> | </span> 
             <Link :href="route('admin.details', reservation.user_id)" target="_blank"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
-            <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ reservation.res_price }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
+            <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ Math.floor(reservation.res_price) }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
           </span>
         </li></p>
       </div>

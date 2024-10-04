@@ -73,8 +73,8 @@ const submit = () => {
             <div class="block mt-4 flex justify-between">
                 <div>
                     <label class="flex items-center -mt-2">
-                        <Checkbox name="remember" v-model:checked="form.remember" />
-                        <span class="text-sm text-gray-600 dark:text-gray-400 ml-0.5">Rester connecté</span>
+                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" />
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Rester connecté</span>
                     </label>
                     <div class="mt-2">
                         <Link

@@ -83,7 +83,7 @@
                 </nav>
             </header>
 
-            <main class="max-w-6xl mx-auto bg-light dark:bg-dark p-6 rounded-lg shadow-lg border border-[#EA580C]">
+            <main class="max-w-6xl mx-auto overflow-hidden bg-light dark:bg-dark p-2 mb-1 rounded-lg shadow-lg border border-[#EA580C]">
                 <slot />
             </main>
 
@@ -164,7 +164,7 @@ onMounted(() => {
                 setTimeout(() => {
                     pageProps.flash.success = null;
         }, 1000);
-    }, 6000);
+    }, 8000);
     }
 
     if (pageProps.flash && pageProps.flash.error) {

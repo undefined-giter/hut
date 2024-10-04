@@ -51,7 +51,7 @@ p, table td {
 
 h1 {
     font-family: 'Kalnia Glaze', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
     text-align: center;
@@ -129,15 +129,22 @@ a:hover {z-index: 50;}
 }
 
 input, textarea {
-    @apply w-full p-2 border border-orange-500 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300 dark:bg-dark dark:text-white;
+    @apply w-full p-3 border border-orange-500 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300 !important;
 }
 
 label {
-    @apply text-blue-500 dark:text-blue-200 font-mirza;
+    @apply text-blue-800 dark:text-[#ccc] font-mirza !important;
+}
+
+input[type="text"], input[type="number"]{
+    @apply border-orange-500 bg-[#9ca3af] dark:bg-[#111827] dark:text-[#ccc] font-semibold;
 }
 
 input[type="checkbox"] {
-    @apply h-4 w-4 border-orange-500 rounded;
+    @apply h-4 w-4 border-orange-500 rounded-full !important;
+}
+input[type="checkbox"]:not(:checked) {
+    background-color: #111827 !important;
 }
 
 ::-webkit-scrollbar {

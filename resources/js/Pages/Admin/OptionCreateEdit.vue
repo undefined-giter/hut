@@ -3,7 +3,7 @@
     <Layout>
         <h1>{{ option ? 'Modifier l\'Option' : 'Créer une Nouvelle Option' }}</h1>
 
-        <form @submit.prevent="submitForm">
+        <form @submit.prevent="submitForm" class="max-w-sm mx-auto">
             
             <div class="mb-4">
                 <label for="name" class="block mb-2">Nom<span class="text-xs text-red-700">*</span></label>

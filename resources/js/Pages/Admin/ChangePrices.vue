@@ -3,7 +3,7 @@
     <Layout>
         <h1>Modifier les prix</h1>
 
-        <form @submit.prevent="updatePrices">
+        <form @submit.prevent="updatePrices" class="max-w-sm mx-auto">
             <div class="mb-4">
                 <label for="price_per_night"> Prix par nuit :</label>
                 <input 
@@ -28,7 +28,7 @@
                 />
             </div>
 
-            <div class="flex justify-between">
+            <div class="flex justify-between -mt-4">
                 <button type="button" @click="goBack();" class="btn">Retour</button>
 
                 <button type="submit" class="btn">Enregistrer</button>

@@ -55,4 +55,3 @@ require __DIR__.'/auth.php';
 // Mailing
 // page expirée
 // ajouter commentaire pour ceux qui réservent + commentaires cachés par réservation pour l'admin
-// retravailler la gallery a la facon options dans reservation (+si impaire mettre dernière au centre)

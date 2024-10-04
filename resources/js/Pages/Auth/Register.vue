@@ -189,7 +189,7 @@ const submit = () => {
                     <input
                     id="picture"
                     type="file"
-                    class="mt-8 !ml-1 block w-full dark:text-white"
+                    class="mt-1.5 !ml-1 block w-full dark:text-white"
                     @input="changePicture"
                     />
                 </div>
