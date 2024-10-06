@@ -1,34 +1,3 @@
-<script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import Layout from './../Layout.vue';
-
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
-
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
-
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
-};
-</script>
-
 <template>
     <Head title="Se Connecter | Cabane" />
     <Layout>
@@ -86,10 +55,53 @@ const submit = () => {
                         </Link>
                     </div>
                 </div>
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
+                <PrimaryButton :class="['btn', { 'btn-disabled': form.processing || !inputsValids }]" :disabled="form.processing || !inputsValids">
+                    Se connecter
                 </PrimaryButton>
             </div>
         </form>
     </Layout>
 </template>
+
+<script setup>
+import Checkbox from '@/Components/Checkbox.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import Layout from './../Layout.vue';
+
+defineProps({
+    canResetPassword: {
+        type: Boolean,
+    },
+    status: {
+        type: String,
+    },
+});
+
+const form = useForm({
+    email: '',
+    password: '',
+    remember: false,
+});
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const isValidEmail = (email) => {
+    return emailRegex.test(email) && email !== '';
+};
+
+const inputsValids = computed(() => {
+    const isEmailValid = isValidEmail(form.email);
+    const isPasswordValid = form.password !== '';
+    return isEmailValid && isPasswordValid && !form.errors.email && !form.errors.password;
+});
+
+const submit = () => {
+    form.post(route('login'), {
+        onFinish: () => form.reset('password'),
+    });
+};
+</script>

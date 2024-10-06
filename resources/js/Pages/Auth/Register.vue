@@ -1,76 +1,3 @@
-<script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import Layout from './../Layout.vue';
-import { ref } from 'vue';
-
-const form = useForm({
-    name: '',
-    name2: '',
-    email: '',
-    phone: '',
-    password: '',
-    password_confirmation: '',
-    picture: null,
-    preview: null,
-});
-
-
-const phoneError = ref(null);
-
-const filterInput = (event) => {
-    event.target.value = event.target.value.replace(/\D/g, '');
-    form.phone = event.target.value;
-
-    phoneError.value = null;
-};
-
-const validatePhone = () => {
-    const phone = form.phone;
-
-    if (!phone) {
-        phoneError.value = null;
-        return true;
-    }
-
-    if (phone.length !== 10) {
-        phoneError.value = "Le numéro doit contenir 10 chiffres.";
-        return false;
-    }
-
-    if (phone.startsWith('3')) {
-        phoneError.value = "Format 33 non accepté -> Merci de le remplacer par 0 et de compléter votre numéro";
-        return false;
-    }
-    phoneError.value = null;
-    return true;
-};
-
-const changePicture = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        form.picture = file;
-        form.preview = URL.createObjectURL(file);
-    } else {
-        form.picture = null;
-        form.preview = null;
-    }
-};
-
-
-const submit = () => {
-    if (validatePhone()) {
-        form.submit('post', route('register'), {
-            forceFormData: true,
-            onFinish: () => form.reset('password', 'password_confirmation'),
-        });
-    }
-};
-</script>
-
 <template>
     <Head title="S'enregistrer | Cabane" />
     <Layout title="S'enregistrer">
@@ -181,7 +108,7 @@ const submit = () => {
 
             <div>
                 <br>
-                <InputLabel for="picture" value="Photo de profil" class="mb-1" />
+                <InputLabel for="picture" value="Photo de profil" class="!mb-0.5" />
                 
                 <div class="flex items-center space-x-4">
                     <img :src="form.preview ?? 'storage/profiles/default_user.png'" alt="Pré-visuelle de votre photo" class="object-cover w-16 h-16 rounded-xl">
@@ -189,7 +116,7 @@ const submit = () => {
                     <input
                     id="picture"
                     type="file"
-                    class="mt-1.5 !ml-1 block w-full dark:text-white"
+                    class="mt-1.5 block w-full dark:text-white"
                     @input="changePicture"
                     />
                 </div>
@@ -206,11 +133,95 @@ const submit = () => {
                         Déjà enregistré ?
                     </Link>
 
-                    <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <PrimaryButton :class="{ 'btn-disabled': form.processing || !inputsValids }" :disabled="form.processing || !inputsValids">
                         S'enregistrer
                     </PrimaryButton>
-                
             </div>
         </form>
     </Layout>
 </template>
+
+<script setup>
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import Layout from './../Layout.vue';
+
+const form = useForm({
+    name: '',
+    name2: '',
+    email: '',
+    phone: '',
+    password: '',
+    password_confirmation: '',
+    picture: null,
+    preview: null,
+});
+
+const phoneError = ref(null);
+
+const filterInput = (event) => {
+    event.target.value = event.target.value.replace(/\D/g, '');
+    form.phone = event.target.value;
+
+    phoneError.value = null;
+};
+
+const validatePhone = () => {
+    const phone = form.phone;
+
+    if (!phone) {
+        phoneError.value = null;
+        return true;
+    }
+
+    if (phone.length !== 10) {
+        phoneError.value = "Le numéro doit contenir 10 chiffres.";
+        return false;
+    }
+
+    if (phone.startsWith('3')) {
+        phoneError.value = "Format 33 non accepté -> Merci de le remplacer par 0 et de compléter votre numéro";
+        return false;
+    }
+    phoneError.value = null;
+    return true;
+};
+
+const changePicture = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        form.picture = file;
+        form.preview = URL.createObjectURL(file);
+    } else {
+        form.picture = null;
+        form.preview = null;
+    }
+};
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const isValidEmail = (email) => {
+    return emailRegex.test(email) && email.trim() !== '';
+};
+
+const inputsValids = computed(() => {
+    const isNameValid = form.name.trim().length >= 2;
+    const isEmailValid = isValidEmail(form.email);
+    const isPasswordValid = form.password.trim() !== '';
+    const isPasswordConfirmationValid = form.password === form.password_confirmation;
+
+    return isNameValid && isEmailValid && isPasswordValid && isPasswordConfirmationValid;
+});
+
+const submit = () => {
+    if (validatePhone()) {
+        form.submit('post', route('register'), {
+            forceFormData: true,
+            onFinish: () => form.reset('password', 'password_confirmation'),
+        });
+    }
+};
+</script>

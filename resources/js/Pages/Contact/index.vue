@@ -13,7 +13,7 @@
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
-                    placeholder="Nom et Prénom"
+                    placeholder="Entrez votre nom et prénom"
                     v-model="form.name"
                     required
                     autofocus
@@ -26,7 +26,7 @@
 
             <div class="mt-4">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="email" value="Email" title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux" /><span class="text-xs text-orange-500">*</span>
                 </div>
                 <TextInput
                     id="email"
@@ -34,7 +34,7 @@
                     class="mt-1 block w-full"
                     placeholder="Votre email"
                     v-model="form.email"
-                    required
+                    title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux"
                     autocomplete="email"
                 />
                 <InputError class="mt-2" :message="form.errors.email" />
@@ -42,6 +42,22 @@
 
             <div class="mt-4">
                 <div class="flex">
+                    <InputLabel for="phone" value="Téléphone" title="Veuillez renségner votre Numéro de Téléphone ou votre Email, ou bien les deux" /><span class="text-xs text-orange-500">*</span>
+                </div>
+                <TextInput
+                    id="phone"
+                    type="tel"
+                    class="mt-1 block w-full"
+                    placeholder="Votre numéro de téléphone"
+                    v-model="form.phone"
+                    maxlength="12"
+                    autocomplete="phone"
+                />
+                <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4">
+                <div class="flex" title="Entre 20 et 510 caractères">
                     <InputLabel for="message" value="Message" /><span class="text-xs text-red-700">*</span>
                 </div>
                 <textarea
@@ -51,17 +67,18 @@
                     :placeholder="messagePlaceholder"
                     rows="4"
                     required
-                    minlength="2"
+                    title="Entre 20 et 510 caractères"
+                    minlength="20"
                     maxlength="510"
                 ></textarea>
                 <InputError class="mt-2" :message="form.errors.message" />
             </div>
-            <div class="ml-auto mt-1 flex justify-end">
+            <div class="ml-auto mt-2 flex justify-end">
                 <PrimaryButton 
                     :class="[
                         '!btn', 
                         form.processing || !inputsValids 
-                        ? 'cursor-not-allowed opacity-50 !bg-gray-600 hover:text-gray-400 opacity-75' 
+                        ? 'btn-disabled' 
                         : ''
                     ]"
                     :disabled="form.processing || !inputsValids">
@@ -105,6 +122,7 @@ if (props.user?.name2 && props.user.name2 != '') {
 const form = useForm({
     name: finalName,
     email: props.user ? props.user.email : '',
+    phone: '',
     message: ''
 });
 
@@ -115,22 +133,36 @@ const isValidEmail = (email) => {
     return emailRegex.test(email) && email !== '';
 };
 
+const transformPhoneToLocal = (phone) => {
+    if (phone.startsWith("+33")) {
+        return '0' + phone.slice(4);
+    } else if (phone.startsWith("33")) {
+        return '0' + phone.slice(2);
+    }
+    return phone;
+};
+
+const phoneRegex = /^0[1-9][0-9]{8}$/;
+const isValidPhone = (phone) => {
+    const transformedPhone = transformPhoneToLocal(phone);
+    return phoneRegex.test(transformedPhone);
+};
+
 const inputsValids = computed(() => {
     const isNameValid = form.name && form.name.trim().length >= 2 && form.name.trim().length <= 50;
-    const isEmailValid = isValidEmail(form.email);
-    const isMessageValid = form.message && form.message.trim().length >= 3 && form.message.trim().length <= 500;
-    
-    return isNameValid && isEmailValid && isMessageValid;
+    const isMessageValid = form.message && form.message.trim().length >= 20 && form.message.trim().length <= 500;
+    const isEmailOrPhoneValid = isValidEmail(form.email) || isValidPhone(form.phone);
+    return isNameValid && isMessageValid && isEmailOrPhoneValid;
 });
 
 const submit = () => {
     if (inputsValids.value) {
+        form.phone = transformPhoneToLocal(form.phone);
         form.post('/contact', {
-            onFinish: () => form.reset('message'),
+            onFinish: () => form.reset('message', 'email', 'phone'),
         });
     } else {
         console.log('Formulaire non valide');
     }
 };
 </script>
-

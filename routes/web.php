@@ -53,4 +53,7 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 
 require __DIR__.'/auth.php';
 // Mailing
+// phone dans le mail de contact
 // page expirée : @csrf ?
+// p sur les res page edit
+// outline color

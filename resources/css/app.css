@@ -113,11 +113,22 @@ a:hover {z-index: 50;}
     font-family: mirza;
 }
 
-.btn:hover{color: #0cff00;}
-
 .btn:hover:not(:disabled) {
+    color: rgba(89, 233, 0, 0.861);
     background-color: #0056b3;
     box-shadow: 0 2px 4px -1px rgba(244, 155, 0, 0.756);
+}
+
+.btn-disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+    background-color: #4b5563;
+    color: #9ca3af;
+}
+.btn-disabled:hover {
+    color: #9ca3af !important;
+    background: #595959 !important;
+    box-shadow: none !important;
 }
 
 * {
@@ -128,23 +139,36 @@ a:hover {z-index: 50;}
     user-drag: none;
 }
 
-input, textarea {
-    @apply w-full p-3 border border-orange-500 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300 !important;
-}
-
 label {
-    @apply text-blue-800 dark:text-[#ccc] font-mirza !important;
+    @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 !important;
 }
 
-input[type="text"], input[type="number"]{
-    @apply border-orange-500 bg-[#9ca3af] dark:bg-[#111827] dark:text-[#ccc] font-semibold;
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+textarea,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    @apply w-full p-3 border-orange-500 bg-[#bfbfbf] dark:bg-[#111827] dark:text-[#ccc] font-semibold rounded-md shadow-sm focus:outline-none focus:ring focus:ring-orange-400;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important;
 }
 
 input[type="checkbox"] {
     @apply h-4 w-4 border-orange-500 rounded-full !important;
 }
 input[type="checkbox"]:not(:checked) {
-    background-color: #111827 !important;
+    background-color: #bfbfbf !important;
 }
 
 ::-webkit-scrollbar {
@@ -186,8 +210,6 @@ input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important;
     -webkit-text-fill-color: #ccc !important;
 }
-textarea{background:rgb(156, 163, 175); font-weight: 600;}
-.dark textarea{background:#111827; color: #ccc;}
 
 /* footer */
 .fade-enter-active, .fade-leave-active {transition: opacity 0.5s ease;}

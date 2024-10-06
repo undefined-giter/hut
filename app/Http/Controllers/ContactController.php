@@ -20,15 +20,20 @@ class ContactController extends Controller
     public function send(ContactFormRequest $request)
     {
         $validatedData = $request->validated();
-
-        Mail::to('leo.ripert@gmail.com')->send(new ContactMail(
-            $validatedData['name'],
-            $validatedData['email'],
-            $validatedData['message']
-        ));
-
-        Session::flash('success', ['Votre message a bien été envoyé.<br>Nous reviendrons vers vous dans les plus brefs délais.']);
-
+    
+        try {
+            Mail::to('leo.ripert@gmail.com')->send(new ContactMail(
+                $validatedData['name'],
+                $validatedData['email'],
+                $validatedData['phone'],
+                $validatedData['message']
+            ));
+    
+            Session::flash('success', ['Votre message a bien été envoyé.<br>Nous reviendrons vers vous dans les plus brefs délais.']);
+        } catch (\Exception $e) {
+            Session::flash('error', ['Une erreur s\'est produite lors de l\'envoi de votre message. Veuillez nous contacter directement depuis votre mail ou par téléphone svp.']);
+        }
+    
         if (Auth::check()) {
             return Inertia::location(route('profile.edit'));
         } else {

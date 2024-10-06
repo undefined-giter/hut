@@ -28,7 +28,7 @@
                                     <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
                                         alt="Photo de profil" class="rounded-full h-7 w-7 md:h-10 md:w-10 ml-2 mt-1 transition-all duration-700 md:mt-0" draggable="false">
                                         <p :class="isActive('/profile') ? 'custom-underline' : ''" class="hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
-                                            {{ capitalizeName(auth.user.name) }}
+                                            {{ auth.user.name }}
                                         </p>
                                 </Link>
                             </template>
