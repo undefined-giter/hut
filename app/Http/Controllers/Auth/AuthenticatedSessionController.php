@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Carbon\Carbon;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -32,6 +33,12 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        if (Auth::check()) {
+            Auth::user()->update([
+                'last_login' => \Carbon\Carbon::now(),
+            ]);
+        }
 
         if (Auth::user()->role === 'admin') {
             return redirect()->intended(route('admin.list'));

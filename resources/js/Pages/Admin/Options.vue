@@ -20,11 +20,12 @@
                     <th class="text-center" title="Si vide = rien de n'affiche; Si 0.00 = 'offert' s'affichera dans l'option;">€</th>
                     <th class="text-center" title="Décocher pour ne plus rendre l'option disponible, sans la supprimée pour autant.">Dispo</th>
                     <th class="text-center" title="Présélectionner l'option par défault">Présélect</th>
-                    <th class="text-center" title="Afficher l'option Par jour ? ou non.">Voir/jr</th>
-                    <th class="text-center" title="NE PAS SELECTIONNER si la colone précédente '/jour' n'est pas séléctionnée
-Prix payé par jour ou pour le séjour entier.
+                    <th class="text-center" title="Afficher l'option Par jour ?">Voir/jr</th>
+                    <th class="text-center" title="NE PAS SELECTIONNER si la colone précédente 'Voir/jr' n'est pas séléctionnée, à moins de vouloir imposer la récurence du prix par jour réserver.
+Prix payé par jour, ou pour le séjour entier ? Séléctionné : option 1 fois par jour, Déséléctionné : 1 fois pour le séjour entier. 
 Exemple si '/jour' est séléctionné : 2 nuits = 2 x le prix de l'option à régler.
-Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle sera prise tous les jours de la réservation -> Peut être déselectionné par l'utilisateur lors de sa réservation.">Présél/jr</th>
+Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle sera prise tous les jours de la réservation
+-> Peut être déselectionné par l'utilisateur lors de sa réservation.">Présél/jr</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>

@@ -11,11 +11,15 @@
                 <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
                 <div class="mt-2">
                     <div class="ml-48">
-                        <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Nom : </strong><span class="!select-text">{{ user.name }}</span></p>
+                        <div class="mb-4 flex">
+                            <p class="break-words w-full max-w-[28ch] flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Nom :</strong>
+                                <span class="!select-text">{{ user.name }}</span>
+                            </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[28ch]"><strong class="font-semibold">Second : </strong> 
+                        <div class="mb-4 flex">
+                            <p class="break-words w-full max-w-[28ch] flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Second :</strong> 
                                 <span v-if="user.phone" class="!select-text">
                                     {{ user.name2 ? user.name2 : 'non renseigné' }}
                                 </span>
@@ -24,9 +28,9 @@
                                 </span>
                             </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[28ch]">
-                                <strong class="font-semibold">Téléphone : </strong>
+                        <div class="mb-4 flex">
+                            <p class="break-words w-full max-w-[28ch] flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Téléphone :</strong>
                                 <span v-if="user.phone" class="!select-text">
                                     {{ user.phone.replace(/(\d{2})(?=\d)/g, '$1 ') }}
                                 </span>
@@ -35,22 +39,49 @@
                                 </span>
                             </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700 break-words w-full max-w-[28ch]">
-                                <strong class="font-semibold">Email :</strong> <span class="!select-text">{{ user.email }}</span>
+                        <div class="mb-4 flex">
+                            <p class="break-words w-full max-w-[28ch] flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Email :</strong>
+                                <span class="!select-text">{{ user.email }}</span>
                             </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700"><strong class="font-semibold">Date d'inscription :</strong> {{ new Date(user.created_at).toLocaleDateString() }}</p>
+                        <div class="mb-4 flex">
+                            <p class="flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Dernière co :</strong>
+                                {{ new Date(user.last_login).toLocaleDateString('fr-FR', { 
+                                    day: '2-digit', 
+                                    month: '2-digit', 
+                                    year: 'numeric'
+                                }) }} à {{ new Date(user.last_login).toLocaleTimeString('fr-FR', {
+                                    hour: '2-digit', 
+                                    minute: '2-digit',
+                                    second: undefined
+                                }) }}
+                            </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700"><strong class="font-semibold">Date de mise à jour :</strong> {{ new Date(user.updated_at).toLocaleDateString() }}</p>
+                        <div class="mb-4 flex">
+                            <p class="flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Inscription :</strong> 
+                                {{ new Date(user.created_at).toLocaleDateString() }}
+                            </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700"><strong class="font-semibold">Role :</strong> {{ user.role }}</p>
+                        <div class="mb-4 flex">
+                            <p class="flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Mise à jour :</strong>
+                                {{ new Date(user.updated_at).toLocaleDateString() }}
+                            </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-gray-700"><strong class="font-semibold">ID :</strong> {{ user.id }}</p>
+                        <div class="mb-4 flex">
+                            <p class="flex">
+                                <strong class="font-semibold !text-gray-700 w-32">Role :</strong> 
+                                {{ user.role }}
+                            </p>
+                        </div>
+                        <div class="mb-4 flex">
+                            <p class="flex">
+                                <strong class="font-semibold !text-gray-700 w-32">ID :</strong>
+                                {{ user.id }}
+                            </p>
                         </div>
                     </div>
                 

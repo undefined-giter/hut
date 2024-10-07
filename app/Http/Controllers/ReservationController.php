@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationMail;
 use Inertia\Inertia;
 use App\Models\Option;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\ReservationNotification;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -200,9 +204,10 @@ class ReservationController extends Controller
         }
 
         if ($reservationId) {
-            $existingReservation = Reservation::where('user_id', $userId)
-                ->where('id', $reservationId)
-                ->first();
+            // $existingReservation = Reservation::where('user_id', $userId)
+            //     ->where('id', $reservationId)
+            //     ->first();
+            $existingReservation = Reservation::findOrFail($reservationId);
 
             if ($existingReservation) {
                 if ($existingReservation->start_date == $validatedData['start_date'] && $existingReservation->end_date == $validatedData['end_date']) {
@@ -213,13 +218,14 @@ class ReservationController extends Controller
                             'res_price' => $validatedData['res_price'],
                             'res_comment' => $validatedData['res_comment'],
                         ]);
+
+                        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated'));
+                        Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated'));
                     }
 
-                    if (auth()->user()->role === 'admin') {
-                        return redirect()->route('admin.list')->with('success', ['Les options de la réservation ont bien été mises à jour']);
-                    }
-
-                    return redirect()->route('profile.edit')->with('success', ['Vos options ont bien été mises à jour']);
+                    return auth()->user()->role === 'admin' ?
+                        redirect()->route('admin.list')->with('success', ['Les options de la réservation ont bien été mises à jour']) :
+                        redirect()->route('profile.edit')->with('success', ['Vos options ont bien été mises à jour']);
                 } else {
                     $existingReservation->update([
                         'start_date' => $validatedData['start_date'],
@@ -233,11 +239,12 @@ class ReservationController extends Controller
                         $existingReservation->options()->sync($validatedData['options']);
                     }
 
-                    if (auth()->user()->role === 'admin') {
-                        return redirect()->route('admin.list')->with('success', ['Les dates et options de la réservation ont bien été mises à jour']);
-                    }
+                    Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated'));
+                    Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated'));
 
-                    return redirect()->route('profile.edit')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
+                    return auth()->user()->role === 'admin' ?
+                        redirect()->route('admin.list')->with('success', ['Les dates et options de la réservation ont bien été mises à jour']) :
+                        redirect()->route('profile.edit')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
                 }
             }
         }
@@ -255,6 +262,9 @@ class ReservationController extends Controller
         if (isset($validatedData['options'])) {
             $reservation->options()->sync($validatedData['options']);
         }
+
+        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($reservation, 'created'));
+        Mail::to(Auth::user()->email)->send(new ReservationMail($reservation, 'created'));
 
         return redirect()->route('profile.edit')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }

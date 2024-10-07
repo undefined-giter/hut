@@ -42,7 +42,7 @@
             <div class="block mt-4 flex justify-between">
                 <div>
                     <label class="flex items-center -mt-2">
-                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" />
+                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
                         <span class="text-sm text-gray-600 dark:text-gray-400">Rester connecté</span>
                     </label>
                     <div class="mt-2">
