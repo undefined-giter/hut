@@ -140,7 +140,7 @@ a:hover {z-index: 50;}
 }
 
 label {
-    @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 !important;
+    @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important;
 }
 
 input[type="text"],

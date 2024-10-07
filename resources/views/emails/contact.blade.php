@@ -4,7 +4,7 @@
     <title>Cabane - Nouveau message de {{ $name }}</title>
 </head>
 <body>
-    <h1>Nouveau message de {{ $name }}</h1>
+    <h2>Nouveau message de {{ $name }}</h2>
     @if (!empty($email))<p><strong>Email :</strong> {{ $email }}</p>@endif
     @if (!empty($phone))
         @php

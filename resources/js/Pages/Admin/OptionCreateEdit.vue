@@ -1,24 +1,24 @@
 <template>
-    <Head :title="option ? 'Modifier Option' : 'Créer Option'" />
+    <Head :title="(option ? 'Modifier Option' : 'Créer Option') + ' | Admin'" />
     <Layout>
         <h1>{{ option ? 'Modifier l\'Option' : 'Créer une Nouvelle Option' }}</h1>
 
         <form @submit.prevent="submitForm" class="max-w-sm mx-auto">
             
             <div class="mb-4">
-                <label for="name" class="block mb-2">Nom<span class="text-xs text-red-700">*</span></label>
+                <label for="name" class="block !-mb-0.5">Nom<span class="text-xs text-red-700">*</span></label>
                 <input v-model="form.name" type="text" id="name" class="input w-full p-2" required />
             </div>
 
             <div class="mb-4">
-                <label for="description" class="block mb-2">Description<span class="text-xs text-red-700">*</span></label>
+                <label for="description" class="block !-mb-0.5">Description<span class="text-xs text-red-700">*</span></label>
                 <textarea v-model="form.description" id="description" rows="4" class="input w-full p-2"></textarea>
             </div>
 
             <div class="mb-4" title='Insérer "0" (zéro) pour afficher "Inclu" aux utilisateurs sur la page de réservation.
 Laisser vide pour ne rien afficher.
 Format "12.34". Les réductions (prix négatifs) sont permis.'>
-                <label for="price" class="block mb-2">Prix (€)</label>
+                <label for="price" class="block !-mb-0.5">Prix (€)</label>
                 <input v-model="form.price" type="number" step="0.01" id="price" class="input w-full p-2" />
             </div>
 

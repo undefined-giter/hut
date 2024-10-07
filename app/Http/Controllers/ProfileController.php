@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Hash;
@@ -23,12 +21,14 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $reservations = $user->reservations()->with('options')->get();
+        $connected_user_id = auth()->id();
 
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'reservations' => $reservations,
             'user' => $user->only(['id', 'name', 'name2', 'email', 'phone']),
+            'connected_user_id' => $connected_user_id,
         ]);
     }
 

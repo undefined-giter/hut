@@ -24,9 +24,9 @@
                 <InputError :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux" /><span class="text-xs text-orange-500">*</span>
+                    <InputLabel for="email" value="Email" /><span class="text-xs text-orange-500">*</span>
                 </div>
                 <TextInput
                     id="email"
@@ -34,15 +34,14 @@
                     class="mt-1 block w-full"
                     placeholder="Votre email"
                     v-model="form.email"
-                    title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux"
                     autocomplete="email"
                 />
                 <InputError :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="Veuillez renseigner votre Numéro de Téléphone ou votre Email, ou bien les deux">
                 <div class="flex">
-                    <InputLabel for="phone" value="Téléphone" title="Veuillez renseigner votre Numéro de Téléphone ou votre Email, ou bien les deux" /><span class="text-xs text-orange-500">*</span>
+                    <InputLabel for="phone" value="Téléphone" /><span class="text-xs text-orange-500">*</span>
                 </div>
                 <input
                     id="phone"

@@ -25,7 +25,7 @@ class ContactMail extends Mailable
      * @param string $email
      * @param string $message
      */
-    public function __construct($name, $email, $phone, $message)
+    public function __construct(string $name, ?string $email, ?string $phone, string $message)
     {
         $this->name = $name;
         $this->email = $email;
@@ -39,7 +39,7 @@ class ContactMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nouveau message de contact'
+            subject: 'Cabane - ' . $this->name
         );
     }
 

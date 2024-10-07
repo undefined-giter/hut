@@ -3,7 +3,7 @@
     <div>
         <img 
             id="worldImg"
-            src='storage/world.png'
+            :src="worldImageUrl"
             alt="Translate" 
             @click="openDropdown" 
             style="width: 26px; height: 26px;"
@@ -14,6 +14,8 @@
 
 <script setup>
 import { onMounted } from 'vue';
+
+const worldImageUrl = '/storage/world.png';
 
 const openDropdown = () => {
     const worldImg = document.querySelector('#worldImg');

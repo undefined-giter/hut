@@ -231,10 +231,6 @@ const isScrollbarVisible = ref(false);
 onMounted(() => {
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-  if (!csrfToken.value) {
-        console.error("CSRF Token is missing");
-    }
-
   if (Array.isArray(options)) {
     options.forEach(option => {
       option.by_day = option.by_day_preselected == 1;
@@ -244,9 +240,6 @@ onMounted(() => {
     selectedOptionsObjects.value = options.filter(option => option.preselected);
     selectedOptionsIds.value = options.filter(option => option.preselected).map(option => option.id);
   }
-
-  csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
   
   if (reservationEdit) {
     arrivalDate.value = new Date(reservationEdit.start_date);

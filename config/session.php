@@ -19,6 +19,7 @@ return [
     */
 
     'driver' => env('SESSION_DRIVER', 'database'),
+    // 'driver' => env('SESSION_DRIVER', 'file'), // TODO test
 
     /*
     |--------------------------------------------------------------------------
@@ -213,5 +214,4 @@ return [
     */
 
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
-
 ];

@@ -60,10 +60,12 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::with('reservations.options')->findOrFail($id);
+        $connected_user_id = auth()->id();
     
         return Inertia::render('Admin/Details', [
             'user' => $user,
             'reservations' => $user->reservations,
+            'connected_user_id' => $connected_user_id,
         ]);
     }    
 

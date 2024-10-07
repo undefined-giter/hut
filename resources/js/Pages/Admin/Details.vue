@@ -3,9 +3,9 @@
     <Layout>
         <h1 style="overflow-wrap: break-word;">À propos de {{ user.name }}</h1>
 
-        <Reservations :reservations="reservations" />
+        <Reservations :reservations="reservations" :connected_user_id="connected_user_id" />
 
-        <div class="bg-[#131516] shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-3000">            
+        <div class="bg-[#131516] shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-300">            
             <h2>Profile</h2>
             <div class="max-w-2xl mx-auto p-8 pt-0">
                 <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
@@ -77,6 +77,7 @@ import Layout from '../Layout.vue';
 const props = defineProps({
   user: Object,
   reservations: Array,
+  connected_user_id: Number,
 });
 
 const goBack = () => {
