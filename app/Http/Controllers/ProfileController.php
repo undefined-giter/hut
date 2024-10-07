@@ -28,7 +28,7 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'reservations' => $reservations,
-            'user' => $user->only(['name', 'name2', 'email', 'phone']),
+            'user' => $user->only(['id', 'name', 'name2', 'email', 'phone']),
         ]);
     }
 

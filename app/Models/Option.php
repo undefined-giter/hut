@@ -10,7 +10,14 @@ class Option extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'price', 'available', 'preselected', 'by_day', 'by_day_preselected',
+        'name', 
+        'description', 
+        'price', 
+        'available', 
+        'preselected', 
+        'by_day', 
+        'by_day_display', 
+        'by_day_preselected',
     ];
 
     public function reservations()

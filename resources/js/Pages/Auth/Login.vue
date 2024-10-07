@@ -19,7 +19,7 @@
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
@@ -36,7 +36,7 @@
                     autocomplete="current-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError :message="form.errors.password" />
             </div>
 
             <div class="block mt-4 flex justify-between">
@@ -70,7 +70,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import Layout from './../Layout.vue';
 
 defineProps({
@@ -96,7 +96,15 @@ const isValidEmail = (email) => {
 const inputsValids = computed(() => {
     const isEmailValid = isValidEmail(form.email);
     const isPasswordValid = form.password !== '';
-    return isEmailValid && isPasswordValid && !form.errors.email && !form.errors.password;
+    return isEmailValid && isPasswordValid;
+});
+
+watch(() => form.email, () => {
+    form.clearErrors('email');
+});
+
+watch(() => form.password, () => {
+    form.clearErrors('password');
 });
 
 const submit = () => {

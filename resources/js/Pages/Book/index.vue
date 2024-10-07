@@ -6,6 +6,7 @@
     <div class="flex justify-between">
       <p>Les réservations commencent à 14h, jusqu'à 12h le jour du départ.</p><p>Parking inclu</p>
     </div>
+    <p>Location pour une nuit : {{ PRICE_PER_NIGHT }}<small>€</small>. Location par nuit pour 2 nuits et + : {{ PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS }}<small>€</small>.</p>
     <vue-cal
       locale="fr"
       active-view="month"
@@ -125,8 +126,8 @@
         <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">Réinitialiser</button>
       </div>
 
-      <h3 v-if="options" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
-      <div :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[450px] overflow-y-auto shadow-sm overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
+      <h3 v-if="options.length >= 1" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
+      <div v-if="options.length >= 1" :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3  min-h-[158px] max-h-[450px] overflow-y-auto shadow-sm overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
         paddingRight: isScrollbarVisible && gridClass == 'one-column' ? '7px' : isScrollbarVisible ? '1px' : '0'}">
         <label v-for="(option, index) in options" :key="option.id"
               class="relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
@@ -144,7 +145,7 @@
             {{ option.description }}
           </p>
 
-          <label @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
+          <label v-if="option.by_day_display" @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
             <span class="text-sm absolute right-12 w-[60px] flex text-gray-800 mirza font-semibold -mr-2 -mt-1">Par jour ?</span>
             <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] 
@@ -161,7 +162,7 @@
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', res_comment.length === 510 ? '!text-orange-600' : '']">{{ res_comment.length }}/510<small> caractères</small></p>
         </div>
         <div class="ml-auto mt-auto mb-1">
-          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" />
+          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" class="mb-3" />
           <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400 opacity-75', 'btn ml-auto block']">
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
@@ -171,11 +172,16 @@
       
     
     <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
-      <h3 class="underline text-red-600 text-xl">Nuits déjà réservées :</h3>
+      <h3 class="underline text-red-600 text-xl -mb-2">Nuits déjà réservées :</h3>
       <div style="max-height: 350px; overflow-y: auto; padding-left:2px;">
         <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
           <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
-          <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's' : '')"></span>
+          <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's ' : ' ')"></span>
+          <span v-if="auth && auth.user && auth.user.id === reservation.user_id">
+            <Link :href="route('profile.edit', reservation.user_id)" class="text-blue-600">
+              <span class="text-sm">🟢</span><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
+            </Link>
+          </span>
           <span v-if="auth && auth.user && auth.user.role === 'admin'">
             => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
                 <input type="hidden" name="_token" :value="csrfToken" />
@@ -183,7 +189,7 @@
                 <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
             </form>
             <span class="text-zinc-800 text-sm"> | </span> 
-            <Link :href="route('admin.details', reservation.user_id)" target="_blank"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
+            <Link :href="route('admin.details', reservation.user_id)"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
             <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ Math.floor(reservation.res_price) }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
           </span>
         </li></p>
@@ -200,7 +206,7 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, 
+const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
   edit_reservation_dates = []  } = usePage().props;
@@ -211,7 +217,7 @@ const showMonth = ref(showMonthEdit ?? null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
-const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour (h arrivée envisagée, ...)";
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour (h arrivée envisagée...)";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();
@@ -222,7 +228,13 @@ const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
 
 
-onMounted(() => {  
+onMounted(() => {
+  csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  if (!csrfToken.value) {
+        console.error("CSRF Token is missing");
+    }
+
   if (Array.isArray(options)) {
     options.forEach(option => {
       option.by_day = option.by_day_preselected == 1;
@@ -308,7 +320,7 @@ const formatDate = (date) => {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
-  }) + ` <small>${date.getFullYear()}</small>`;
+  }) + ` <span class="text-xs">${date.getFullYear()}</span>`;
 };
 
 const formatDateShort = (date) => {

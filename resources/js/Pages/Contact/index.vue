@@ -21,7 +21,7 @@
                     minlength="2"
                     maxlength="255"
                 />
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError :message="form.errors.name" />
             </div>
 
             <div class="mt-4">
@@ -37,23 +37,26 @@
                     title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux"
                     autocomplete="email"
                 />
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
                 <div class="flex">
-                    <InputLabel for="phone" value="Téléphone" title="Veuillez renségner votre Numéro de Téléphone ou votre Email, ou bien les deux" /><span class="text-xs text-orange-500">*</span>
+                    <InputLabel for="phone" value="Téléphone" title="Veuillez renseigner votre Numéro de Téléphone ou votre Email, ou bien les deux" /><span class="text-xs text-orange-500">*</span>
                 </div>
-                <TextInput
+                <input
                     id="phone"
                     type="tel"
                     class="mt-1 block w-full"
                     placeholder="Votre numéro de téléphone"
                     v-model="form.phone"
-                    maxlength="12"
+                    maxlength="10"
+                    title="Numéro de téléphone avec 10 chiffres, commençant par 0"
                     autocomplete="phone"
+                    @input="clearPhoneError"
+                    @blur="validatePhone"
                 />
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError :message="phoneError" />
             </div>
 
             <div class="mt-4">
@@ -71,7 +74,7 @@
                     minlength="20"
                     maxlength="510"
                 ></textarea>
-                <InputError class="mt-2" :message="form.errors.message" />
+                <InputError :message="form.errors.message" />
             </div>
             <div class="ml-auto mt-2 flex justify-end">
                 <PrimaryButton 
@@ -91,6 +94,7 @@
 
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import { computed } from 'vue';
 import Layout from './../Layout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -122,46 +126,50 @@ if (props.user?.name2 && props.user.name2 != '') {
 const form = useForm({
     name: finalName,
     email: props.user ? props.user.email : '',
-    phone: '',
+    phone: props.user ? props.user.phone : '',
     message: ''
 });
 
 const messagePlaceholder = "Bonjour,\nmerci de nous laisser un message, nous vous répondrons au plus vite.";
-
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneError = ref('');
+const phoneRegex = /^0[1-9][0-9]{8}$/;
+
 const isValidEmail = (email) => {
     return emailRegex.test(email) && email !== '';
 };
 
-const transformPhoneToLocal = (phone) => {
-    if (phone.startsWith("+33")) {
-        return '0' + phone.slice(4);
-    } else if (phone.startsWith("33")) {
-        return '0' + phone.slice(2);
-    }
-    return phone;
+const clearPhoneError = () => {
+    phoneError.value = '';
 };
 
-const phoneRegex = /^0[1-9][0-9]{8}$/;
-const isValidPhone = (phone) => {
-    const transformedPhone = transformPhoneToLocal(phone);
-    return phoneRegex.test(transformedPhone);
+const validatePhone = () => {
+    if (!phoneRegex.test(form.phone)) {
+        phoneError.value = "Le numéro doit commencer par 0 et comporter 10 chiffres.";
+    }
 };
 
 const inputsValids = computed(() => {
-    const isNameValid = form.name && form.name.trim().length >= 2 && form.name.trim().length <= 50;
+    const isNameValid = form.name && form.name.trim().length >= 2 && form.name.trim().length <= 255;
     const isMessageValid = form.message && form.message.trim().length >= 20 && form.message.trim().length <= 500;
-    const isEmailOrPhoneValid = isValidEmail(form.email) || isValidPhone(form.phone);
+    const isEmailOrPhoneValid = isValidEmail(form.email) || phoneError.value === "";
     return isNameValid && isMessageValid && isEmailOrPhoneValid;
 });
 
+const resetFieldsOnErrors = () => {
+    const isPhoneValid = phoneRegex.test(form.phone);
+    const isEmailValid = isValidEmail(form.email);
+    if (!isPhoneValid) {form.reset('phone');}
+    if (!isEmailValid) {form.reset('email');}
+};
+
 const submit = () => {
     if (inputsValids.value) {
-        form.phone = transformPhoneToLocal(form.phone);
         form.post('/contact', {
-            onFinish: () => form.reset('message', 'email', 'phone'),
+            onFinish: () => resetFieldsOnErrors(),
         });
     } else {
+        resetFieldsOnErrors();
         console.log('Formulaire non valide');
     }
 };

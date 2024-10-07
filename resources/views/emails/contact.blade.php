@@ -4,11 +4,15 @@
     <title>Cabane - Nouveau message de {{ $name }}</title>
 </head>
 <body>
-    <h1>Nouveau message de contact</h1>
-    <p><strong>Nom :</strong> {{ $name }}</p>
-    <p><strong>Nom :</strong> {{ $name }}</p>
+    <h1>Nouveau message de {{ $name }}</h1>
     @if (!empty($email))<p><strong>Email :</strong> {{ $email }}</p>@endif
-    @if (!empty($phone))<p><strong>Téléphone :</strong> {{ $phone }}</p>@endif
+    @if (!empty($phone))
+        @php
+            $formattedPhone = preg_replace('/\B(?=(..)+(?!\d))/', ' ', strrev($phone));
+            $formattedPhone = strrev($formattedPhone);
+        @endphp
+        <p><strong>Téléphone :</strong> {{ $formattedPhone }}</p>
+    @endif
     <p><strong>Message :</strong></p>
     <p>{!! nl2br(e($messageContent)) !!}</p>
 </body>

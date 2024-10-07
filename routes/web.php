@@ -44,7 +44,7 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::resource('/options', OptionController::class)->except(['show']);
     Route::put('/options/{option}/toggle-availability', [OptionController::class, 'toggleAvailability'])->name('options.toggle-availability');
     Route::put('/options/{option}/toggle-preselected', [OptionController::class, 'togglePreselected'])->name('options.toggle-preselected');
-    Route::put('/options/{option}/toggle-by-day', [OptionController::class, 'toggleByDay'])->name('options.toggle-by-day');
+    Route::put('/options/{option}/toggle-by-day-display', [OptionController::class, 'toggleByDayDisplay'])->name('options.toggle-by-day-display');
     Route::put('/options/{option}/toggle-by-day-preselected', [OptionController::class, 'toggleByDayPreselected'])->name('options.toggle-by-day-preselected');
 
     Route::get('/prices', [PriceController::class, 'getPrices'])->name('prices');
@@ -53,7 +53,4 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 
 require __DIR__.'/auth.php';
 // Mailing
-// phone dans le mail de contact
 // page expirée : @csrf ?
-// p sur les res page edit
-// outline color

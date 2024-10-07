@@ -24,9 +24,20 @@ class ContactFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:2|max:50',
-            'email' => 'required|email',
-            'message' => 'required|string|min:3|max:500',
+            'name' => 'required|string|min:2|max:255',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|regex:/^0[1-9][0-9]{8}$/',
+            'message' => 'required|string|min:20|max:510',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (empty($this->email) && empty($this->phone)) {
+                $validator->errors()->add('email', 'Vous devez remplir au moins l\'email ou le téléphone.');
+                $validator->errors()->add('phone', 'Vous devez remplir au moins le téléphone ou l\'email.');
+            }
+        });
     }
 }

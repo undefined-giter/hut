@@ -6,7 +6,7 @@
 
     <form @submit.prevent="submit" class="space-y-6">
 
-      <div class="text-center w-[384px] h-[250px] mx-auto">
+      <div class="text-center w-[384px] mx-auto">
         <div class="w-[384px] h-[250px] mx-auto">
           <img :src="form.preview" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
         </div>
@@ -17,7 +17,6 @@
               <input
                 id="delete_picture"
                 type="checkbox"
-                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                 v-model="form.delete_picture"
               />
               <span class="ml-2 text-sm text-gray-600">Supprimer la photo actuelle</span>
@@ -25,7 +24,7 @@
           </div>
 
           <div class="relative overflow-hidden inline-block">
-            <button class="bg-blue-500 text-white py-2 px-4 rounded-lg cursor-pointer focus:outline-none" id="input-file">
+            <button class="bg-blue-600 text-white py-2 px-4 rounded-lg cursor-pointer focus:outline-none" id="input-file">
               Choisir un fichier
             </button>
             <input
@@ -36,7 +35,7 @@
           </div>
         </div>
 
-        <InputError class="mt-2" :message="form.errors.picture" />
+        <InputError :message="form.errors.picture" />
 
         <div class="mt-4 mx-2 text-right">
           <PrimaryButton :disabled="form.processing" class="!bg-blue-700 !text-gray-200">Enregistrer</PrimaryButton>

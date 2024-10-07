@@ -37,6 +37,10 @@ class UserController extends Controller
             ->selectRaw('ROUND(AVG(options.price), 2) as avg_options')
             ->first()
             ->avg_options ?? 'Indisponible';
+
+        if (is_numeric($averageOptionBasket)) {
+            $averageOptionBasket = floatval($averageOptionBasket);
+        }
     
         // Récupérer le nombre total de réservations dans les 12 derniers mois
         $averageReservationsPerMonth = $totalReservations > 0 
@@ -55,7 +59,7 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::with('reservations')->findOrFail($id);
+        $user = User::with('reservations.options')->findOrFail($id);
     
         return Inertia::render('Admin/Details', [
             'user' => $user,

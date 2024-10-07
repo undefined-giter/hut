@@ -18,7 +18,7 @@
             </div>
 
             <div class="mb-6">
-                <label for="price_per_night_for_2_and_more_nights">Prix par nuit (2 nuits et plus) :</label>
+                <label for="price_per_night_for_2_and_more_nights">Prix par nuit pour 2 nuits et + :</label>
                 <input 
                     v-model="form.price_per_night_for_2_and_more_nights"
                     type="number"

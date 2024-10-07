@@ -5,7 +5,7 @@
 
         <Reservations :reservations="reservations" />
 
-        <div class="bg-[#131516] shadow-lg rounded-lg p-8 mx-auto">            
+        <div class="bg-[#131516] shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-3000">            
             <h2>Profile</h2>
             <div class="max-w-2xl mx-auto p-8 pt-0">
                 <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">

@@ -30,6 +30,7 @@ class OptionController extends Controller
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
             'by_day' => 'required|boolean',
+            'by_day_display' => 'required|boolean',
             'by_day_preselected' => 'required|boolean',
         ]);
 
@@ -53,6 +54,7 @@ class OptionController extends Controller
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
             'by_day' => 'required|boolean',
+            'by_day_display' => 'required|boolean',
             'by_day_preselected' => 'required|boolean',
         ]);
 
@@ -78,13 +80,13 @@ class OptionController extends Controller
         return redirect()->back()->with('success', ['Statut de présélection mis à jour']);
     }
 
-    public function toggleByDay(Request $request, Option $option)
+    public function toggleByDayDisplay(Request $request, Option $option)
     {
         $option->update([
-            'by_day' => $request->by_day,
+            'by_day_display' => $request->by_day_display,
         ]);
 
-        return redirect()->back()->with('success', ['Statut "Par jour" mis à jour']);
+        return redirect()->back()->with('success', ['Affichage "Par jour" mis à jour']);
     }
 
     public function toggleByDayPreselected(Request $request, Option $option)

@@ -15,14 +15,11 @@
                 <textarea v-model="form.description" id="description" rows="4" class="input w-full p-2"></textarea>
             </div>
 
-            <div class="mb-4">
+            <div class="mb-4" title='Insérer "0" (zéro) pour afficher "Inclu" aux utilisateurs sur la page de réservation.
+Laisser vide pour ne rien afficher.
+Format "12.34". Les réductions (prix négatifs) sont permis.'>
                 <label for="price" class="block mb-2">Prix (€)</label>
                 <input v-model="form.price" type="number" step="0.01" id="price" class="input w-full p-2" />
-                <p class="text-xs mt-1">
-                    Insérer "0" (zéro) pour afficher "Offert" aux utilisateurs sur la page de réservation.<br>
-                    Laisser vide pour ne rien afficher.<br>
-                    Format "12.34". Les réductions (prix négatifs) sont permis.
-                </p>
             </div>
 
             <div class="flex justify-between space-x-6">
@@ -38,10 +35,10 @@
                     </div>
                 </div>
                 <div>
-                    <div class="flex items-center mb-4">
+                    <!-- <div class="flex items-center mb-4">
                         <input v-model="form.by_day" type="checkbox" id="by_day" />
                         <label for="by_day" class="ml-2">Par Jour</label>
-                    </div>
+                    </div> -->
     
                     <div class="flex items-center mb-4">
                         <input v-model="form.by_day_preselected" type="checkbox" id="by_day_preselected" />

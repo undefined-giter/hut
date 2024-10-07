@@ -19,7 +19,7 @@
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError :message="form.errors.name" />
             </div>
 
             <div>
@@ -34,7 +34,7 @@
                     v-model="form.name2"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError :message="form.errors.name" />
             </div>
 
             <div class="mt-4">
@@ -51,7 +51,7 @@
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
@@ -68,7 +68,7 @@
                     @blur="validatePhone"
                 />
 
-                <InputError class="mt-2" :message="form.errors.phone" />
+                <InputError :message="form.errors.phone" />
                 <p v-if="phoneError" class="!text-red-600 text-sm mt-2">{{ phoneError }}</p>
             </div>
 
@@ -86,7 +86,7 @@
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
@@ -103,7 +103,7 @@
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                <InputError :message="form.errors.password_confirmation" />
             </div>
 
             <div>
@@ -116,7 +116,7 @@
                     <input
                     id="picture"
                     type="file"
-                    class="mt-1.5 block w-full dark:text-white"
+                    class="mt-2 block w-full"
                     @input="changePicture"
                     />
                 </div>

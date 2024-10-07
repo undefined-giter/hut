@@ -25,12 +25,12 @@
 
                         <div v-if="reservation.res_comment">
                             <em><button @click="toggleComment" class="text-orange-500 underline">
-                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} le commentaire
+                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} {{ user != null && reservation.user_id === user.id  ? 'votre' : 'son' }} commentaire
                             </button></em>
-                            <p v-if="isCommentVisible" class="whitespace-pre-wrap mt-2">{{ reservation.res_comment }}</p>
+                            <p v-if="isCommentVisible" class="whitespace-pre-wrap break-words mt-2">{{ reservation.res_comment }}</p>
                         </div>
 
-                        <p class="!text-green-400 text-right mr-1.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                        <p class="!text-green-400 text-right -mt-3">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                     </li>
                 </ul>
         
@@ -80,12 +80,12 @@
 
                         <div v-if="reservation.res_comment">
                             <em><button @click="toggleComment" class="text-orange-500 underline">
-                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} le commentaire
+                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} {{ user != null && reservation.user_id === user.id  ? 'votre' : 'son' }} commentaire
                             </button></em>
-                            <p v-if="isCommentVisible" class="whitespace-pre-wrap mt-2">{{ reservation.res_comment }}</p>
+                            <p v-if="isCommentVisible" class="whitespace-pre-wrap break-words mt-2">{{ reservation.res_comment }}</p>
                         </div>
 
-                        <p class="!text-green-400 text-right mr-1.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                        <p class="!text-green-400 text-right mr-1.5 -mt-3">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                     </li>
                 </ul>
 
@@ -113,12 +113,12 @@
 
                         <div v-if="reservation.res_comment">
                             <em><button @click="toggleComment" class="text-orange-500 underline">
-                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} le commentaire
+                                {{ isCommentVisible ? 'Masquer' : 'Afficher' }} {{ user != null && reservation.user_id === user.id  ? 'votre' : 'son' }} commentaire
                             </button></em>
-                            <p v-if="isCommentVisible" class="whitespace-pre-wrap mt-2">{{ reservation.res_comment }}</p>
+                            <p v-if="isCommentVisible" class="whitespace-pre-wrap break-words mt-2">{{ reservation.res_comment }}</p>
                         </div>
 
-                        <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                        <p class="!text-green-400 text-right mr-1.5 -mt-3">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                     </li>
                 </ul>
             </div>
@@ -138,7 +138,11 @@ onMounted(() => {
 });
 
 const props = defineProps({
-    reservations: Array
+    reservations: Array,
+    user: {
+        type: Object,
+        default: null,
+    },
 });
 
 const today = new Date();

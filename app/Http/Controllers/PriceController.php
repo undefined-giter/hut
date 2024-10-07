@@ -33,8 +33,19 @@ class PriceController extends Controller
             'price_per_night_for_2_and_more_nights' => 'required|integer|min:0',
         ]);
     
-        DB::table('prices')->where('key', 'price_per_night')->update(['value' => $request->input('price_per_night')]);
-        DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->update(['value' => $request->input('price_per_night_for_2_and_more_nights')]);
+        $pricePerNightExists = DB::table('prices')->where('key', 'price_per_night')->exists();
+        if ($pricePerNightExists) {
+            DB::table('prices')->where('key', 'price_per_night')->update(['value' => $request->input('price_per_night')]);
+        } else {
+            DB::table('prices')->insert(['key' => 'price_per_night', 'value' => $request->input('price_per_night')]);
+        }
+    
+        $pricePerNightFor2Exists = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->exists();
+        if ($pricePerNightFor2Exists) {
+            DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->update(['value' => $request->input('price_per_night_for_2_and_more_nights')]);
+        } else {
+            DB::table('prices')->insert(['key' => 'price_per_night_for_2_and_more_nights', 'value' => $request->input('price_per_night_for_2_and_more_nights')]);
+        }
     
         return redirect()->route('admin.options.index')->with('success', ['Les prix ont été mis à jour']);
     }

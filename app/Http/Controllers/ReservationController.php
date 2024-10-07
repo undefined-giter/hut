@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Option;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -133,10 +134,15 @@ class ReservationController extends Controller
         $calendarColors = $this->getCalendarColors($reservations);
 
         $options = Option::where('available', true)->get();
+
+        $pricePerNight = DB::table('prices')->where('key', 'price_per_night')->value('value');
+        $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
         
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
+            'PRICE_PER_NIGHT' => $pricePerNight,
+            'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
             
             'in_date' => $calendarColors['in_date'],
             'inner_date' => $calendarColors['inner_date'],
@@ -182,17 +188,19 @@ class ReservationController extends Controller
             }
         }
                 
-        $conflictingReservations = Reservation::where('user_id', '!=', auth()->id())
+        $userId = auth()->user()->role === 'admin' && $reservationId ? Reservation::find($reservationId)->user_id : auth()->id();
+        
+        $conflictingReservations = Reservation::where('user_id', '!=', $userId)
             ->where('start_date', '<', $validatedData['end_date'])
             ->where('end_date', '>', $validatedData['start_date'])
             ->exists();
 
         if ($conflictingReservations) {
-            return back()->with('error', ["Il y a déjà une réservation durant cette période.<br><span style='color: #fc8003;'>Veuillez choisir une autre date ou non contacter directement.</span>"]);
+            return back()->with('error', ["Il y a déjà une réservation durant cette période.<br><span style='color: #fc8003;'>Veuillez choisir une autre date ou nous contacter directement.</span>"]);
         }
 
         if ($reservationId) {
-            $existingReservation = Reservation::where('user_id', auth()->id())
+            $existingReservation = Reservation::where('user_id', $userId)
                 ->where('id', $reservationId)
                 ->first();
 
@@ -205,6 +213,10 @@ class ReservationController extends Controller
                             'res_price' => $validatedData['res_price'],
                             'res_comment' => $validatedData['res_comment'],
                         ]);
+                    }
+
+                    if (auth()->user()->role === 'admin') {
+                        return redirect()->route('admin.list')->with('success', ['Les options de la réservation ont bien été mises à jour']);
                     }
 
                     return redirect()->route('profile.edit')->with('success', ['Vos options ont bien été mises à jour']);
@@ -221,13 +233,17 @@ class ReservationController extends Controller
                         $existingReservation->options()->sync($validatedData['options']);
                     }
 
+                    if (auth()->user()->role === 'admin') {
+                        return redirect()->route('admin.list')->with('success', ['Les dates et options de la réservation ont bien été mises à jour']);
+                    }
+
                     return redirect()->route('profile.edit')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
                 }
             }
         }
 
         $reservation = Reservation::create([
-            'user_id' => auth()->id(),
+            'user_id' => $userId,
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
             'nights' => $validatedData['nights'],
@@ -249,6 +265,9 @@ class ReservationController extends Controller
         $today = now()->startOfDay();
         $reservations = Reservation::where('end_date', '>', $today)->get();
 
+        $pricePerNight = DB::table('prices')->where('key', 'price_per_night')->value('value');
+        $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
+
         $calendarColors = $this->getCalendarColors($reservations, $id);
 
         $options = Option::all();
@@ -263,6 +282,8 @@ class ReservationController extends Controller
             'options' => $options,
             'reservationEdit' => $reservationEdit,
             'showMonthEdit' => $showMonth,
+            'PRICE_PER_NIGHT' => $pricePerNight,
+            'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
         
             'in_date' => array_values($calendarColors['in_date']),
             'inner_date' => array_values($calendarColors['inner_date']),

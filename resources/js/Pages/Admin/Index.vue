@@ -63,7 +63,7 @@
         <p class="text-lg font-semibold text-center">Réservation demandées ces 12 derniers mois</p>
         <div class="mx-auto text-left mt-2" style="max-width: fit-content;">
             <table class="mx-auto">
-                <thead class="border-x border-[#EA580C]">
+                <thead class="border-x border-[#EA580C] text-center">
                     <tr>
                         <th class="py-2 md:min-w-[150px]">PanierTT/res</th>
                         <th class="md:min-w-[150px]">Options/res</th>
@@ -94,10 +94,10 @@ import { Head } from '@inertiajs/vue3';
 
 defineProps({
     users: Object,
-    averageTtcBasket: Number,
-    averageOptionBasket: Number,
-    averageDaysReserved: Number,
-    averageReservationsPerMonth: Number,
+    averageTtcBasket: [Number, String],
+    averageOptionBasket: [Number, String],
+    averageDaysReserved: [Number, String],
+    averageReservationsPerMonth: [Number, String],
 });
 
 const goTo = (url) => {
