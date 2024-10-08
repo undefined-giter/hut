@@ -25,7 +25,7 @@ const props = defineProps({
     <Layout>
         <h1>Votre Profil</h1>
         
-        <Reservations :reservations="reservations" />
+        <Reservations :reservations="reservations" :connected_user_id="connected_user_id" />
 
         <div>
             <div class="max-w-7xl mx-auto space-y-6">

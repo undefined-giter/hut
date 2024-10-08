@@ -15,7 +15,18 @@
                             <em><span class="dark:text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
-                                    {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
+                                    {{ option.name }} -
+                                    <small>
+                                        <span v-if="option.price == 0.00">offert</span>
+                                        <span v-else>
+                                            <span v-if="option.pivot.by_day">
+                                                {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
+                                            </span>
+                                            <span v-else>
+                                                {{ formatPrice(option.price) }}€ - 1 pour le séjour
+                                            </span>
+                                        </span>
+                                    </small>
                                 </li>
                             </ul>
                         </div>
@@ -71,7 +82,18 @@
                             <em><span class="dark:text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
-                                    {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
+                                    {{ option.name }} -
+                                    <small>
+                                        <span v-if="option.price == 0.00">offert</span>
+                                        <span v-else>
+                                            <span v-if="option.pivot.by_day">
+                                                {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
+                                            </span>
+                                            <span v-else>
+                                                {{ formatPrice(option.price) }}€ - 1 pour le séjour
+                                            </span>
+                                        </span>
+                                    </small>
                                 </li>
                             </ul>
                         </div>
@@ -105,7 +127,18 @@
                             <em><span class="text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
-                                    {{ option.name }} ({{ option.price != null && option.price != '' ? option.price + '€' : 'à déterminer' }})
+                                    {{ option.name }} -
+                                    <small>
+                                        <span v-if="option.price == 0.00">offert</span>
+                                        <span v-else>
+                                            <span v-if="option.pivot.by_day">
+                                                {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
+                                            </span>
+                                            <span v-else>
+                                                {{ formatPrice(option.price) }}€ - 1 pour le séjour
+                                            </span>
+                                        </span>
+                                    </small>
                                 </li>
                             </ul>
                         </div>
@@ -164,6 +197,14 @@ const formatDate = (date) => {
         month: 'long',
         day: 'numeric',
     });
+};
+
+const formatPrice = (price) => {
+    const numericPrice = parseFloat(price);
+    if (isNaN(numericPrice)) {
+        return 'à déterminer';
+    }
+    return numericPrice % 1 === 0 ? numericPrice.toFixed(0).replace('.', ',') : numericPrice.toFixed(2).replace('.', ',');
 };
 
 const toggleComment = (reservationId) => {

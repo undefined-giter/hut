@@ -1,7 +1,8 @@
 <template>
   <Layout>
     <Head title="Réserver | Cabane" />
-    <h1>Réserver Votre Bonheur !</h1>
+    
+    <h1>Réservez Votre Bonheur !</h1>
 
     <div class="flex justify-between">
       <p>Les réservations commencent à 14h, jusqu'à 12h le jour du départ.</p><p>Parking inclu</p>
@@ -98,7 +99,7 @@
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="nights" :value="numberOfNights" />
       <input type="hidden" name="res_comment" :value="res_comment" />
-      <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsIds)" />
+      <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
       <input type="hidden" name="res_price" :value="calculatedPrice" />
 
       <div class="flex justify-between items-start mt-4">
@@ -145,9 +146,14 @@
             {{ option.description }}
           </p>
 
-          <label v-if="option.by_day_display" @change="handleOptionChange(option)" class="absolute bottom-1.5 right-2 flex items-center space-x-0.5">
+          <label v-if="option.by_day_display" class="cursor-pointer absolute bottom-1.5 right-2 flex items-center space-x-0.5">
             <span class="text-sm absolute right-12 w-[60px] flex text-gray-800 mirza font-semibold -mr-2 -mt-1">Par jour ?</span>
-            <input type="checkbox" v-model="option.by_day" class="sr-only peer" :disabled="!selectedOptionsIds.includes(option.id)" />
+            <input type="checkbox" 
+              v-model="option.by_day" 
+              @change="handleOptionChange(option)" 
+              class="sr-only peer" 
+              :disabled="!selectedOptionsIds.includes(option.id)" 
+            />
             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] 
               after:absolute after:top-[2px] after:left-[4px] peer-checked:bg-green-800 peer-checked:after:bg-green-300 
               after:bg-gray-300 peer-checked:before:bg-green-800 after:rounded-full after:h-5 after:w-5 after:transition-all border border-black border-[1.5px]"
@@ -156,7 +162,7 @@
         </label>
       </div>
       <div class="flex">
-        <div class="flex-1 mr-4 relative">
+        <div class="flex-1 mr-4 relative max-w-[840px]">
           <label for="res_comment">Quelque chose à nous demander ?</label>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', res_comment.length === 510 ? '!text-orange-600' : '']">{{ res_comment.length }}/510<small> caractères</small></p>
@@ -210,7 +216,7 @@ const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_N
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
   edit_reservation_dates = []  } = usePage().props;
-  
+
 const arrivalDate = ref(null);
 const departureDate = ref(null);
 const showMonth = ref(showMonthEdit ?? null);
@@ -245,10 +251,17 @@ onMounted(() => {
     arrivalDate.value = new Date(reservationEdit.start_date);
     departureDate.value = new Date(reservationEdit.end_date);
     numberOfNights.value = reservationEdit.nights;
-    
-    if (Array.isArray(reservationEdit.options)) {
-      selectedOptionsIds.value = reservationEdit.options.map(option => option.id);
+
+    if (Array.isArray(options)) {
       selectedOptionsObjects.value = reservationEdit.options;
+      selectedOptionsIds.value = reservationEdit.options.map(option => option.id);
+      
+      reservationEdit.options.forEach(resOption => {
+        const option = options.find(o => o.id === resOption.id);
+        if (option) {
+          option.by_day = resOption.pivot.by_day ? true : false;          
+        }
+      });
     }
     
     if (reservationEdit.res_comment) { res_comment.value = reservationEdit.res_comment; }
@@ -257,6 +270,31 @@ onMounted(() => {
   updateGridClass();
   window.addEventListener('resize', updateGridClass);
 });
+
+
+watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
+  const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));
+
+  if (JSON.stringify(updatedOptions) !== JSON.stringify(selectedOptionsObjects.value)) {
+    selectedOptionsObjects.value = updatedOptions;
+  }
+
+  options.forEach(option => {
+    if (newSelectedIds.includes(option.id)) {
+      if (!oldSelectedIds.includes(option.id) && (typeof option.by_day === 'undefined' || option.by_day === null)) {
+        option.by_day = option.by_day_preselected == 1;
+      }
+    } else {
+      option.by_day = false;
+    }
+  });
+});
+
+const handleOptionChange = (option) => {
+  if (selectedOptionsIds.value.includes(option.id)) {
+    selectedOptionsObjects.value = options.filter(opt => selectedOptionsIds.value.includes(opt.id));
+  }
+};
 
 const isReservedDate = (cellDate) => {
   if (in_date.includes(cellDate)) {
@@ -348,33 +386,6 @@ const checkScrollbar = () => {
   isScrollbarVisible.value = container.scrollHeight > container.clientHeight;
 };
 
-
-watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
-  const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));
-
-  if (JSON.stringify(updatedOptions) !== JSON.stringify(selectedOptionsObjects.value)) {
-    selectedOptionsObjects.value = updatedOptions;
-  }
-
-  options.forEach(option => {
-    if (newSelectedIds.includes(option.id)) {
-      if (oldSelectedIds.includes(option.id) === false) {
-        option.by_day = option.by_day_preselected == 1;
-      }
-    } else {
-      if (option.by_day) {
-        option.by_day = false;
-      }
-    }
-  });
-});
-
-const handleOptionChange = (option) => {
-  if (selectedOptionsIds.value.includes(option.id)) {
-    selectedOptionsObjects.value = options.filter(opt => selectedOptionsIds.value.includes(opt.id));
-  }
-};
-
 const updateCalculatedPrice = (price) => {
   calculatedPrice.value = price;
 };
@@ -407,17 +418,17 @@ onUnmounted(() => {
 .three-columns .option_hover:nth-child(3n) {transform-origin: right;}
 
 .vuecal__cell-date {
-  color: #ccc;
+  color: white;
   background: blue;
   border-radius: 50%;
   width: 1.8rem;
   height: 1.8rem;
-  font-size: 1.2rem;
-  padding-top: 2.5px;
-  font-family: 'Oleo Script', cursive;
+  font-size: 1.1rem;
+  font-family: 'Lucida Handwriting', cursive;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 550;
 }
 .vuecal__cell--before-min .vuecal__cell-content .vuecal__cell-date{
   color: #ccc; 

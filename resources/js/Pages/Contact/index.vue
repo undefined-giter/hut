@@ -169,7 +169,6 @@ const submit = () => {
         });
     } else {
         resetFieldsOnErrors();
-        console.log('Formulaire non valide');
     }
 };
 </script>

@@ -15,17 +15,23 @@ class ReservationMail extends Mailable
 
     public $reservation;
     public $action;
+    public $options;
+    public $isAdmin;
 
     /**
      * Create a new message instance.
      *
      * @param $reservation
      * @param $action
+     * @param $options
+     * @param bool $isAdmin
      */
-    public function __construct($reservation, $action)
+    public function __construct($reservation, $action, $options, $isAdmin = false)
     {
         $this->reservation = $reservation;
         $this->action = $action;
+        $this->options = $options;
+        $this->isAdmin = $isAdmin;
     }
 
     /**
@@ -34,7 +40,7 @@ class ReservationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Réservation ' . ($this->action === 'created' ? 'créée' : 'mise à jour'),
+            subject: 'Demande de réservation ' . ($this->action === 'created' ? 'réalisée' : 'mise à jour'),
         );
     }
 
@@ -48,7 +54,8 @@ class ReservationMail extends Mailable
             with: [
                 'reservation' => $this->reservation,
                 'action' => $this->action,
-                'options' => $this->reservation->options, // Passer les options sélectionnées dans l'email
+                'options' => $this->options,
+                'isAdmin' => $this->isAdmin,
             ],
         );
     }
@@ -61,7 +68,7 @@ class ReservationMail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromPath(public_path('images/static-image.png'))
+            Attachment::fromPath(public_path('hut.png'))
                 // ->as('reservation-image.jpg') // Nom de l'image jointe renommée
                 ->withMime('image/png') // Type MIME de l'image
         ];

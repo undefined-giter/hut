@@ -8,7 +8,6 @@ use App\Models\Option;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Notifications\ReservationNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -164,22 +163,36 @@ class ReservationController extends Controller
 
     public function store(Request $request, $reservationId = null)
     {
-        $options = json_decode($request->input('options'), true);
-        if (!is_array($options)) {
-            return back()->with('error', ['Erreur dans les options sélectionnées.']);
-        }
-        $request->merge(['options' => $options]);
+        $optionsJson = $request->input('options');
+        $optionsData = json_decode($optionsJson, true);
+    
+        if (!is_array($optionsData)) { $optionsData = []; }
+    
+        $optionIds = collect($optionsData)->pluck('id')->toArray();
+        $selectedOptions = Option::whereIn('id', $optionIds)->get();
+
+        $optionsWithByDay = $selectedOptions->mapWithKeys(function ($option) use ($optionsData) {
+            $byDay = collect($optionsData)->firstWhere('id', $option->id)['by_day'] ?? false;
+            return [
+                $option->id => [
+                    'by_day' => $byDay,
+                ]
+            ];
+        });
+
+        $request->merge(['options' => $optionsData]);
 
         $validatedData = $request->validate([
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'nights' => 'required|integer|min:1',
             'res_comment' => 'nullable|max:510',
-            'options' => 'array',
-            'options.*' => 'exists:options,id',
             'res_price' => 'required|numeric',
+            'options' => 'nullable|array',
+            'options.*.id' => 'nullable|exists:options,id',
+            'options.*.by_day' => 'nullable|boolean',
         ]);
-
+        
         if($reservationId == null){
             $existingReservation = Reservation::where('user_id', auth()->id())
                 ->where('start_date', '<', $validatedData['end_date'])
@@ -188,7 +201,7 @@ class ReservationController extends Controller
                 
             if ($existingReservation) {
                 return redirect()->route('profile.edit')
-                ->with('error', ['Vous avez déjà une réservation durant cette période.<br><span style="color: #ff9a34;">Veuillez modifier votre réservation existante.</span>']);
+                    ->with('error', ['Vous avez déjà une réservation durant cette période.<br><span style="color: #ff9a34;">Veuillez modifier votre réservation existante.</span>']);
             }
         }
                 
@@ -204,23 +217,22 @@ class ReservationController extends Controller
         }
 
         if ($reservationId) {
-            // $existingReservation = Reservation::where('user_id', $userId)
-            //     ->where('id', $reservationId)
-            //     ->first();
             $existingReservation = Reservation::findOrFail($reservationId);
 
             if ($existingReservation) {
                 if ($existingReservation->start_date == $validatedData['start_date'] && $existingReservation->end_date == $validatedData['end_date']) {
-                    if (isset($validatedData['options'])) {
-                        $existingReservation->options()->sync($validatedData['options']);
-
+                    if (!empty($optionsWithByDay)) {
+                        $existingReservation->options()->sync($optionsWithByDay);
+        
                         $existingReservation->update([
                             'res_price' => $validatedData['res_price'],
                             'res_comment' => $validatedData['res_comment'],
                         ]);
 
-                        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated'));
-                        Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated'));
+                        $selectedOptions = $existingReservation->options()->get();
+        
+                        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, true));
+                        Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, false));
                     }
 
                     return auth()->user()->role === 'admin' ?
@@ -235,12 +247,14 @@ class ReservationController extends Controller
                         'res_comment' => $validatedData['res_comment'],
                     ]);
 
-                    if (isset($validatedData['options'])) {
-                        $existingReservation->options()->sync($validatedData['options']);
+                    if (!empty($optionsWithByDay)) {
+                        $existingReservation->options()->sync($optionsWithByDay);
                     }
 
-                    Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated'));
-                    Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated'));
+                    $selectedOptions = $existingReservation->options()->get();
+
+                    Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, true));
+                    Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, false));
 
                     return auth()->user()->role === 'admin' ?
                         redirect()->route('admin.list')->with('success', ['Les dates et options de la réservation ont bien été mises à jour']) :
@@ -250,7 +264,7 @@ class ReservationController extends Controller
         }
 
         $reservation = Reservation::create([
-            'user_id' => $userId,
+            'user_id' => auth()->id(),
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
             'nights' => $validatedData['nights'],
@@ -259,16 +273,17 @@ class ReservationController extends Controller
             'status' => 'pending',
         ]);
 
-        if (isset($validatedData['options'])) {
-            $reservation->options()->sync($validatedData['options']);
-        }
+        $reservation->options()->sync($optionsWithByDay);
 
-        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($reservation, 'created'));
-        Mail::to(Auth::user()->email)->send(new ReservationMail($reservation, 'created'));
+        $selectedOptions = $reservation->options()->get();
+
+        $reservation->options()->sync($optionsWithByDay);
+        
+        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($reservation, 'created', $selectedOptions, true));
+        Mail::to(Auth::user()->email)->send(new ReservationMail($reservation, 'created', $selectedOptions, false));
 
         return redirect()->route('profile.edit')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }
-
 
     public function edit($id)
     {
@@ -280,16 +295,16 @@ class ReservationController extends Controller
 
         $calendarColors = $this->getCalendarColors($reservations, $id);
 
-        $options = Option::all();
-        
-        $reservationEdit = Reservation::with('options')->findOrFail($id);
+        $reservationEdit = Reservation::with(['options' => function ($query) {
+            $query->select('options.*', 'option_reservation.by_day');
+        }])->findOrFail($id);
 
         $arrivalDate = $reservationEdit->start_date;
         $showMonth = $showMonth = date('Y-m-01', strtotime($arrivalDate));
         
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
-            'options' => $options,
+            'options' => Option::all(),
             'reservationEdit' => $reservationEdit,
             'showMonthEdit' => $showMonth,
             'PRICE_PER_NIGHT' => $pricePerNight,
@@ -309,7 +324,7 @@ class ReservationController extends Controller
 
             'edit_reservation_dates' => array_values($calendarColors['edit_reservation_dates']),
         ]);
-    }    
+    }
 
     public function destroy($id)
     {
