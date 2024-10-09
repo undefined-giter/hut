@@ -1,7 +1,7 @@
 <template>
     <span 
         @click="toggleDarkMode"
-        :class="['text-2xl -ml-3 transform hover:scale-105 origin-top-left cursor-pointer transition-all ease-in-out duration-1000', {'mr-0': windowWidth < 768, 'mr-4': windowWidth >= 768 && auth.user }]" >
+        :class="['text-2xl -ml-3 transform hover:scale-110 origin-left md:origin-top-left cursor-pointer transition-all ease-in-out duration-300', {'!-ml-4 text-3xl': windowWidth < 768, 'mr-4': windowWidth >= 768 && auth.user }]" >
         {{ isDarkMode ? '☀️' : '🌑' }}
     </span>
 </template>

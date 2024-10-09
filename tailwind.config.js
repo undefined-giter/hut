@@ -22,10 +22,11 @@ export default {
                 oleo: ['OleoScript', ...defaultTheme.fontFamily.sans],
               },
             colors: {
-                htmlLightBg: '#ffa448',
-                htmlDarkBg: '#141a23',
-                light: '#ccc',
-                dark: '#131516',
+                light: 'rgba(204, 204, 204, 0.8)',
+                dark: 'rgba(19, 21, 22, 0.9)',
+                orangeTheme : '#EA580C',
+                inputsLight : 'rgba(191, 191, 191, 0.8)',
+                inputsDark : 'rgba(17, 24, 39, 0.8)',
             },
             screens: {
                 'xs': '480px',

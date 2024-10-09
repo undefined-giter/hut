@@ -1,13 +1,13 @@
 <template>
-    <div id="google_translate_element"></div>
-    <div>
+    <div id="google_translate_element" class="!mt-2.5"></div>
+    <div class="!mt-1.5">
         <img 
             id="worldImg"
             :src="worldImageUrl"
             alt="Translate" 
             @click="openDropdown" 
             style="width: 26px; height: 26px;"
-            class="transform transition-transform duration-300 hover:scale-110 origin-top-right cursor-pointer"
+            class="hidden md:block transform transition-transform duration-300 hover:scale-110 origin-top-right cursor-pointer"
         />
     </div>
 </template>

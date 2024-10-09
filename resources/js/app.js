@@ -1,12 +1,12 @@
 import './bootstrap';
 import '../css/app.css';
+import 'animate.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
-
-// const appName = import.meta.env.VITE_APP_NAME || 'Cabane'; TODO production
+import { InertiaProgress } from '@inertiajs/progress';
 
 createInertiaApp({
     title: (title) => `${title}`,
@@ -17,7 +17,11 @@ createInertiaApp({
             .use(ZiggyVue)
             .mount(el);
     },
-    progress: {
-        color: '#4B5563',
-    },
+});
+
+InertiaProgress.init({
+    delay: 100, // Attends 100ms avant de montrer la barre
+    color: '#EA580C', // Couleur de la barre de progression // Redéfini en app.css
+    includeCSS: false, // Inclut le CSS de la barre
+    showSpinner: false // Désactive le spinner
 });

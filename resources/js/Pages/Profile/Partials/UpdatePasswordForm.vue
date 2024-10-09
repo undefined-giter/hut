@@ -37,10 +37,6 @@ const updatePassword = () => {
     <section class="mx-auto">
         <header>
             <h2 class="text-lg">Modifier Votre Mot de Passe</h2>
-
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
-                Assurez-vous d'utiliser un mot de passe long et aléatoire.
-            </p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6 max-w-sm mx-auto">

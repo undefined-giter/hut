@@ -29,8 +29,8 @@ class OptionController extends Controller
             'price' => 'nullable|numeric',
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
-            'by_day' => 'required|boolean',
-            'by_day_display' => 'required|boolean',
+            'by_day' => 'sometimes|boolean',
+            'by_day_display' => 'sometimes|boolean',
             'by_day_preselected' => 'required|boolean',
         ]);
 
@@ -53,11 +53,11 @@ class OptionController extends Controller
             'price' => 'nullable|numeric',
             'available' => 'required|boolean',
             'preselected' => 'required|boolean',
-            'by_day' => 'required|boolean',
-            'by_day_display' => 'required|boolean',
+            'by_day' => 'sometimes|boolean',
+            'by_day_display' => 'sometimes|boolean',
             'by_day_preselected' => 'required|boolean',
         ]);
-
+        
         $option->update($validated);
         return redirect()->route('admin.options.index')->with('success', ['Option mise à jour']);
     }

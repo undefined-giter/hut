@@ -1,15 +1,38 @@
 <template>
-    <div v-if="reservations.length > 0" class="dark:bg-[#131516] shadow-md rounded-lg pt-4 mx-auto mb-4 hover:scale-105 transform transition-transform duration-300">
+    <div v-if="reservations.length > 0" class="bg-light dark:bg-dark shadow-md rounded-lg pt-4 mx-auto mb-4 hover:scale-105 transform transition-transform duration-300">
         <h2 class="text-lg">Réservations</h2>
 
         <div class="max-w-sm mx-auto pb-6">
             <div style="max-height: 350px; overflow-y: auto;">
-                <h3 class="text-center dark:text-[#EA580C]" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
+                <h3 class="text-center dark:text-orangeTheme" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
                 <ul v-if="currentReservations.length > 0" class="mb-6">
                     <li v-for="reservation in currentReservations" :key="reservation.id" class="dark:text-blue-400">
-                    {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : 
-                    Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
-                    {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
+
+                        <div class="flex justify-between">
+                            <div>
+                                {{ formatDateShort(new Date(reservation.start_date)) }} - 
+                                {{ formatDateShort(new Date(reservation.end_date)) }} : 
+                                {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }}
+                            </div>
+                        
+                            <div class="flex text-sm mt-1">
+                                <Link :href="route('book.edit', reservation.id)">
+                                    <span class="text-xs">✏️</span><span class="dark:text-blue-700">Modifier</span>
+                                </Link>
+                                <span class="text-zinc-800 mx-1">|</span>
+                                <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
+                                    <input type="hidden" name="_token" :value="csrfToken" />
+                                    <input type="hidden" name="_method" value="DELETE" />
+                                    <button type="submit" class="text-red-600 mr-1">
+                                        <span class="text-xs">❌</span>Annuler
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }}
+                        </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <em><span class="dark:text-blue-600">Options demandées :</span></em>
@@ -46,7 +69,7 @@
                     </li>
                 </ul>
         
-                <h3 class="text-center text-[#EA580C]" v-if="upcomingReservations.length > 0">
+                <h3 class="text-center text-orangeTheme" v-if="upcomingReservations.length > 0">
                     {{ upcomingReservations.length === 1 ? 'Réservation à venir :' : 'Réservations à venir :' }}
                 </h3>
                 <ul v-if="upcomingReservations.length > 0" :class="{ 'mb-6': !isLastList }">
@@ -74,8 +97,9 @@
                                 </form>
                             </div>
                         </div>
+                        
                         <div>
-                        Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }}
+                            Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }}
                         </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
@@ -113,7 +137,7 @@
                     </li>
                 </ul>
 
-                <h3 class="text-center dark:text-[#EA580C]" v-if="pastReservations.length > 0">
+                <h3 class="text-center dark:text-orangeTheme" v-if="pastReservations.length > 0">
                     {{ pastReservations.length === 1 ? 'Réservation passée :' : 'Réservations passées :' }}
                 </h3>
                 <ul v-if="pastReservations.length > 0">

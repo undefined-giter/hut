@@ -4,7 +4,7 @@
         <h1>Se Connecter</h1>
         
         <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
-            <div>
+            <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
                     <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -22,7 +22,7 @@
                 <InputError :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="Assurez-vous d'utiliser les identifiants correspondant à ceux entrés lors de votre inscription">
                 <div class="flex">
                     <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -41,7 +41,8 @@
 
             <div class="block mt-4 flex justify-between">
                 <div>
-                    <label class="flex items-center -mt-2">
+                    <label class="flex items-center -mt-2" title="Nos cookies ont une durée de vie de 2 heures seulement.
+Inutile de vous surcharger de cookies 😉">
                         <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
                         <span class="text-sm text-gray-600 dark:text-gray-400">Rester connecté</span>
                     </label>

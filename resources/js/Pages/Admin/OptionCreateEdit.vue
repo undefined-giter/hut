@@ -35,6 +35,12 @@ Format "12.34". Les réductions (prix négatifs) sont permis.'>
                     </div>
                 </div>
                 <div>
+                    <div class="flex items-center mb-4">
+                        <input v-model="form.by_day_display" type="checkbox" id="by_day_display" />
+                        <label for="by_day_display" class="ml-2">Afficher la case "Par jour"</label>
+                    </div>
+
+
                     <!-- <div class="flex items-center mb-4">
                         <input v-model="form.by_day" type="checkbox" id="by_day" />
                         <label for="by_day" class="ml-2">Par Jour</label>
@@ -68,6 +74,8 @@ const props = defineProps({
         default: null
     }
 });
+console.log(props.option);
+
 
 const form = reactive({
     name: props.option ? props.option.name : '',
@@ -76,6 +84,7 @@ const form = reactive({
     available: props.option ? Boolean(props.option.available) : true,
     preselected: props.option ? Boolean(props.option.preselected) : false,
     by_day: props.option ? Boolean(props.option.by_day) : false,
+    by_day_display: props.option ? Boolean(props.option.by_day_display) : true,
     by_day_preselected: props.option ? Boolean(props.option.by_day_preselected) : false,
 });
 
@@ -87,13 +96,6 @@ const submitForm = () => {
     }
 };
 
-const handleKeyDown = (event) => {
-    if (event.ctrlKey && event.key === 's') {
-        event.preventDefault();
-        submitForm();
-    }
-};
-
 const goBack = () => {
     if (window.history.length > 1) {
         window.history.back();
@@ -102,6 +104,12 @@ const goBack = () => {
     }
 };
 
+const handleKeyDown = (event) => {
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        submitForm();
+    }
+};
 onMounted(() => {
     window.addEventListener('keydown', handleKeyDown);
 });

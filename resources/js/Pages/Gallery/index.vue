@@ -5,15 +5,20 @@
       <h1>Votre Voyage</h1>
 
       <div class="gallery grid grid-cols-1 md:grid-cols-2 gap-2 px-0 xs:px-2.5 md:px-0">
-          <div v-for="(image, index) in displayedImages" :key="index" class="image-item">
-              <img 
-                  :src="`/storage/gallery/${image}`" 
-                  alt="Photo de la cabane" 
-                  :title="image.name"
-                  :style="getTransformOrigin(index)"
-                  class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-40 relative"
-              >
-          </div>
+        <div 
+          v-for="(image, index) in displayedImages" 
+          :key="index" 
+          class="image-item" 
+          :class="{'col-span-2 flex justify-center': displayedImages.length % 2 !== 0 && index === displayedImages.length - 1}"
+        >
+          <img 
+            :src="`/storage/gallery/${image}`" 
+            alt="Photo de la cabane" 
+            :title="image.name"
+            :style="getTransformOrigin(index)"
+            class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-40 relative"
+          >
+        </div>
       </div>
   </Layout>
 </template>
@@ -60,6 +65,10 @@ const handleResize = () => {
 };
 
 const getTransformOrigin = (index) => {
+  if (displayedImages.value.length % 2 !== 0 && index === displayedImages.value.length - 1) {
+    return { transformOrigin: 'unset' };
+  }
+
   if (windowWidth.value >= 768) {
     return index % 2 === 0 
       ? { transformOrigin: 'left' }
@@ -79,7 +88,3 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
 </script>
-
-<style scoped>
-.gallery img {transition: transform 0.3s ease;}
-</style>

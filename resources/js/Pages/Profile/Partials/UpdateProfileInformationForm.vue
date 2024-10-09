@@ -59,11 +59,11 @@ const submit = () => {
         <header>
             <h2 class="text-lg">Informations du profil</h2>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
-                Modifiez les informations de votre profil et votre adresse e-mail.
+                Modifier les informations de votre profil.
             </p>
         </header>
 
-        <form @submit.prevent="submit" class="mt-6 space-y-6 max-w-sm mx-auto">
+        <form @submit.prevent="submit" class="mt-3 space-y-6 max-w-sm mx-auto">
             <div>
                 <InputLabel for="name" value="Nom" />
                 <TextInput

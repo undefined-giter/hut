@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen mx-auto xl:max-w-6xl pb-8">
         <div class="md:mx-20 mx-4 flex-grow">
-            <header class="font-bold md:pb-20">
+            <header class="font-bold md:pb-16">
 
                 <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
                     <transition-group name="fade" tag="div">
@@ -15,21 +15,25 @@
                     </transition-group>
                 </div>
                 
-                <nav class="fixed top-0 left-20 md:right-20 right-4 1280px:px-0 xl:px-20 max-w-6xl mx-auto mt-3 flex justify-between items-center z-50 bg-transparent">
+                <nav class="fixed top-0 left-20 md:right-20 right-4 1280px:px-0 xl:px-20 max-w-6xl mx-auto mt-2 flex justify-between items-center z-50 bg-transparent">
                    
-                    <div class="-ml-1.5">
-                        <div class="flex absolute -top-5 !bg-transparent">
-                            <ThemeSwitcher class="-mt-1" />
+                    <div>
+                        <div class="flex absolute -top-6 !bg-transparent z-30">
+                            <ThemeSwitcher class="mt-4 md:mt-0.5" />
                             <GoogleTranslate />
                         </div>
-                        <div class="flex items-center w-[50px] md:w-[300px] ">
+
+                        <div class="flex items-center w-auto absolute md:-top-0 !bg-transparent z-20">
                             <template v-if="auth.user">
-                                <Link href="/profile" class="flex transition-transform duration-300 hover:scale-105 hover:shadow-lg items-center items-center origin-left w-auto hidden xs:flex">
+                                <Link href="/profile" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
                                     <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
-                                        alt="Photo de profil" class="rounded-full h-7 w-7 md:h-10 md:w-10 ml-2 mt-1 transition-all duration-700 md:mt-0" draggable="false">
-                                        <p :class="isActive('/profile') ? 'custom-underline' : ''" class="hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
-                                            {{ auth.user.name }}
-                                        </p>
+                                        alt="Photo de profil" 
+                                        class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300" 
+                                        draggable="false">
+                                    <p :class="isActive('/profile') ? 'custom-underline' : ''" 
+                                    class="hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none">
+                                        {{ auth.user.name }}
+                                    </p>
                                 </Link>
                             </template>
                         </div>
@@ -83,7 +87,7 @@
                 </nav>
             </header>
 
-            <main class="max-w-6xl mx-auto overflow-hidden bg-light dark:bg-dark p-2 mb-1 rounded-lg shadow-lg border border-[#EA580C]">
+            <main class="max-w-6xl mx-auto overflow-hidden p-2 mb-1 rounded-lg shadow-lg border border-orangeTheme">
                 <slot />
             </main>
 
@@ -112,13 +116,6 @@ const menuButtonRef = ref(null);
 const isActive = (path) => window.location.pathname === path;
 
 const logout = () => { Inertia.post('/logout'); };
-
-const capitalizeName = (name) => {
-    return name
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join('-');
-};
 
 const showFooter = ref(false);
 
@@ -186,22 +183,3 @@ onUnmounted(() => {
     document.removeEventListener('click', handleDocumentClick);
 });
 </script>
-
-<style>
-.flash-success, .flash-error {
-    transition: opacity 3s ease-in-out;
-    pointer-events: none;
-}
-
-.fade-out {opacity: 0;}
-
-.custom-underline {
-    text-decoration: underline;
-    text-decoration-color: #800064;
-    text-underline-offset: 3px;
-}
-
-.custom-transparent-pink{
-    background-color: rgba(80, 7, 36, 0.33) !important;
-}
-</style>

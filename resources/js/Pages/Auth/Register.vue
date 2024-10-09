@@ -4,7 +4,7 @@
         <h1>S'enregistrer</h1>
 
         <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
-            <div>
+            <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -22,7 +22,7 @@
                 <InputError :message="form.errors.name" />
             </div>
 
-            <div>
+            <div title="Optionnel : Entrez le prénom de la seconde personne, ainsi que son nom">
                 <div class="mt-4">
                     <InputLabel for="name2" value="Nom & Prénom de la seconde personne" />
                 </div>
@@ -37,7 +37,7 @@
                 <InputError :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="votre_mail@exemple.com">
                 <div class="flex">
                     <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -54,7 +54,7 @@
                 <InputError :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="Veuillez entrer votre numéro de téléphone composé de 10 chiffres et commençant par un 0 svp">
                 <InputLabel for="phone" value="Numéro de Téléphone" />
 
                 <TextInput
@@ -72,7 +72,7 @@
                 <p v-if="phoneError" class="!text-red-600 text-sm mt-2">{{ phoneError }}</p>
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="Assurez-vous d'avoir un mot de passe sécurisé et unique d'au moins 8 caractères">
                 <div class="flex">
                     <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -89,7 +89,7 @@
                 <InputError :message="form.errors.password" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" title="Assurez-vous d'inscrire le même mot de passe dans les deux champs">
                 <div class="flex">
                     <InputLabel for="password_confirmation" value="Confirmez votre Mot de Passe" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -106,7 +106,7 @@
                 <InputError :message="form.errors.password_confirmation" />
             </div>
 
-            <div>
+            <div title="Veuillez enregistrer votre photo de profil svp">
                 <br>
                 <InputLabel for="picture" value="Photo de profil" class="!mb-0.5" />
                 

@@ -12,8 +12,8 @@
             </Link>
         </div>
 
-        <table class="mx-auto w-full border border-[#EA580C] rounded-lg">
-            <thead class="border-x border-[#EA580C]">
+        <table class="mx-auto w-full border border-orangeTheme rounded-lg">
+            <thead class="border-x border-orangeTheme">
                 <tr>
                     <th class="text-left pl-2 py-1" title="Nom de l'option">Nom</th>
                     <th class="text-left" title="Description de l'option">Description</th>
@@ -29,54 +29,54 @@ Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle ser
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
-            <tbody class="border-x border-[#EA580C]">
+            <tbody class="border-x border-orangeTheme">
                 <tr v-for="option in options" :key="option.id" class="hover:bg-[#333333] !important transition h-[3.5rem]">
-                    <td class="border-b border-[#EA580C] px-2 max-w-[250px] overflow-hidden">
+                    <td class="border-b border-orangeTheme px-2 max-w-[250px] overflow-hidden">
                         <div class="custom-scrollbar overflow-y-auto overflow-x-hidden text-ellipsis">
                             <span class="line-clamp-2 whitespace-pre-wrap">
                                 {{ option.name }}
                             </span>
                         </div>
                     </td>
-                    <td class="border-b border-[#EA580C] max-w-[250px] overflow-hidden">
+                    <td class="border-b border-orangeTheme max-w-[250px] overflow-hidden">
                         <div class="custom-scrollbar overflow-y-auto overflow-x-hidden text-ellipsis">
                             <span class="line-clamp-2 whitespace-pre-wrap">
                                 {{ option.description || 'Aucune description' }}
                             </span>
                         </div>
                     </td>
-                    <td class="border-b border-[#EA580C] max-w-[100px] text-center">
+                    <td class="border-b border-orangeTheme max-w-[100px] text-center">
                         {{ option.price !== null ? option.price == 0.00 ? 'offert' : Number(option.price).toFixed(2) : 'Vide' }}
                     </td>
-                    <td class="border-b border-[#EA580C] text-center">
+                    <td class="border-b border-orangeTheme text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.available" class="sr-only peer" 
                                    @change="toggleAvailability(option.id, option.available)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                         </label>
                     </td>
-                    <td class="border-b border-[#EA580C] text-center">
+                    <td class="border-b border-orangeTheme text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.preselected" class="sr-only peer" 
                                    @change="togglePreselected(option.id, option.preselected)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
                         </label>
                     </td>
-                    <td class="border-b border-[#EA580C] text-center">
+                    <td class="border-b border-orangeTheme text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.by_day_display" class="sr-only peer" 
                                    @change="toggleByDayDisplay(option.id, option.by_day_display)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-700"></div>
                         </label>
                     </td>
-                    <td class="border-b border-[#EA580C] text-center">
+                    <td class="border-b border-orangeTheme text-center">
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" :checked="option.by_day_preselected" class="sr-only peer" 
                                    @change="toggleByDayPreselected(option.id, option.by_day_preselected)" />
                             <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-800"></div>
                         </label>
                     </td>
-                    <td class="border-b text-center border-[#EA580C] w-[200px]">
+                    <td class="border-b text-center border-orangeTheme w-[200px]">
                         <div class="flex justify-center space-x-1.5">
                             <button @click="goTo(route('admin.options.edit', option.id))"
                                 class="btn text-sm bg-blue-700 text-white px-2 rounded shadow">

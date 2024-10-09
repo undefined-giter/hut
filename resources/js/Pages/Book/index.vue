@@ -93,7 +93,7 @@
       </template>
     </vue-cal>
 
-    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
+    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'"  @submit.prevent="handleSubmit">
       <input type="hidden" name="_token" :value="csrfToken" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
@@ -174,6 +174,9 @@
           </button>
         </div>
       </div>
+      <div v-if="isSubmitting" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-orangeTheme"></div>
+      </div>
     </form>
       
     
@@ -232,6 +235,7 @@ const selectedOptionsIds = ref([]);
 const calculatedPrice = ref(0);
 const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
+const isSubmitting = ref(false);
 
 
 onMounted(() => {
@@ -239,38 +243,31 @@ onMounted(() => {
 
   if (Array.isArray(options)) {
     options.forEach(option => {
-      option.by_day = option.by_day_preselected == 1;
+      if (reservationEdit) {
+        const editedOption = reservationEdit.options.find(resOption => resOption.id === option.id);
+        if (editedOption) {
+          option.by_day = editedOption.pivot.by_day ? true : false;
+        } else {
+          option.by_day = option.by_day_preselected == 1;
+        }
+      } else {
+        option.by_day = option.by_day_preselected == 1;
+      }
     });
 
-    options.sort((a, b) => b.preselected - a.preselected);
-    selectedOptionsObjects.value = options.filter(option => option.preselected);
-    selectedOptionsIds.value = options.filter(option => option.preselected).map(option => option.id);
-  }
-  
-  if (reservationEdit) {
-    arrivalDate.value = new Date(reservationEdit.start_date);
-    departureDate.value = new Date(reservationEdit.end_date);
-    numberOfNights.value = reservationEdit.nights;
+    selectedOptionsObjects.value = options.filter(option => option.preselected || (reservationEdit && reservationEdit.options.some(resOption => resOption.id === option.id)));
+    selectedOptionsIds.value = selectedOptionsObjects.value.map(option => option.id);
 
-    if (Array.isArray(options)) {
-      selectedOptionsObjects.value = reservationEdit.options;
-      selectedOptionsIds.value = reservationEdit.options.map(option => option.id);
-      
-      reservationEdit.options.forEach(resOption => {
-        const option = options.find(o => o.id === resOption.id);
-        if (option) {
-          option.by_day = resOption.pivot.by_day ? true : false;          
-        }
-      });
+    if (reservationEdit) {
+      arrivalDate.value = new Date(reservationEdit.start_date);
+      departureDate.value = new Date(reservationEdit.end_date);
+      numberOfNights.value = reservationEdit.nights;
+      if (reservationEdit.res_comment) {
+        res_comment.value = reservationEdit.res_comment;
+      }
     }
-    
-    if (reservationEdit.res_comment) { res_comment.value = reservationEdit.res_comment; }
   }
-
-  updateGridClass();
-  window.addEventListener('resize', updateGridClass);
 });
-
 
 watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
   const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));
@@ -281,8 +278,13 @@ watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
 
   options.forEach(option => {
     if (newSelectedIds.includes(option.id)) {
-      if (!oldSelectedIds.includes(option.id) && (typeof option.by_day === 'undefined' || option.by_day === null)) {
-        option.by_day = option.by_day_preselected == 1;
+      if (!oldSelectedIds.includes(option.id)) {
+        const editedOption = reservationEdit ? reservationEdit.options.find(resOption => resOption.id === option.id) : null;
+        if (editedOption) {
+          option.by_day = editedOption.pivot.by_day ? true : false;
+        } else {
+          option.by_day = option.by_day_preselected == 1;
+        }
       }
     } else {
       option.by_day = false;
@@ -390,6 +392,18 @@ const updateCalculatedPrice = (price) => {
   calculatedPrice.value = price;
 };
 
+const handleSubmit = async () => {
+  isSubmitting.value = true;
+
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+    document.getElementById('reservationForm').submit();
+  } catch (error) {
+    console.error('Erreur lors de la soumission du formulaire', error);
+  } finally {
+  }
+};
+
 const confirmDelete = (event) => {
   if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
     event.target.submit();
@@ -401,56 +415,14 @@ onUnmounted(() => {
 });
 </script>
 
-<style>
-.option_hover {transition: transform 0.3s ease;}
-.option_hover:hover {transform: scale(1.02);}
-
-.one-column .option_hover {transform-origin: center;}
-
-.two-columns .option_hover:nth-child(even) {transform-origin: right;}
-
-.two-columns .option_hover:nth-child(odd) {transform-origin: left;}
-
-.three-columns .option_hover:nth-child(3n + 1) {transform-origin: left;}
-
-.three-columns .option_hover:nth-child(3n + 2) {transform-origin: center;}
-
-.three-columns .option_hover:nth-child(3n) {transform-origin: right;}
-
-.vuecal__cell-date {
-  color: white;
-  background: blue;
-  border-radius: 50%;
-  width: 1.8rem;
-  height: 1.8rem;
-  font-size: 1.1rem;
-  font-family: 'Lucida Handwriting', cursive;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 550;
-}
-.vuecal__cell--before-min .vuecal__cell-content .vuecal__cell-date{
-  color: #ccc; 
-  background: rgb(144, 0, 0);
-  font-weight: 400;
-  font-size: 1rem;
-}
-
-.selected-range {
-  background: rgba(0, 150, 136, 0.8);
-  border: 3px solid #009688;
-  color: rgb(104, 252, 104);
-}
-
-/* .vuecal__cell-events-count{display: none;} */
-/* .vuecal__cell--selected {;} */
-/* .vuecal__cell--out-of-scope{;} */
-/* .vuecal__cell--disabled {;} */
-</style>
-
 <style scoped>
 .hide-scrollbar::-webkit-scrollbar {display: none;}
 .hide-scrollbar {scrollbar-width: none;}
 .hide-scrollbar {-ms-overflow-style: none;}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin {animation: spin 1s linear infinite;}
 </style>

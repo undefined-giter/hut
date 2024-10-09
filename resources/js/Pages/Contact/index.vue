@@ -5,7 +5,7 @@
         <h1>Contact</h1>
 
         <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
-            <div>
+            <div title="Merci de renseigner vos nom et prénom">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
                 </div>

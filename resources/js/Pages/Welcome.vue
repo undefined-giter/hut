@@ -2,28 +2,36 @@
     <Head title="Bienvenue | Cabane" />
 
     <Layout>
-        <h1 class="text-5xl font-bold mb-6">Bienvenue</h1>
+        <h1 class="text-5xl">Bienvenue</h1>
 
         <div class="flex justify-between">
             <div class="text-right opacity-0 hidden lg:block"> <!--- decoy to center phone part -->
                 <p class="oleoScript">
-                    Ou par mail : <span class="text-lg text-teal-600 select-text mr-4">aze@gmail.com</span>
+                    Ou par mail : <span class="text-lg ml-3">aze@gmail.com</span>
                 </p>
             </div>
 
             <div class="text-center">
                 <p class="oleoScript pl-3 lg:pl-0">
-                    Réservez directement au <span class="text-xl text-teal-600 select-text">06 XX XX XX XX</span>
+                    Réservez directement au <span class="text-xl text-orangeTheme select-text">06 XX XX XX XX</span>
                 </p>
             </div>
 
             <div class="text-right">
                 <p class="oleoScript">
-                    Ou par mail : <span class="text-lg text-teal-600 select-text mr-4">aze@gmail.com</span>
+                    Ou par mail : <span class="text-lg text-orangeTheme select-text mr-4">aze@gmail.com</span>
                 </p>
             </div>
         </div>
         <div class="relative inset-0 h-[50vh] overflow-hidden mb-4 max-h-[630px] sm:h-[70vh]">
+
+            <div class="eyes-container">
+                <div class="eyes">
+                    <div><i></i></div>
+                    <div><i></i></div>
+                </div>
+            </div>
+
             <div 
                 v-for="(image, index) in images" 
                 :key="index" 
@@ -77,8 +85,33 @@ onUnmounted(() => {
     clearTimeout(timeoutId);
     clearInterval(intervalId);
 });
-</script>
 
-<style scoped>
-.transition-opacity { opacity: 0; }
-</style>
+
+document.addEventListener('mousemove', (e) => {
+    const eyesContainer = document.querySelector('.eyes');
+    const eyes = document.querySelectorAll('.eyes > div');
+    
+    if (!eyesContainer || eyes.length !== 2) return;
+    
+    const containerRect = eyesContainer.getBoundingClientRect();
+    const containerCenterX = containerRect.left + containerRect.width / 2;
+    const containerCenterY = containerRect.top + containerRect.height / 2;
+
+
+    const angle = Math.atan2(e.clientY - containerCenterY, e.clientX - containerCenterX);
+    const distance = Math.min(
+        eyes[0].offsetWidth / 4,
+        Math.sqrt(Math.pow(e.clientX - containerCenterX, 2) + Math.pow(e.clientY - containerCenterY, 2))
+    );
+
+
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
+
+
+    eyes.forEach(eye => {
+        const eyeBall = eye.querySelector('i');
+        eyeBall.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+});
+</script>

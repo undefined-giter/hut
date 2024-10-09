@@ -4,7 +4,7 @@
         <h1>Liste des Profils</h1>
         
         <table>
-            <thead class="border-x border-[#EA580C]">
+            <thead class="border-x border-orangeTheme">
                 <tr>
                     <th class="py-2">Photo</th>
                     <th class="text-left">Nom</th>
@@ -12,24 +12,24 @@
                     <th style="width: 1%;" class="text-center">Actions</th>
                 </tr>
             </thead>
-            <tbody class="border-x border-[#EA580C]">
+            <tbody class="border-x border-orangeTheme">
                 <tr v-for="user in users.data" :key="user.id">
-                    <td class="px-4 py-1 border-b border-[#EA580C] table-cell text-center w-[100px]">
+                    <td class="px-4 py-1 border-b border-orangeTheme table-cell text-center w-[100px]">
                         <img :src="`/storage/profiles/${user.picture}`" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
-                    <td class="border-b border-[#EA580C] max-w-[150px]" draggable="false">
+                    <td class="border-b border-orangeTheme max-w-[150px]" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
                             {{ user.name }}
                         </div>
                     </td>
 
-                    <td class="border-b max-w-[150px] border-[#EA580C]" draggable="false">
+                    <td class="border-b max-w-[150px] border-orangeTheme" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
                             {{ user.email }}
                         </div>
                     </td>
 
-                    <td class="px-2 py-2 border-b text-center border-[#EA580C] w-[80px]" draggable="false">
+                    <td class="px-2 py-2 border-b text-center border-orangeTheme w-[80px]" draggable="false">
                         <div class="flex justify-center">
                             <button 
                                 @click="goTo(`/user/${user.id}`)" 
@@ -63,7 +63,7 @@
         <p class="text-lg font-semibold text-center">Réservation demandées ces 12 derniers mois</p>
         <div class="mx-auto text-left mt-2" style="max-width: fit-content;">
             <table class="mx-auto">
-                <thead class="border-x border-[#EA580C] text-center">
+                <thead class="border-x border-orangeTheme text-center">
                     <tr>
                         <th class="py-2 md:min-w-[150px]">PanierTT/res</th>
                         <th class="md:min-w-[150px]">Options/res</th>
@@ -71,12 +71,12 @@
                         <th class="md:min-w-[150px]">Rés/mois</th>
                     </tr>
                 </thead>
-                <tbody class="border-x border-[#EA580C]">
+                <tbody class="border-x border-orangeTheme">
                     <tr>
-                        <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageTtcBasket }}</td>
-                        <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageOptionBasket }}</td>
-                        <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageDaysReserved }}</td>
-                        <td class="px-4 py-1 border-b border-[#EA580C] text-center">{{ averageReservationsPerMonth }}</td>
+                        <td class="px-4 py-1 border-b border-orangeTheme text-center">{{ averageTtcBasket }}</td>
+                        <td class="px-4 py-1 border-b border-orangeTheme text-center">{{ averageOptionBasket }}</td>
+                        <td class="px-4 py-1 border-b border-orangeTheme text-center">{{ averageDaysReserved }}</td>
+                        <td class="px-4 py-1 border-b border-orangeTheme text-center">{{ averageReservationsPerMonth }}</td>
                     </tr>
                 </tbody>
             </table>

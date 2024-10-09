@@ -220,12 +220,17 @@ class ReservationController extends Controller
             $existingReservation = Reservation::findOrFail($reservationId);
 
             if ($existingReservation) {
+
+                // Séparée au cas ou des réservtions été passées sans enregistrer le prix, ce qui n'aura plus réèlement de sens en prod et créé qu'une requêtes supplementaire mais assure la maj du prix même si aucun n'était enregistré
+                if (is_null($existingReservation->res_price)) {
+                    $existingReservation->update(['res_price' => $validatedData['res_price']]);
+                }
+
                 if ($existingReservation->start_date == $validatedData['start_date'] && $existingReservation->end_date == $validatedData['end_date']) {
                     if (!empty($optionsWithByDay)) {
                         $existingReservation->options()->sync($optionsWithByDay);
-        
+
                         $existingReservation->update([
-                            'res_price' => $validatedData['res_price'],
                             'res_comment' => $validatedData['res_comment'],
                         ]);
 
@@ -243,7 +248,6 @@ class ReservationController extends Controller
                         'start_date' => $validatedData['start_date'],
                         'end_date' => $validatedData['end_date'],
                         'nights' => $validatedData['nights'],
-                        'res_price' => $validatedData['res_price'],
                         'res_comment' => $validatedData['res_comment'],
                     ]);
 

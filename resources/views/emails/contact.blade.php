@@ -12,15 +12,12 @@
             line-height: 1.6;
             padding: 20px;
         }
-        h1, p {
-            color: #EA580C;
+        h1, p, strong, .label, .footer-message {
+            @apply text-orangeTheme
         }
         li {
             color: #cccccc;
             margin-bottom: 10px;
-        }
-        strong {
-            color: #EA580C;
         }
         .message-content {
             background-color: #1f2937;
@@ -34,11 +31,7 @@
             border-radius: 8px;
             margin-bottom: 10px;
         }
-        .label {
-            color: #EA580C;
-        }
         .footer-message {
-            color: #EA580C;
             text-align: center;
             margin-top: 30px;
         }
