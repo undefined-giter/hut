@@ -54,13 +54,11 @@
     </div>
 
     <div class="message-content">
-        <p><strong>Message :</strong></p>
-        <p>{!! nl2br(e($messageContent)) !!}</p>
+        <p><strong>Message :</strong> {!! nl2br(e($messageContent)) !!}</p>
     </div>
 
     <div class="footer-message">
-        <p>Merci pour votre message, nous vous répondrons dès que possible !</p>
-        <p>Cabane</p>
+        <p>Cabane - Châtel-En-Trièves / Cordéac</p>
     </div>
 </body>
 </html>

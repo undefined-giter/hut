@@ -25,8 +25,9 @@
 
                         <div class="flex items-center w-auto absolute md:-top-0 !bg-transparent z-20">
                             <template v-if="auth.user">
-                                <Link href="/profile" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
+                                <Link :href="route('profile')" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
                                     <img :src="auth.user.picture ? '/storage/profiles/' + auth.user.picture : '/storage/profiles/default_user.png'" 
+                                        loading="lazy"
                                         alt="Photo de profil" 
                                         class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300" 
                                         draggable="false">
@@ -40,22 +41,22 @@
                     </div>
 
                     <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-2 items-center">
-                        <Link href="/" :class="isActive('/') ? 'active btn' : 'btn'">Accueil</Link>
-                        <Link href="/gallery" :class="isActive('/gallery') ? 'active btn' : 'btn'">Galerie</Link>
-                        <Link href="/book" :class="isActive('/book') ? 'active btn' : 'btn'">Réserver</Link>
-                        <Link href="/contact" :class="isActive('/contact') ? 'active btn' : 'btn'">Contact</Link>
+                        <Link :href="route('homepage')" :class="isActive(route('homepage')) ? 'active btn' : 'btn'">Accueil</Link>
+                        <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active btn' : 'btn'">Galerie</Link>
+                        <Link :href="route('book')" :class="isActive(route('book')) ? 'active btn' : 'btn'">Réserver</Link>
+                        <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active btn' : 'btn'">Contact</Link>
 
-                        <Link href="/options" :class="isActive('/options') ? 'active btn !ml-6' : 'btn !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
-                        <Link href="/list" :class="isActive('/list') ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
+                        <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active btn !ml-6' : 'btn !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
+                        <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
                     </div>
 
                     <div class="hidden md:flex items-center">
                         <template v-if="!auth.user">
-                            <Link href="/register" :class="isActive('/register') ? 'active btn' : 'btn'">Inscription</Link>
-                            <Link href="/login" :class="isActive('/login') ? 'active btn ml-2' : 'btn ml-2'">Connexion</Link>
+                            <Link :href="route('register')" :class="isActive(route('register')) ? 'active btn' : 'btn'">Inscription</Link>
+                            <Link :href="route('login')" :class="isActive(route('login')) ? 'active btn ml-2' : 'btn ml-2'">Connexion</Link>
                         </template>
                         <template v-else>
-                            <Link href="/logout" method="post" as="button" class="btn !bg-pink-950 ml-2 hover:text-orange-600">Déconnexion</Link>
+                            <Link :href="route('logout')" method="post" as="button" class="btn !bg-pink-950 ml-2 hover:text-orange-600">Déconnexion</Link>
                         </template>
                     </div>
 
@@ -67,20 +68,20 @@
                     </button>
 
                     <div v-if="menuOpen" ref="menuRef" class="open-menu md:hidden mr-0.5 -mt-9 !rounded-tr-none">
-                        <Link href="/" :class="isActive('/') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Accueil</Link>
-                        <Link href="/gallery" :class="isActive('/gallery') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Galerie</Link>
-                        <Link href="/book" :class="isActive('/book') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Réserver</Link>
-                        <Link href="/contact" :class="isActive('/contact') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Contact</Link>
+                        <Link :href="route('homepage')" :class="isActive(route('homepage')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Accueil</Link>
+                        <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Galerie</Link>
+                        <Link :href="route('book')" :class="isActive(route('book')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Réserver</Link>
+                        <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Contact</Link>
                         <span v-if="auth.user && auth.user.role === 'admin'">
-                            <Link href="/options" :class="isActive('/options') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Options</Link>
-                            <Link href="/list" :class="isActive('/list') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Utilisateurs</Link>
+                            <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Options</Link>
+                            <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Utilisateurs</Link>
                         </span>
                         <template v-if="!auth.user">
-                            <Link href="/register" :class="isActive('/register') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Inscription</Link>
-                            <Link href="/login" :class="isActive('/login') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Connexion</Link>
+                            <Link :href="route('register')" :class="isActive(route('register')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Inscription</Link>
+                            <Link :href="route('login')" :class="isActive(route('login')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Connexion</Link>
                         </template>
                         <template v-else>
-                            <Link href="/profile" :class="isActive('/profile') ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Profil</Link>
+                            <Link :href="route('profile')" :class="isActive(route('profile')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Profil</Link>
                             <button @click="logout" class="block px-4 py-1.5 text-left text-sm custom-transparent-pink w-full hover:text-orange-600 text-right">Déconnexion</button>
                         </template>
                     </div>

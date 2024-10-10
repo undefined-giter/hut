@@ -13,13 +13,13 @@ use Inertia\Inertia;
 
 Route::get('/', function () { return Inertia::render('Welcome'); })->name('homepage');
 
-Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
+Route::get('/gallerie', [GalleryController::class, 'index'])->name('gallery');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/book', [ReservationController::class, 'index'])->name('book');
+    Route::get('/reserver', [ReservationController::class, 'index'])->name('book');
     Route::post('/book', [ReservationController::class, 'store']);
     
     Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/book/{id}', [ReservationController::class, 'destroy'])->name('book.delete');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profil', [ProfileController::class, 'edit'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('/profile/edit-picture', [ProfileController::class, 'editPicture'])->name('profile.edit-picture');

@@ -2,7 +2,7 @@
     <Head title="Bienvenue | Cabane" />
 
     <Layout>
-        <h1 class="text-5xl">Bienvenue</h1>
+        <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec Jacuzzi</h1>
 
         <div class="flex justify-between">
             <div class="text-right opacity-0 hidden lg:block"> <!--- decoy to center phone part -->

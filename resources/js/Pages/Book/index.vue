@@ -4,10 +4,36 @@
     
     <h1>Réservez Votre Bonheur !</h1>
 
-    <div class="flex justify-between">
-      <p>Les réservations commencent à 14h, jusqu'à 12h le jour du départ.</p><p>Parking inclu</p>
+    <div class="mb-6">
+      <p class="mb-6 text-lg text-justify">Bienvenue dans notre cabane de luxe située au cœur de la nature. Offrez-vous un séjour inoubliable dans une cabane équipée d'un <strong>jacuzzi privatif</strong>, parfaite pour un moment de détente loin du stress quotidien. Profitez d'une <strong>vue à couper le souffle</strong> tout en étant entouré par la beauté de la nature. Notre cabane est idéale pour une <strong>escapade romantique</strong>, un week-end détente ou encore une petite pause bien méritée.
+        <br><span class="underline">Partique :</span> Dégustez un bon repas parmis les restaurants ou prennez une pizza dans l'un des deux camions de pizza à proximité.</p>
+  
+      <p class="text-lg text-justify">Vous avez le choix entre une <strong>location pour une nuit</strong> ou plusieurs nuits pour un séjour prolongé. Nos <strong>tarifs</strong> s'adaptent en fonction de la durée de votre séjour : <strong>{{ PRICE_PER_NIGHT }}€/nuit</strong> pour une nuit et <strong>{{ PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS }}€/nuit</strong> pour les séjours de deux nuits ou plus. <strong>Le parking est inclus</strong> pour toute réservation.</p>
     </div>
-    <p>Location pour une nuit : {{ PRICE_PER_NIGHT }}<small>€</small>. Location par nuit pour 2 nuits et + : {{ PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS }}<small>€</small>.</p>
+
+    <h2>Nos Services Offerts</h2>
+    <div class="max-w-xl mx-auto text-left mb-6">
+      <ul class="ml-20 md:ml-36 list-disc list-inside">
+        <p>
+          <li>Accès à un jacuzzi privatif chauffé</li>
+          <li>Vue panoramique sur la nature environnante</li>
+          <li>Petit déjeuner livré à la cabane (en option)</li>
+          <li>Parking gratuit et sécurisé</li>
+          <li>Wi-Fi inclus</li>
+        </p>
+      </ul>
+    </div>
+
+    <h2>Ce que disent nos clients</h2>
+    <div class="mb-6">
+      <p class="italic">"Un endroit incroyable pour se ressourcer. Le jacuzzi avec vue sur les montagnes est tout simplement magique !" — <strong>Marie et Julien</strong></p>
+      <p class="italic mt-2">"Nous avons passé un week-end inoubliable. La cabane est magnifique et le service est impeccable. Nous reviendrons !" — <strong>Sophie et Thomas</strong></p>
+    </div>
+
+    <div class="flex justify-between">
+      <p class="text-lg">Location pour une nuit : {{ PRICE_PER_NIGHT }}€, location par nuit pour 2 nuits et plus : {{ PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS }}€.</p>
+      <p class="text-lg">Parking inclus</p>
+    </div>
     <vue-cal
       locale="fr"
       active-view="month"
@@ -94,7 +120,7 @@
     </vue-cal>
 
     <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'"  @submit.prevent="handleSubmit">
-      <input type="hidden" name="_token" :value="csrfToken" />
+      <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="nights" :value="numberOfNights" />
@@ -163,7 +189,7 @@
       </div>
       <div class="flex">
         <div class="flex-1 mr-4 relative max-w-[840px]">
-          <label for="res_comment">Quelque chose à nous demander ?</label>
+          <label for="res_comment">Demande spéciale</label>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', res_comment.length === 510 ? '!text-orange-600' : '']">{{ res_comment.length }}/510<small> caractères</small></p>
         </div>
@@ -187,13 +213,13 @@
           <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
           <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's ' : ' ')"></span>
           <span v-if="auth && auth.user && auth.user.id === reservation.user_id">
-            <Link :href="route('profile.edit', reservation.user_id)" class="text-blue-600">
+            <Link :href="route('profile', reservation.user_id)" class="text-blue-600">
               <span class="text-sm">🟢</span><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
             </Link>
           </span>
           <span v-if="auth && auth.user && auth.user.role === 'admin'">
             => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
-                <input type="hidden" name="_token" :value="csrfToken" />
+                <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
                 <input type="hidden" name="_method" value="DELETE" />
                 <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
             </form>
@@ -236,11 +262,10 @@ const calculatedPrice = ref(0);
 const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
 const isSubmitting = ref(false);
+const previousAuthUser = ref(null);
 
 
 onMounted(() => {
-  csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
   if (Array.isArray(options)) {
     options.forEach(option => {
       if (reservationEdit) {
@@ -267,7 +292,20 @@ onMounted(() => {
       }
     }
   }
+
+  csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  previousAuthUser.value = auth.user;
 });
+
+watch(
+  () => usePage().props.auth.user,
+  (newUser, oldUser) => {
+    if (!previousAuthUser.value && newUser) {
+      window.location.reload();
+    }
+    previousAuthUser.value = newUser;
+  }
+);
 
 watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
   const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));

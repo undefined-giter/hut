@@ -200,7 +200,7 @@ class ReservationController extends Controller
                 ->first();
                 
             if ($existingReservation) {
-                return redirect()->route('profile.edit')
+                return redirect()->route('profile')
                     ->with('error', ['Vous avez déjà une réservation durant cette période.<br><span style="color: #ff9a34;">Veuillez modifier votre réservation existante.</span>']);
             }
         }
@@ -242,7 +242,7 @@ class ReservationController extends Controller
 
                     return auth()->user()->role === 'admin' ?
                         redirect()->route('admin.list')->with('success', ['Les options de la réservation ont bien été mises à jour']) :
-                        redirect()->route('profile.edit')->with('success', ['Vos options ont bien été mises à jour']);
+                        redirect()->route('profile')->with('success', ['Vos options ont bien été mises à jour']);
                 } else {
                     $existingReservation->update([
                         'start_date' => $validatedData['start_date'],
@@ -262,7 +262,7 @@ class ReservationController extends Controller
 
                     return auth()->user()->role === 'admin' ?
                         redirect()->route('admin.list')->with('success', ['Les dates et options de la réservation ont bien été mises à jour']) :
-                        redirect()->route('profile.edit')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
+                        redirect()->route('profile')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
                 }
             }
         }
@@ -286,7 +286,7 @@ class ReservationController extends Controller
         Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($reservation, 'created', $selectedOptions, true));
         Mail::to(Auth::user()->email)->send(new ReservationMail($reservation, 'created', $selectedOptions, false));
 
-        return redirect()->route('profile.edit')->with('success', ['Réservation effectuée ! À très vite 🌞']);
+        return redirect()->route('profile')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }
 
     public function edit($id)

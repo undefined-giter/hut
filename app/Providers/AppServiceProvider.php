@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Enregistre les services de l'application.
      */
     public function register(): void
     {
@@ -18,16 +18,20 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Démarre les services de l'application.
      */
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+
         Inertia::share([
             'auth' => function () {
                 return [
                     'user' => Auth::user(),
                 ];
+            },
+            'csrf_token' => function () {
+                return csrf_token();
             },
         ]);
     }

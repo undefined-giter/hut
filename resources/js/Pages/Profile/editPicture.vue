@@ -8,7 +8,7 @@
 
       <div class="text-center w-[384px] mx-auto">
         <div class="w-[384px] h-[250px] mx-auto">
-          <img :src="form.preview" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
+          <img :src="form.preview" loading="lazy" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
         </div>
 
         <div class="flex justify-between items-center mt-2 mx-2">

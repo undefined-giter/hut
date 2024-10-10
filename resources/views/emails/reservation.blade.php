@@ -83,6 +83,6 @@
     
     <p>Merci pour votre confiance et à très vite ! 😊</p>
 
-    <img src="{{ asset('hut.png') }}" alt="Représentation de la Cabane" style="max-width: 100%; height: auto;">
+    <img src="{{ asset('hut.png') }}" loading="lazy" alt="Représentation de la Cabane" style="max-width: 100%; height: auto;">
 </body>
 </html>

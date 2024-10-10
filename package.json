@@ -20,8 +20,9 @@
     },
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
-        "@inertiajs/progress": "^0.2.7",
+        "@inertiajs/progress": "^0.1.2",
         "animate.css": "^4.1.1",
-        "vue-cal": "^4.9.0"
+        "vue-cal": "^4.9.0",
+        "ziggy-js": "^2.3.0"
     }
 }

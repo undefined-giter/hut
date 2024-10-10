@@ -4,6 +4,7 @@
         <img 
             id="worldImg"
             :src="worldImageUrl"
+            loading="lazy"
             alt="Translate" 
             @click="openDropdown" 
             style="width: 26px; height: 26px;"

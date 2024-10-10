@@ -54,7 +54,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile.edit')->with('success', ['Profil modifié 👍']);
+        return redirect()->route('profile')->with('success', ['Profil modifié 👍']);
     }
 
     public function editPicture()
@@ -89,7 +89,7 @@ class ProfileController extends Controller
     
         $user->save();
 
-        return redirect()->route('profile.edit')->with('success', ['Photo mise à jour 👍']);
+        return redirect()->route('profile')->with('success', ['Photo mise à jour 👍']);
     }
 
     /**
@@ -102,11 +102,11 @@ class ProfileController extends Controller
     
         if ($currentUser->role !== 'admin') {
             if ($currentUser->id !== $user->id) {
-                return redirect()->route('profile.edit')->with('error', ['Vous n\'êtes pas autorisé à supprimer ce compte.']);
+                return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à supprimer ce compte.']);
             }
     
             if (!Hash::check($request->password, $currentUser->password)) {
-                return redirect()->route('profile.edit')->with('error', ['Mot de passe incorrect.']);
+                return redirect()->route('profile')->with('error', ['Mot de passe incorrect.']);
             }
         }
     

@@ -13,6 +13,7 @@
         >
           <img 
             :src="`/storage/gallery/${image}`" 
+            loading="lazy"
             alt="Photo de la cabane" 
             :title="image.name"
             :style="getTransformOrigin(index)"
