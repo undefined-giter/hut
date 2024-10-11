@@ -16,7 +16,7 @@
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
 
-        {{-- <script type="application/ld+json">
+        {{-- <script type="application/ld+json"> // TODO production
         {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
