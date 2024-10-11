@@ -183,8 +183,8 @@ const validatePhone = () => {
         return false;
     }
 
-    if (phone.startsWith('3')) {
-        phoneError.value = "Format 33 non accepté -> Merci de le remplacer par 0 et de compléter votre numéro";
+    if (!phone.startsWith('0')) {
+        phoneError.value = "Le numéro doit commencer par 0. Merci de le corriger et de compléter votre numéro.";
         return false;
     }
     phoneError.value = null;

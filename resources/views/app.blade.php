@@ -61,5 +61,9 @@
     </head>
     <body class="parallax font-sans antialiased">
         @inertia
+
+        <script>
+            window.appBaseUrl = "{{ asset('') }}";
+        </script>
     </body>
 </html>

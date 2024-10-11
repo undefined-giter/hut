@@ -190,7 +190,7 @@
       <div class="flex">
         <div class="flex-1 mr-4 relative max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
-          <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5"></textarea>
+          <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5 no-scrollbar"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', res_comment.length === 510 ? '!text-orange-600' : '']">{{ res_comment.length }}/510<small> caractères</small></p>
         </div>
         <div class="ml-auto mt-auto mb-1">
@@ -252,7 +252,7 @@ const showMonth = ref(showMonthEdit ?? null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
-const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour (h arrivée envisagée...)";
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour\nComme votre heure d'arrivée envisagée, etc.";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();

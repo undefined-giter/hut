@@ -21,12 +21,14 @@
         li { margin-bottom: 10px; }
         .reservation-details {
             background-color: #1f2937;
+            width: 750px,
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
         }
         .option-item {
             background-color: #0d1117;
+            width: 750px,
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -38,6 +40,10 @@
         }
         b{font-size : 1.04rem;}
         .bolder{font-weight: 600}
+        .footer-message {
+            text-align: center;
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -83,6 +89,10 @@
     
     <p>Merci pour votre confiance et à très vite ! 😊</p>
 
-    <img src="{{ asset('hut.png') }}" loading="lazy" alt="Représentation de la Cabane" style="max-width: 100%; height: auto;">
+    <div class="footer-message">
+        <p>Cabane - Châtel-En-Trièves / Cordéac</p>
+    </div>
+
+    <img src="{{ asset('hut.png') }}" loading="lazy" alt="Représentation de la Cabane" style="max-width: 750px; height: auto;">
 </body>
 </html>
