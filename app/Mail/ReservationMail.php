@@ -68,7 +68,7 @@ class ReservationMail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromPath(public_path('hut.png'))
+            Attachment::fromPath(public_path('img/hut.png'))
                 // ->as('reservation-image.jpg') // Nom de l'image jointe renommée
                 ->withMime('image/png') // Type MIME de l'image
         ];

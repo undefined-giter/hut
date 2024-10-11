@@ -17,7 +17,7 @@
                 <tr>
                     <th class="text-left pl-2 py-1" title="Nom de l'option">Nom</th>
                     <th class="text-left" title="Description de l'option">Description</th>
-                    <th class="text-center" title="Si vide = rien de n'affiche; Si 0.00 = 'offert' s'affichera dans l'option;">€</th>
+                    <th class="text-center" title="Si vide = rien de n'affiche; Si 0.00 = 'Inclu' s'affichera dans l'option;">€</th>
                     <th class="text-center" title="Décocher pour ne plus rendre l'option disponible, sans la supprimée pour autant.">Dispo</th>
                     <th class="text-center" title="Présélectionner l'option par défault">Présélect</th>
                     <th class="text-center" title="Afficher l'option Par jour ?">Voir/jr</th>
@@ -46,7 +46,7 @@ Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle ser
                         </div>
                     </td>
                     <td class="border-b border-orangeTheme max-w-[100px] text-center">
-                        {{ option.price !== null ? option.price == 0.00 ? 'offert' : Number(option.price).toFixed(2) : 'Vide' }}
+                        {{ option.price !== null ? option.price == 0.00 ? 'Inclu' : Number(option.price).toFixed(2) : 'Vide' }}
                     </td>
                     <td class="border-b border-orangeTheme text-center">
                         <label class="relative inline-flex items-center cursor-pointer">

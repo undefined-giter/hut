@@ -19,6 +19,16 @@ export default defineConfig({
             },
         }),
     ],
+    build: {
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.js',
+            },
+            output: {
+                assetFileNames: 'assets/[name].[hash][extname]',
+            },
+        },
+    },
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),

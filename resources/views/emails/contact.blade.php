@@ -61,6 +61,6 @@
         <p>Cabane - Châtel-En-Trièves / Cordéac</p>
     </div>
 
-    <img src="{{ asset('hut.png') }}" loading="lazy" alt="Représentation de la Cabane" style="max-width: 750px; height: auto;">
+    <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Représentation de la Cabane" style="max-width: 750px; height: auto;">
 </body>
 </html>

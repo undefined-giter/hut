@@ -5,26 +5,50 @@
 
 @font-face {
     font-family: 'Danfo';
-    src: url('/fonts/Danfo/static/Danfo-Regular.ttf') format('truetype');
+    src: url('../fonts/Danfo/Danfo-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-font-family: 'Kalnia Glaze';
-src: url('/fonts/Kalnia_Glaze/static/KalniaGlaze-Regular.ttf') format('truetype');
-font-weight: normal;
-font-style: normal;
+    font-family: 'Kalnia Glaze';
+    src: url('../fonts/Kalnia_Glaze/KalniaGlaze-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 @font-face {
     font-family: 'Mirza';
-    src: url('/fonts/Mirza/Mirza-Regular.ttf') format('truetype');
+    src: url('../fonts/Mirza/Mirza-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Mirza';
+    src: url('../fonts/Mirza/Mirza-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Mirza';
+    src: url('../fonts/Mirza/Mirza-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Mirza';
+    src: url('../fonts/Mirza/Mirza-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Oleo Script';
+    src: url('../fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'Oleo Script';
-    src: url('/fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
-    font-weight: normal;
+    src: url('../fonts/Oleo_Script/OleoScript-Bold.ttf') format('truetype');
+    font-weight: bold;
     font-style: normal;
 }
 .danfo {font-family: 'Danfo', sans-serif;}
@@ -120,7 +144,7 @@ h3{
 }
 
 .parallax {
-    background-image: url('/hut.png');
+    background: url('img/hut.png');
     height: 500px;
     background-attachment: fixed;
     background-position: center;

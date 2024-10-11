@@ -40,7 +40,7 @@
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} -
                                     <small>
-                                        <span v-if="option.price == 0.00">offert</span>
+                                        <span v-if="option.price == 0.00">Inclu</span>
                                         <span v-else>
                                             <span v-if="option.pivot.by_day">
                                                 {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
@@ -108,7 +108,7 @@
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} -
                                     <small>
-                                        <span v-if="option.price == 0.00">offert</span>
+                                        <span v-if="option.price == 0.00">Inclu</span>
                                         <span v-else>
                                             <span v-if="option.pivot.by_day">
                                                 {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
@@ -153,7 +153,7 @@
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
                                     {{ option.name }} -
                                     <small>
-                                        <span v-if="option.price == 0.00">offert</span>
+                                        <span v-if="option.price == 0.00">Inclu</span>
                                         <span v-else>
                                             <span v-if="option.pivot.by_day">
                                                 {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€

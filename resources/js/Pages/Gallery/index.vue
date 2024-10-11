@@ -29,10 +29,12 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import Layout from './../Layout.vue';
 import { Head } from '@inertiajs/vue3';
 
+
 const props = defineProps({
   images: Array
 });
 
+const baseUrl = "storage/";
 const displayedImages = ref([]);
 const imagesPerLoad = 2;
 const imagesLoaded = ref(0);
