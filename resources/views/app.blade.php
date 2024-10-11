@@ -60,10 +60,10 @@
         </script>             --}}
     </head>
     <body class="parallax font-sans antialiased">
-        @inertia
-
         <script>
-            window.appBaseUrl = "{{ asset('') }}";
+            baseUrl = "{{ rtrim(asset('storage/'), '/') }}/";
         </script>
+
+        @inertia
     </body>
 </html>

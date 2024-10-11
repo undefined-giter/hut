@@ -16,7 +16,7 @@
 <script setup>
 import { onMounted } from 'vue';
 
-const worldImageUrl = '/storage/world.png';
+const worldImageUrl = `${baseUrl}world.png`;
 
 const openDropdown = () => {
     const worldImg = document.querySelector('#worldImg');

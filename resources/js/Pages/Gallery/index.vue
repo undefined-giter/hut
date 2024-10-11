@@ -12,9 +12,9 @@
           :class="{'col-span-2 flex justify-center': displayedImages.length % 2 !== 0 && index === displayedImages.length - 1}"
         >
           <img 
-            :src="`/storage/gallery/${image}`" 
+            :src="`${baseUrl}gallery/${image}`"
             loading="lazy"
-            alt="Photo de la cabane" 
+            :alt="getImageName(image)"
             :title="image.name"
             :style="getTransformOrigin(index)"
             class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-40 relative"
@@ -77,6 +77,13 @@ const getTransformOrigin = (index) => {
   }
   return { transformOrigin: 'center' };
 };
+
+function getImageName(image) {
+    const decodedImage = decodeURIComponent(image);
+    const parts = decodedImage.split('.');
+    parts.pop();
+    return parts.join('.');
+}
 
 onMounted(() => {
   loadImages();

@@ -53,3 +53,5 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 
 require __DIR__.'/auth.php';
 // Créer une 404 
+// forbidden img
+// style mails client

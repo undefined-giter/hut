@@ -7,7 +7,7 @@
         <div class="flex justify-between">
             <div class="text-right opacity-0 hidden lg:block"> <!--- decoy to center phone part -->
                 <p class="oleoScript">
-                    Ou par mail : <span class="text-lg ml-3">aze@gmail.com</span>
+                    Ou par mail : <span class="text-lg ml-3">moelleux@gmail.com</span>
                 </p>
             </div>
 
@@ -19,7 +19,7 @@
 
             <div class="text-right">
                 <p class="oleoScript">
-                    Ou par mail : <span class="text-lg text-orangeTheme select-text mr-4">aze@gmail.com</span>
+                    Ou par mail : <span class="text-lg text-orangeTheme select-text mr-4">moelleux@gmail.com</span>
                 </p>
             </div>
         </div>
@@ -58,9 +58,9 @@ import { Head } from '@inertiajs/vue3';
 import Layout from './Layout.vue';
 
 const images = [
-    '/storage/gallery/hut_front.jpg',
-    '/storage/gallery/hut_porch.jpg',
-    '/storage/gallery/hut_side.jpg'
+    `${baseUrl}gallery/hut_front.jpg`,
+    `${baseUrl}gallery/hut_porch.jpg`,
+    `${baseUrl}gallery/hut_side.jpg`
 ];
 
 const currentImageIndex = ref(0);
