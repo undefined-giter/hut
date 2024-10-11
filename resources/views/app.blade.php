@@ -16,7 +16,7 @@
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
 
-        <script type="application/ld+json">
+        {{-- <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
@@ -57,7 +57,7 @@
             }
             ]
         }
-        </script>            
+        </script>             --}}
     </head>
     <body class="parallax font-sans antialiased">
         @inertia
