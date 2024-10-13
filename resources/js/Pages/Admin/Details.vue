@@ -8,7 +8,7 @@
         <div class="bg-dark shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-300">            
             <h2>Profile</h2>
             <div class="max-w-2xl mx-auto p-8 pt-0">
-                <img :src="`${baseUrl}profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
+                <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
                 <div class="mt-2">
                     <div class="ml-48">
                         <div class="mb-4 flex">

@@ -111,7 +111,7 @@
                 <InputLabel for="picture" value="Photo de profil" class="!mb-0.5" />
                 
                 <div class="flex items-center space-x-4">
-                    <img :src="form.preview ?? `${baseUrl}profiles/default_user.png`" loading="lazy" alt="Pré-visuelle de votre photo" class="object-cover w-16 h-16 rounded-xl">
+                    <img :src="form.preview ?? `${baseUrl}/profiles/default_user.png`" loading="lazy" alt="Pré-visuelle de votre photo" class="object-cover w-16 h-16 rounded-xl">
                     
                     <input
                     id="picture"

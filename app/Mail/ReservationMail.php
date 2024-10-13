@@ -14,6 +14,11 @@ class ReservationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $reservation;
+    public $userName;
+    public $name2;
+    public $phone;
+    public $email;
+    public $userId;
     public $action;
     public $options;
     public $isAdmin;
@@ -22,13 +27,23 @@ class ReservationMail extends Mailable
      * Create a new message instance.
      *
      * @param $reservation
+     * @param $userName
+     * @param $name2
+     * @param $phone
+     * @param $email
+     * @param $userId
      * @param $action
      * @param $options
      * @param bool $isAdmin
      */
-    public function __construct($reservation, $action, $options, $isAdmin = false)
+    public function __construct($reservation, $userName, $name2 = null, $phone = null, $email = null, $userId = null, $action, $options, $isAdmin = false)
     {
         $this->reservation = $reservation;
+        $this->userName = $userName;
+        $this->name2 = $name2;
+        $this->phone = $phone;
+        $this->email = $email;
+        $this->userId = $userId;
         $this->action = $action;
         $this->options = $options;
         $this->isAdmin = $isAdmin;
@@ -40,7 +55,9 @@ class ReservationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Demande de réservation ' . ($this->action === 'created' ? 'réalisée' : 'mise à jour'),
+            subject: 'Demande de réservation ' . 
+                ($this->action === 'created' ? 'réalisée' : 
+                ($this->action === 'updated_options' ? 'options mises à jour' : 'date et options mises à jour')),
         );
     }
 
@@ -50,13 +67,18 @@ class ReservationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.reservation', // Assure-toi de créer cette vue
+            view: 'emails.reservation', // vue correspondante
             with: [
                 'reservation' => $this->reservation,
+                'userName' => $this->userName,
+                'name2' => $this->name2,
+                'phone' => $this->phone,
+                'email' => $this->email,
+                'userId' => $this->userId,
                 'action' => $this->action,
                 'options' => $this->options,
                 'isAdmin' => $this->isAdmin,
-            ],
+            ]
         );
     }
 

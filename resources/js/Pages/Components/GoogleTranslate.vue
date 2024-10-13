@@ -3,7 +3,7 @@
     <div class="!mt-1.5">
         <img 
             id="worldImg"
-            :src="worldImageUrl"
+            :src="`${baseUrl}/world.png`"
             loading="lazy"
             alt="Translate" 
             @click="openDropdown" 
@@ -15,8 +15,9 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
-const worldImageUrl = `${baseUrl}world.png`;
+const { baseUrl } = usePage().props;
 
 const openDropdown = () => {
     const worldImg = document.querySelector('#worldImg');

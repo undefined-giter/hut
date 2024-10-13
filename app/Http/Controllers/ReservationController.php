@@ -163,6 +163,8 @@ class ReservationController extends Controller
 
     public function store(Request $request, $reservationId = null)
     {
+        $user = Auth::user();
+
         $optionsJson = $request->input('options');
         $optionsData = json_decode($optionsJson, true);
     
@@ -194,7 +196,7 @@ class ReservationController extends Controller
         ]);
         
         if($reservationId == null){
-            $existingReservation = Reservation::where('user_id', auth()->id())
+            $existingReservation = Reservation::where('user_id', $user->id)
                 ->where('start_date', '<', $validatedData['end_date'])
                 ->where('end_date', '>', $validatedData['start_date'])
                 ->first();
@@ -205,7 +207,7 @@ class ReservationController extends Controller
             }
         }
                 
-        $userId = auth()->user()->role === 'admin' && $reservationId ? Reservation::find($reservationId)->user_id : auth()->id();
+        $userId = $user->role === 'admin' && $reservationId ? Reservation::find($reservationId)->user_id : $user->id;
         
         $conflictingReservations = Reservation::where('user_id', '!=', $userId)
             ->where('start_date', '<', $validatedData['end_date'])
@@ -220,7 +222,6 @@ class ReservationController extends Controller
             $existingReservation = Reservation::findOrFail($reservationId);
 
             if ($existingReservation) {
-
                 // Séparée au cas ou des réservtions été passées sans enregistrer le prix, ce qui n'aura plus réèlement de sens en prod et créé qu'une requêtes supplementaire mais assure la maj du prix même si aucun n'était enregistré
                 if (is_null($existingReservation->res_price)) {
                     $existingReservation->update(['res_price' => $validatedData['res_price']]);
@@ -236,14 +237,35 @@ class ReservationController extends Controller
 
                         $selectedOptions = $existingReservation->options()->get();
         
-                        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, true));
-                        Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, false));
+                        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail(
+                            $existingReservation,
+                            $user->name,
+                            $user->name2 ?? null,
+                            $user->phone ?? null,
+                            $user->email,
+                            $userId,
+                            'updated_options',
+                            $selectedOptions,
+                            true
+                        ));
+                        Mail::to($user->email)->send(new ReservationMail(
+                            $existingReservation,
+                            $user->name,
+                            null,
+                            null,
+                            null,
+                            null,
+                            'updated_options',
+                            $selectedOptions,
+                            false
+                        ));
                     }
 
-                    return auth()->user()->role === 'admin' ?
+                    return $user->role === 'admin' ?
                         redirect()->route('admin.list')->with('success', ['Les options de la réservation ont bien été mises à jour']) :
                         redirect()->route('profile')->with('success', ['Vos options ont bien été mises à jour']);
-                } else {
+                
+                    } else {
                     $existingReservation->update([
                         'start_date' => $validatedData['start_date'],
                         'end_date' => $validatedData['end_date'],
@@ -257,10 +279,30 @@ class ReservationController extends Controller
 
                     $selectedOptions = $existingReservation->options()->get();
 
-                    Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, true));
-                    Mail::to(Auth::user()->email)->send(new ReservationMail($existingReservation, 'updated', $selectedOptions, false));
+                    Mail::to('leo.ripert@gmail.com')->send(new ReservationMail(
+                        $existingReservation,
+                        $user->name,
+                        $user->name2 ?? null,
+                        $user->phone ?? null,
+                        $user->email,
+                        $userId,
+                        'updated',
+                        $selectedOptions,
+                        true
+                    ));
+                    Mail::to($user->email)->send(new ReservationMail(
+                        $existingReservation,
+                        $user->name,
+                        null,
+                        null,
+                        null,
+                        null,
+                        'updated',
+                        $selectedOptions,
+                        false
+                    ));
 
-                    return auth()->user()->role === 'admin' ?
+                    return $user->role === 'admin' ?
                         redirect()->route('admin.list')->with('success', ['Les dates et options de la réservation ont bien été mises à jour']) :
                         redirect()->route('profile')->with('success', ['Les dates et options de votre réservation ont bien été mises à jour']);
                 }
@@ -268,7 +310,7 @@ class ReservationController extends Controller
         }
 
         $reservation = Reservation::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
             'nights' => $validatedData['nights'],
@@ -283,8 +325,28 @@ class ReservationController extends Controller
 
         $reservation->options()->sync($optionsWithByDay);
         
-        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail($reservation, 'created', $selectedOptions, true));
-        Mail::to(Auth::user()->email)->send(new ReservationMail($reservation, 'created', $selectedOptions, false));
+        Mail::to('leo.ripert@gmail.com')->send(new ReservationMail(
+            $reservation,
+            $user->name,
+            $user->name2 ?? null,
+            $user->phone ?? null,
+            $user->email,
+            $user->id,
+            'created',
+            $selectedOptions,
+            true
+        ));
+        Mail::to($user->email)->send(new ReservationMail(
+            $reservation,
+            $user->name,
+            null,
+            null,
+            null,
+            null,
+            'created',
+            $selectedOptions,
+            false
+        ));
 
         return redirect()->route('profile')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }

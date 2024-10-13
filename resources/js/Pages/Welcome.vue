@@ -58,9 +58,9 @@ import { Head } from '@inertiajs/vue3';
 import Layout from './Layout.vue';
 
 const images = [
-    `${baseUrl}gallery/hut_front.jpg`,
-    `${baseUrl}gallery/hut_porch.jpg`,
-    `${baseUrl}gallery/hut_side.jpg`
+    `${baseUrl}/gallery/hut_front.jpg`,
+    `${baseUrl}/gallery/hut_porch.jpg`,
+    `${baseUrl}/gallery/hut_side.jpg`
 ];
 
 const currentImageIndex = ref(0);

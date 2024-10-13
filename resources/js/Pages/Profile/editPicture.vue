@@ -58,13 +58,13 @@ const user = usePage().props.auth.user;
 const form = useForm({
     picture: null,
     delete_picture: false,
-    preview: user.picture ? `${baseUrl}profiles/${user.picture}` : `${baseUrl}profiles/default_user.png`,
+    preview: user.picture ? `${baseUrl}/profiles/${user.picture}` : `${baseUrl}/profiles/default_user.png`,
 });
 
 const changePicture = (e) => {
     const file = e.target.files[0];
     form.picture = file;
-    form.preview = file ? URL.createObjectURL(file) : `${baseUrl}profiles/default_user.png`;
+    form.preview = file ? URL.createObjectURL(file) : `${baseUrl}/profiles/default_user.png`;
 };
 
 const submit = () => {

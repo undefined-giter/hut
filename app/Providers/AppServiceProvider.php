@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
                     'user' => Auth::user(),
                 ];
             },
+            'baseUrl' => asset('storage'),
             'csrf_token' => function () {
                 return csrf_token();
             },

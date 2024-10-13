@@ -191,11 +191,18 @@
         <div class="flex-1 mr-4 relative max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5 no-scrollbar"></textarea>
-          <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', res_comment.length === 510 ? '!text-orange-600' : '']">{{ res_comment.length }}/510<small> caractères</small></p>
+          <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
         <div class="ml-auto mt-auto mb-1">
           <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" class="mb-3" />
-          <button type="submit" form="reservationForm" :disabled="!isReservationValid" :class="[isReservationValid ? '' : '!bg-gray-600 hover:text-gray-400 opacity-75', 'btn ml-auto block']">
+          <button
+            type="submit"
+            form="reservationForm"
+            :disabled="!isReservationValid || resCommentLength > 510"
+            :class="[
+              (!isReservationValid || resCommentLength > 510) ? '!bg-gray-600 hover:text-gray-400 opacity-75 cursor-not-allowed' : '', 
+              'btn ml-auto block'
+            ]">
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
         </div>
@@ -295,6 +302,9 @@ onMounted(() => {
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   previousAuthUser.value = auth.user;
+
+  window.addEventListener('resize', updateGridClass);
+  updateGridClass();
 });
 
 watch(
@@ -349,6 +359,10 @@ const isReservedDate = (cellDate) => {
     return false;
   }
 };
+
+const resCommentLength = computed(() => {
+  return res_comment.value.replace(/\r?\n/g, '  ').length;
+});
 
 const handleDateClick = (cell) => {
   const selectedDate = new Date(cell);

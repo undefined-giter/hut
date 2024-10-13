@@ -12,7 +12,11 @@ createInertiaApp({
     title: (title) => `${title}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+        const app = createApp({ render: () => h(App, props) });
+
+        app.config.globalProperties.$baseUrl = baseUrl;
+
+        return app
             .use(plugin)
             .use(ZiggyVue)
             .mount(el);

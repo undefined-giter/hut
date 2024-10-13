@@ -1,8 +1,8 @@
 <template>
-    <div class="min-h-screen mx-auto xl:max-w-6xl pb-8">
-        <div class="md:mx-20 mx-4 flex-grow">
-            <header class="font-bold md:pb-16">
-
+    <div class="min-h-screen mx-auto max-w-6xl pb-8">
+        <div class="mx-0.5 flex-grow">
+            
+            <header class="font-bold">
                 <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
                     <transition-group name="fade" tag="div">
                         <div v-for="(message, index) in $page.props.flash.success" :key="index" class="flash-success bg-green-500 text-white px-4 py-2 rounded shadow-lg text-xl select-none" v-html="message.replace(/\n/g, '<br>')"></div>
@@ -15,8 +15,7 @@
                     </transition-group>
                 </div>
                 
-                <nav class="fixed top-0 left-20 md:right-20 right-4 1280px:px-0 xl:px-20 max-w-6xl mx-auto mt-2 flex justify-between items-center z-50 bg-transparent">
-                   
+                <nav class="fixed top-0 left-7 right-4 1280px:px-0 max-w-6xl mx-auto mt-2 flex justify-between items-center z-50 bg-transparent">   
                     <div>
                         <div class="flex absolute -top-6 !bg-transparent z-30">
                             <ThemeSwitcher class="mt-4 md:mt-0.5" />
@@ -26,7 +25,7 @@
                         <div class="flex items-center w-auto absolute md:-top-0 !bg-transparent z-20">
                             <template v-if="auth.user">
                                 <Link :href="route('profile')" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
-                                    <img :src="auth.user.picture ? `${baseUrl}profiles/` + auth.user.picture : `${window.baseUrl}profiles/default_user.png`"
+                                    <img :src="auth.user.picture ? `${baseUrl}/profiles/` + auth.user.picture : `${baseUrl}/profiles/default_user.png`"
                                         loading="lazy"
                                         alt="Photo de profil"
                                         class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"
@@ -56,7 +55,7 @@
                             <Link :href="route('login')" :class="isActive(route('login')) ? 'active btn ml-2' : 'btn ml-2'">Connexion</Link>
                         </template>
                         <template v-else>
-                            <Link :href="route('logout')" method="post" as="button" class="btn !bg-pink-950 ml-2 hover:text-orange-600">Déconnexion</Link>
+                            <Link :href="route('logout')" method="post" as="button" class="btn !bg-pink-950 right-2 mr-0 lg:mr-4 xl:mr-3 hover:text-orange-600">Déconnexion</Link>
                         </template>
                     </div>
 
@@ -88,9 +87,11 @@
                 </nav>
             </header>
 
-            <main class="max-w-6xl mx-auto overflow-hidden p-2 mb-1 rounded-xl shadow-lg border border-orangeTheme">
-                <slot />
-            </main>
+            <div class="mx-1 sm:mx-2 md:mx-4 lg:mx-2 xl:mx-0">
+                <main class="max-w-6xl mt-12 md:mt-16 mx-auto overflow-hidden p-2 mb-1 rounded-xl shadow-lg border border-orangeTheme transition-all duration-300">
+                    <slot />
+                </main>
+            </div>
 
             <transition name="fade">
                 <footer v-if="showFooter">
@@ -108,7 +109,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import ThemeSwitcher from './Components/DarkMode.vue';
 import GoogleTranslate from './Components/GoogleTranslate.vue';
 
-const { auth } = usePage().props;
+const { baseUrl, auth } = usePage().props;
 
 const menuOpen = ref(false);
 const menuRef = ref(null);

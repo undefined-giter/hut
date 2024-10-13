@@ -64,13 +64,13 @@
             }
             ]
         }
-        </script>            
+        </script>    
+        
+        <script>
+            window.baseUrl = "{{ asset('storage/') }}";
+        </script>
     </head>
     <body class="parallax font-sans antialiased">
-        <script>
-           baseUrl = "{{ rtrim(asset('storage/'), '/') }}/";
-        </script>
-
         @inertia
     </body>
 </html>

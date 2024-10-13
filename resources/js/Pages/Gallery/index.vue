@@ -12,7 +12,7 @@
           :class="{'col-span-2 flex justify-center': displayedImages.length % 2 !== 0 && index === displayedImages.length - 1}"
         >
           <img 
-            :src="`${baseUrl}gallery/${image}`"
+            :src="`${baseUrl}/gallery/${image}`"
             loading="lazy"
             :alt="getImageName(image)"
             :title="image.name"
@@ -27,38 +27,39 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import Layout from './../Layout.vue';
-import { Head } from '@inertiajs/vue3';
-
+import { Head, usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
   images: Array
 });
 
-const baseUrl = "storage/";
+const { baseUrl } = usePage().props;
 const displayedImages = ref([]);
-const imagesPerLoad = 2;
+const imagesPerLoadInitial = 10;
+const imagesPerLoadScroll = 4;
 const imagesLoaded = ref(0);
 const windowWidth = ref(window.innerWidth);
+const loading = ref(false);
 
-const loadImages = () => {
-  if (imagesLoaded.value >= props.images.length) return;
+const loadImages = (initial = false) => {
+  if (loading.value || imagesLoaded.value >= props.images.length) return;
 
-  const nextImages = props.images.slice(imagesLoaded.value, imagesLoaded.value + imagesPerLoad);
+  loading.value = true;
+  const perLoad = initial ? imagesPerLoadInitial : imagesPerLoadScroll;
+  const nextImages = props.images.slice(imagesLoaded.value, imagesLoaded.value + perLoad);
   displayedImages.value.push(...nextImages);
-  imagesLoaded.value += imagesPerLoad;
-
+  imagesLoaded.value += perLoad;
+  
   nextTick(() => {
-    if (document.documentElement.scrollHeight <= window.innerHeight) {
-      loadImages();
-    }
+    loading.value = false;
   });
 };
 
 const handleScroll = () => {
   const scrollPosition = window.innerHeight + window.scrollY;
-  const bottomOfPage = document.documentElement.offsetHeight;
+  const bottomOfPage = document.documentElement.scrollHeight;
 
-  if (scrollPosition >= bottomOfPage - 100) {
+  if (scrollPosition >= bottomOfPage - 100 && !loading.value && imagesLoaded.value < props.images.length) {
     loadImages();
   }
 };
@@ -88,7 +89,7 @@ function getImageName(image) {
 }
 
 onMounted(() => {
-  loadImages();
+  loadImages(true);
   window.addEventListener('scroll', handleScroll);
   window.addEventListener('resize', handleResize);
 });
