@@ -54,7 +54,7 @@
         }
     </style>
 </head>
-<body>aze
+<body>
     <div class="container">
         <h1>Bonjour {{ $isAdmin ? 'Admin' : $userName }},</h1>
 
@@ -63,7 +63,7 @@
                 {{ $isAdmin ? 'Une réservation a été ' : 'Votre demande de réservation a bien été ' }} 
                 <strong>
                     @if ($action === 'created')
-                        demandée.
+                        réalisée.
                     @elseif ($action === 'updated')
                         mise à jour sur les <span style="text-decoration: underline">dates et options</span>.
                     @elseif ($action === 'updated_options')

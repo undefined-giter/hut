@@ -5,12 +5,13 @@
 
         <Reservations :reservations="reservations" :connected_user_id="connected_user_id" />
 
-        <div class="bg-dark shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-300">            
-            <h2>Profile</h2>
+        <div class="bg-light dark:bg-dark shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-300">            
+            <h2>Profil</h2>
             <div class="max-w-2xl mx-auto p-8 pt-0">
                 <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
-                <div class="mt-2">
-                    <div class="ml-48">
+
+                <div class="flex justify-center">
+                    <div class="my-2 pl-20 mx-auto">
                         <div class="mb-4 flex">
                             <p class="break-words w-full max-w-[28ch] flex">
                                 <strong class="font-semibold !text-gray-700 w-32">Nom :</strong>
@@ -84,15 +85,15 @@
                             </p>
                         </div>
                     </div>
-                
-                    <div class="flex justify-end">
-                        <button @click="deleteUser" class="btn !bg-red-700 text-white mr-4">
-                            Supprimer
-                        </button>
-                        <button type="button" @click="goBack();" class="btn mr-4 py-2">
-                            Retour
-                        </button>
-                    </div>
+                </div>
+            
+                <div class="flex justify-end">
+                    <button @click="deleteUser" class="btn !bg-red-700 text-white mr-4">
+                        Supprimer
+                    </button>
+                    <button type="button" @click="goBack();" class="btn mr-4 py-2">
+                        Retour
+                    </button>
                 </div>
             </div>
         </div>
@@ -102,8 +103,10 @@
 <script setup>
 import Reservations from './../Components/Reservations.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import Layout from '../Layout.vue';
+
+const { baseUrl } = usePage().props;
 
 const props = defineProps({
   user: Object,

@@ -20,7 +20,7 @@ const handleResize = () => {
 
 const toggleDarkMode = () => {
     isDarkMode.value = !isDarkMode.value;
-    document.documentElement.classList.toggle('dark', isDarkMode.value);
+    document.body.classList.toggle('dark', isDarkMode.value);
     localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light');
 };
 
@@ -28,10 +28,10 @@ onMounted(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         isDarkMode.value = true;
-        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
     } else {
         isDarkMode.value = false;
-        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
     }
     window.addEventListener('resize', handleResize);
 });

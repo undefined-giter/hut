@@ -59,7 +59,7 @@
             <p>Cabane - Châtel-En-Trièves / Cordéac</p>
         </div>
 
-        <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Représentation de la Cabane">
+        <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Location gîte cabane dans le Trièves">
     </div>
 </body>
 </html>

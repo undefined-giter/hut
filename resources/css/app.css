@@ -144,8 +144,7 @@ h3{
 }
 
 .parallax {
-    background: url('img/hut.png');
-    height: 500px;
+    background: url('/img/hut.png');
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -154,7 +153,6 @@ h3{
 @media screen and (max-width: 768px) {
     .parallax-section {
         background-attachment: scroll;
-        height: 300px;
     }
 }
 

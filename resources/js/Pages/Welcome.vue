@@ -4,24 +4,12 @@
     <Layout>
         <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec Jacuzzi</h1>
 
-        <div class="flex justify-between">
-            <div class="text-right opacity-0 hidden lg:block"> <!--- decoy to center phone part -->
-                <p class="oleoScript">
-                    Ou par mail : <span class="text-lg ml-3">moelleux@gmail.com</span>
-                </p>
-            </div>
+        <div class="flex justify-between oleoScript font-bold">
 
-            <div class="text-center">
-                <p class="oleoScript pl-3 lg:pl-0">
-                    Réservez directement au <span class="text-xl text-orangeTheme select-text">06 XX XX XX XX</span>
-                </p>
-            </div>
+            <p class="ml-4">Réservez directement au <span class="text-2xl text-orangeTheme select-text">06 XX XX XX XX</span></p>
 
-            <div class="text-right">
-                <p class="oleoScript">
-                    Ou par mail : <span class="text-lg text-orangeTheme select-text mr-4">moelleux@gmail.com</span>
-                </p>
-            </div>
+            <a href="{{ route('book') }}" class="mr-4 text-right"><p>Réservez votre séjour dans notre cabane dès maintenant</p></a>
+            
         </div>
         <div class="relative inset-0 h-[50vh] overflow-hidden mb-4 max-h-[630px] sm:h-[70vh]">
 
@@ -35,7 +23,7 @@
             <div 
                 v-for="(image, index) in images" 
                 :key="index" 
-                class="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out rounded-2xl"
+                class="lazyload absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out rounded-2xl"
                 :style="{ backgroundImage: `url(${image})`, opacity: currentImageIndex === index ? 1 : 0 }">
             </div>
         </div>

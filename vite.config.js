@@ -6,7 +6,7 @@ import path from 'path';
 export default defineConfig({
     plugins: [
         laravel({
-            input: 'resources/js/app.js',
+            input: ['resources/css/app.css', 'resources/js/app.js'],
             ssr: 'resources/js/ssr.js',
             refresh: true,
         }),
@@ -28,6 +28,7 @@ export default defineConfig({
                 assetFileNames: 'assets/[name].[hash][extname]',
             },
         },
+        assetsInlineLimit: 0,
     },
     resolve: {
         alias: {

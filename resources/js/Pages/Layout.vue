@@ -40,48 +40,47 @@
                     </div>
 
                     <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-2 items-center">
-                        <Link :href="route('homepage')" :class="isActive(route('homepage')) ? 'active btn' : 'btn'">Accueil</Link>
-                        <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active btn' : 'btn'">Galerie</Link>
-                        <Link :href="route('book')" :class="isActive(route('book')) ? 'active btn' : 'btn'">Réserver</Link>
-                        <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active btn' : 'btn'">Contact</Link>
+                        <Link :href="route('homepage')" :class="isActive(route('homepage')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Accueil</Link>
+                        <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Galerie</Link>
+                        <Link :href="route('book')" :class="isActive(route('book')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Réserver</Link>
+                        <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Contact</Link>
 
-                        <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active btn !ml-6' : 'btn !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
-                        <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active btn' : 'btn'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
+                        <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active btn transition duration-300 ease-in-out !ml-6' : 'btn transition duration-300 ease-in-out !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
+                        <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
                     </div>
 
                     <div class="hidden md:flex items-center">
                         <template v-if="!auth.user">
-                            <Link :href="route('register')" :class="isActive(route('register')) ? 'active btn' : 'btn'">Inscription</Link>
-                            <Link :href="route('login')" :class="isActive(route('login')) ? 'active btn ml-2' : 'btn ml-2'">Connexion</Link>
+                            <Link :href="route('register')" :class="isActive(route('register')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Inscription</Link>
+                            <Link :href="route('login')" :class="isActive(route('login')) ? 'active btn ml-2 transition duration-300 ease-in-out' : 'btn ml-2 transition duration-300 ease-in-out'">Connexion</Link>
                         </template>
                         <template v-else>
-                            <Link :href="route('logout')" method="post" as="button" class="btn !bg-pink-950 right-2 mr-0 lg:mr-4 xl:mr-3 hover:text-orange-600">Déconnexion</Link>
+                            <Link :href="route('logout')" method="post" as="button" class="btn !bg-pink-950 right-2 mr-0 lg:mr-4 xl:mr-3 hover:text-orange-600 transition duration-300 ease-in-out">Déconnexion</Link>
                         </template>
                     </div>
 
-                    <button id="menuButton" ref="menuButtonRef" @click="menuOpen = !menuOpen" class="md:hidden ml-auto text-blue-700 focus:outline-none">
+                    <button id="menuButton" ref="menuButtonRef" @click="menuOpen = !menuOpen" class="md:hidden ml-auto text-blue-700 focus:outline-none transition duration-300 ease-in-out">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
 
-                    <div v-if="menuOpen" ref="menuRef" class="open-menu md:hidden mr-0.5 -mt-9 !rounded-tr-none">
-                        <Link :href="route('homepage')" :class="isActive(route('homepage')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Accueil</Link>
-                        <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Galerie</Link>
-                        <Link :href="route('book')" :class="isActive(route('book')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Réserver</Link>
-                        <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Contact</Link>
+                    <div v-if="menuOpen" ref="menuRef" class="open-menu md:hidden mr-0.5 -mt-9 !rounded-tr-none transition duration-300 ease-in-out">
+                        <Link :href="route('homepage')" :class="isActive(route('homepage')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Accueil</Link>
+                        <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Galerie</Link>
+                        <Link :href="route('book')" :class="isActive(route('book')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Réserver</Link>
+                        <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Contact</Link>
                         <span v-if="auth.user && auth.user.role === 'admin'">
-                            <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Options</Link>
-                            <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Utilisateurs</Link>
+                            <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Options</Link>
+                            <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Utilisateurs</Link>
                         </span>
                         <template v-if="!auth.user">
-                            <Link :href="route('register')" :class="isActive(route('register')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Inscription</Link>
-                            <Link :href="route('login')" :class="isActive(route('login')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Connexion</Link>
+                            <Link :href="route('register')" :class="isActive(route('register')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Inscription</Link>
+                            <Link :href="route('login')" :class="isActive(route('login')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Connexion</Link>
                         </template>
                         <template v-else>
-                            <Link :href="route('profile')" :class="isActive(route('profile')) ? 'active block px-4 py-1.5 hover:text-green-200' : 'block px-4 py-1.5 hover:bg-gray-200'">Profil</Link>
-                            <button @click="logout" class="block px-4 py-1.5 text-left text-sm custom-transparent-pink w-full hover:text-orange-600 text-right">Déconnexion</button>
+                            <Link :href="route('profile')" :class="isActive(route('profile')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Profil</Link>
+                            <button @click="logout" class="block px-4 py-1.5 text-left text-sm custom-transparent-pink w-full hover:text-orange-600 transition duration-300 ease-in-out text-right">Déconnexion</button>
                         </template>
                     </div>
                 </nav>

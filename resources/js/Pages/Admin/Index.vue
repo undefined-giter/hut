@@ -90,7 +90,9 @@
 <script setup>
 import { Inertia } from '@inertiajs/inertia';
 import Layout from '../Layout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
+
+const { baseUrl } = usePage().props;
 
 defineProps({
     users: Object,

@@ -233,6 +233,7 @@ class ReservationController extends Controller
 
                         $existingReservation->update([
                             'res_comment' => $validatedData['res_comment'],
+                            'res_price' => $validatedData['res_price'],
                         ]);
 
                         $selectedOptions = $existingReservation->options()->get();
@@ -271,6 +272,7 @@ class ReservationController extends Controller
                         'end_date' => $validatedData['end_date'],
                         'nights' => $validatedData['nights'],
                         'res_comment' => $validatedData['res_comment'],
+                        'res_price' => $validatedData['res_price'],
                     ]);
 
                     if (!empty($optionsWithByDay)) {
