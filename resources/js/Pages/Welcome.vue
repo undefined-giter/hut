@@ -8,7 +8,7 @@
 
             <p class="ml-4">Réservez directement au <span class="text-2xl text-orangeTheme select-text">06 XX XX XX XX</span></p>
 
-            <a href="{{ route('book') }}" class="mr-4 text-right"><p>Réservez votre séjour dans notre cabane dès maintenant</p></a>
+            <Link :href="route('book')" class="mr-4 text-right"><p>Réservez votre séjour dans notre cabane dès maintenant</p></Link>
             
         </div>
         <div class="relative inset-0 h-[50vh] overflow-hidden mb-4 max-h-[630px] sm:h-[70vh]">
@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import Layout from './Layout.vue';
 
 const images = [

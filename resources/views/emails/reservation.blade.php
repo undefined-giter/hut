@@ -117,7 +117,7 @@
                         <li>
                             <span class="label">Option :</span> <span class="green">{{ $option->name }}</span><br>
                             <span class="label" style="white-space: nowrap;">Description :</span> {{ $option->description }}<br>
-                            <span class="label">Prix unitaire :</span> {{ $option->price }} € 
+                            <span class="label">Prix unitaire :</span> {{ $option->price !== '' ? $option->price : 0 }} €
                             <span class="label">{{ $option->pivot->by_day ?? false ? 'par nuit réservée' : 'pour le séjour' }}</span><br>
                             soit <span class="bolder">{{ $option->price == 0.00 ? 'Inclu' : ($option->pivot->by_day ?? false ? $option->price * $reservation->nights . ' €' : $option->price . ' €') }}</span>
                         </li>
