@@ -52,4 +52,3 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-//créer mail suppression de reservation
