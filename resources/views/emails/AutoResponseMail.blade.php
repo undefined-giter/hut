@@ -56,7 +56,9 @@
         <p>Cordialement,</p>
         
         <div class="footer-message">
-            <p>Cabane - Châtel-En-Trièves / Cordéac</p>
+            <p>06 XX XX XX XX<br>
+            Cabane - Châtel-En-Trièves / Cordéac
+            </p>
         </div>
 
         <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Location gîte cabane dans le Trièves">

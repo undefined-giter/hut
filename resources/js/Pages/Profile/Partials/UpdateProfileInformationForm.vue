@@ -47,6 +47,10 @@ const validatePhone = () => {
 };
 
 const submit = () => {    
+    if (props.user.email === 'fake_admin@fake.admin') {
+        alert("En tant que fake_admin, vous n'avez pas le droit de modifier vos informations.");
+        return;
+    }
     if (validatePhone()) {
         form.patch(route('profile.update'));
     }

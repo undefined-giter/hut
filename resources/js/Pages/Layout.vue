@@ -45,8 +45,8 @@
                         <Link :href="route('book')" :class="isActive(route('book')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Réserver</Link>
                         <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'">Contact</Link>
 
-                        <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active btn transition duration-300 ease-in-out !ml-6' : 'btn transition duration-300 ease-in-out !ml-6'" v-if="auth.user && auth.user.role === 'admin'">Options</Link>
-                        <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'" v-if="auth.user && auth.user.role === 'admin'">Utilisateurs</Link>
+                        <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active btn transition duration-300 ease-in-out !ml-6' : 'btn transition duration-300 ease-in-out !ml-6'" v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')">Options</Link>
+                        <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active btn transition duration-300 ease-in-out' : 'btn transition duration-300 ease-in-out'" v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')">Utilisateurs</Link>
                     </div>
 
                     <div class="hidden md:flex items-center">
@@ -70,7 +70,7 @@
                         <Link :href="route('gallery')" :class="isActive(route('gallery')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Galerie</Link>
                         <Link :href="route('book')" :class="isActive(route('book')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Réserver</Link>
                         <Link :href="route('contact')" :class="isActive(route('contact')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Contact</Link>
-                        <span v-if="auth.user && auth.user.role === 'admin'">
+                        <span v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')">
                             <Link :href="route('admin.options.index')" :class="isActive(route('admin.options.index')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Options</Link>
                             <Link :href="route('admin.list')" :class="isActive(route('admin.list')) ? 'active block px-4 py-1.5 hover:text-green-200 transition duration-300 ease-in-out' : 'block px-4 py-1.5 hover:bg-gray-200 transition duration-300 ease-in-out'">Utilisateurs</Link>
                         </span>

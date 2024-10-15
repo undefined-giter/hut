@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ReservationMail;
 use Inertia\Inertia;
 use App\Models\Option;
 use App\Models\Reservation;
@@ -10,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationMail;
+use App\Mail\ReservationDeletedMail;
 
 class ReservationController extends Controller
 {
@@ -164,6 +165,11 @@ class ReservationController extends Controller
     public function store(Request $request, $reservationId = null)
     {
         $user = Auth::user();
+
+        if($user->role === 'fake_admin'){
+            return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à effectuer de réservation en tant que fake_admin, ni à la modifiée, ni à modifier celles des autres à leur place.<br>
+                <span style="color:gray">Si vous réservez avec un autre profil sans réèlle intention de réserver le gîte, merci de SUPPRIMER VOS RÉSERVATIONS IMMEDIATEMENT après vos tests terminés svp.<br>Merci.<span>']);
+        }
 
         $optionsJson = $request->input('options');
         $optionsData = json_decode($optionsJson, true);
@@ -397,14 +403,39 @@ class ReservationController extends Controller
     public function destroy($id)
     {
         $reservation = Reservation::findOrFail($id);
+
         $currentUser = auth()->user();
-    
+
+        if ($currentUser->role === 'fake_admin') {
+            return redirect()->route('book')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucune réservation.']);
+        }
+        
         if ($currentUser->role !== 'admin' && $currentUser->id !== $reservation->user_id) {
             return redirect()->route('book')->with('error', ['Vous n\'êtes pas autorisé à supprimer cette réservation.']);
         }
-    
+        
         $reservation->delete();
+        
+        $user = $currentUser->role === 'admin' ? $reservation->user : $currentUser;
+        
+        Mail::to('leo.ripert@gmail.com')->send(new ReservationDeletedMail(
+            $reservation,
+            $user->name,
+            $user->name2 ?? null,
+            $user->email,
+            $user->phone ?? null,
+            true
+        ));
     
-        return redirect()->route('book')->with('success', ['Réservation annulée.']);
-    } 
+        Mail::to($user->email)->send(new ReservationDeletedMail(
+            $reservation,
+            $user->name,
+            null,
+            null,
+            null,
+            false
+        ));
+    
+        return redirect()->route('book')->with('success', ['Votre réservation a bien été annulée.<br>N\'hésitez pas à revenir à l\'avenir !']);
+    }
 }

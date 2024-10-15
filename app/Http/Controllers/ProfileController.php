@@ -97,8 +97,13 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request, $id): RedirectResponse
     {
-        $user = User::findOrFail($id);
         $currentUser = auth()->user();
+        
+        if ($currentUser->role === 'fake_admin'){ 
+            return redirect()->route('profile')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris fake_admin.']); 
+        }
+        
+        $user = User::findOrFail($id);
     
         if ($currentUser->role !== 'admin') {
             if ($currentUser->id !== $user->id) {

@@ -28,6 +28,10 @@ class PriceController extends Controller
 
     public function updatePrices(Request $request)
     {
+        if (auth()->user()->role === 'fake_admin') {
+            return redirect()->route('admin.prices')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer les prix des réservations."]);
+        }
+
         $request->validate([
             'price_per_night' => 'required|integer|min:0',
             'price_per_night_for_2_and_more_nights' => 'required|integer|min:0',

@@ -24,4 +24,9 @@ class Reservation extends Model
         return $this->belongsToMany(Option::class, 'option_reservation')
                     ->withPivot('by_day');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
