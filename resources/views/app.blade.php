@@ -85,7 +85,5 @@
     </head>
     <body class="parallax font-sans antialiased">
         @inertia
-
-        <script>document.body.classList.add('dark');</script>
     </body>
 </html>

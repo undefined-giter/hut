@@ -9,6 +9,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+
 const { auth } = usePage().props;
 
 const isDarkMode = ref(true);
@@ -20,18 +21,18 @@ const handleResize = () => {
 
 const toggleDarkMode = () => {
     isDarkMode.value = !isDarkMode.value;
-    document.body.classList.toggle('dark', isDarkMode.value);
+    document.documentElement.classList.toggle('dark', isDarkMode.value);
     localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light');
 };
 
 onMounted(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    if (!savedTheme || savedTheme === 'dark') {
         isDarkMode.value = true;
-        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
     } else {
         isDarkMode.value = false;
-        document.body.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
     }
     window.addEventListener('resize', handleResize);
 });
