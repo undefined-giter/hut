@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OptionRequest;
 use App\Models\Option;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,22 +22,13 @@ class OptionController extends Controller
         return Inertia::render('Admin/OptionCreateEdit');
     }
 
-    public function store(Request $request)
+    public function store(OptionRequest $request)
     {
         if (auth()->user()->role === 'fake_admin') {
             return redirect()->route('admin.options.create')->with('error', ['En tant que fake_admin, vous ne pouvez pas enregistrer de nouvelle option.']);
         }
 
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'available' => 'required|boolean',
-            'preselected' => 'required|boolean',
-            'by_day' => 'sometimes|boolean',
-            'by_day_display' => 'sometimes|boolean',
-            'by_day_preselected' => 'required|boolean',
-        ]);
+        $validated = $request->validated();
 
         Option::create($validated);
         return redirect()->route('admin.options.index')->with('success', ['Option ajoutée']);
@@ -49,24 +41,16 @@ class OptionController extends Controller
         ]);
     }
 
-    public function update(Request $request, Option $option)
+    public function update(OptionRequest $request, Option $option)
     {
         if (auth()->user()->role === 'fake_admin') {
             return redirect()->route('admin.options.create')->with('error', ['En tans que fake_admin, vous ne pouvez pas modifier d\'option.']);
         }
-
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'nullable|numeric',
-            'available' => 'required|boolean',
-            'preselected' => 'required|boolean',
-            'by_day' => 'sometimes|boolean',
-            'by_day_display' => 'sometimes|boolean',
-            'by_day_preselected' => 'required|boolean',
-        ]);
+        
+        $validated = $request->validated();
         
         $option->update($validated);
+        
         return redirect()->route('admin.options.index')->with('success', ['Option mise à jour']);
     }
 
@@ -76,9 +60,7 @@ class OptionController extends Controller
             return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer la disponibilité de l'option.<br>Elle correspond à afficher ou non l'option dans la page de réservation."]);
         }
 
-        $option->update([
-            'available' => $request->available,
-        ]);
+        $option->update([ 'available' => $request->available ]);
 
         return redirect()->back()->with('success', ['Disponibilité mise à jour']);
     }
@@ -89,9 +71,7 @@ class OptionController extends Controller
             return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer la présélection de l'option.<br>Elle correspond à préselectionner l'option ou non (visuel vert ou orange sur la page de réservation)."]);
         }
 
-        $option->update([
-            'preselected' => $request->preselected,
-        ]);
+        $option->update([ 'preselected' => $request->preselected ]);
 
         return redirect()->back()->with('success', ['Statut de présélection mis à jour']);
     }
@@ -102,9 +82,7 @@ class OptionController extends Controller
             return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin... vous n'allez pas toutes les essayer, si ?<br>Affichage de l'input \"par jour ?\" en bas à droite de l'option sur la page de réservation."]);
         }
 
-        $option->update([
-            'by_day_display' => $request->by_day_display,
-        ]);
+        $option->update([ 'by_day_display' => $request->by_day_display ]);
 
         return redirect()->back()->with('success', ['Affichage "Par jour" mis à jour']);
     }
@@ -115,9 +93,7 @@ class OptionController extends Controller
             return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer la présélection de l'option d'option \"Par jour ?\"<br>Cela correspond préselectionner l'option d'option ou non."]);
         }
 
-        $option->update([
-            'by_day_preselected' => $request->by_day_preselected,
-        ]);
+        $option->update([ 'by_day_preselected' => $request->by_day_preselected ]);
 
         return redirect()->back()->with('success', ['Statut "Présélection par jour" mis à jour']);
     }

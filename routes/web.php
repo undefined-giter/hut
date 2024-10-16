@@ -24,7 +24,6 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
     Route::post('/book/{id}/update', [ReservationController::class, 'store'])->name('book.update');
-    Route::get('/get-prices', [PriceController::class, 'getPrices'])->defaults('return_json', true);
 
     Route::delete('/book/{id}', [ReservationController::class, 'destroy'])->name('book.delete');
 

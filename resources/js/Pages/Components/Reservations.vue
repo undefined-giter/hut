@@ -2,7 +2,7 @@
     <div v-if="reservations.length > 0" class="bg-light dark:bg-dark shadow-md rounded-lg pt-4 mx-auto mb-4 hover:scale-105 transform transition-transform duration-300">
         <h2 class="text-lg">Réservations</h2>
 
-        <div class="max-w-sm mx-auto pb-6">
+        <div class="max-w-sm mx-auto pb-6 mb-6">
             <div style="max-height: 350px; overflow-y: auto;">
                 <h3 class="text-center dark:text-orangeTheme" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
                 <ul v-if="currentReservations.length > 0" class="mb-6">

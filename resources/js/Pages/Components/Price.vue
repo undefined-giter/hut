@@ -13,33 +13,24 @@ const props = defineProps({
     resOptions: {
         type: Array,
         default: () => []
-    }
+    },
+    PRICE_PER_NIGHT: {
+        type: Number,
+        required: true
+    },
+    PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS: {
+        type: Number,
+        required: true
+    },
 });
 
 const emit = defineEmits(['price-updated']);
 
-const PRICE_PER_NIGHT = ref(160);
-const PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS = ref(120);
-
 const totalPrice = ref(0);
 const totalPriceDisplay = ref('');
 
-const fetchPrices = async () => {
-    try {
-        const response = await axios.get('/get-prices');        
-        PRICE_PER_NIGHT.value = response.data.PRICE_PER_NIGHT;
-        PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS.value = response.data.PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS;
-
-        calculateTotalPrice();
-    } catch (error) {
-        console.error('Erreur lors de la récupération des prix :', error);
-
-        calculateTotalPrice(); // Continue with this defaults values instead of breaking the run
-    }
-};
-
 const calculateTotalPrice = () => {
-    const night_price = props.resNights > 1 ? PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS.value : PRICE_PER_NIGHT.value;
+    const night_price = props.resNights > 1 ? props.PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS : props.PRICE_PER_NIGHT;
     const optionPrices = props.resOptions.map(option => {
         const optionPrice = parseFloat(option.price) || 0;
         return option.by_day ? optionPrice * (props.resNights == 0 ? 1 : props.resNights) : optionPrice;
@@ -55,8 +46,4 @@ const calculateTotalPrice = () => {
 };
 
 watch([() => props.resNights, () => props.resOptions], calculateTotalPrice);
-
-onMounted(() => {
-    fetchPrices();
-});
 </script>

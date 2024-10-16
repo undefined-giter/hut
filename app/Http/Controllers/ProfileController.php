@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfilePictureRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -35,16 +37,8 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(Request $request)
+    public function update(UpdateProfileRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'name2' => 'nullable|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'phone' => 'nullable|string|size:10',
-            'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
         $user = Auth::user();
 
         $user->name = $request->name;
@@ -62,12 +56,8 @@ class ProfileController extends Controller
         return Inertia::render('Profile/editPicture');
     }
 
-    public function updatePicture(Request $request)
+    public function updatePicture(UpdateProfilePictureRequest $request)
     {
-        $request->validate([
-            'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
         $user = Auth::user();
 
         if ($request->hasFile('picture')) {
@@ -99,24 +89,23 @@ class ProfileController extends Controller
     {
         $currentUser = auth()->user();
         
-        if ($currentUser->role === 'fake_admin'){ 
+        if ($currentUser->role === 'fake_admin'){
             return redirect()->route('profile')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris fake_admin.']); 
         }
-        
+
         $user = User::findOrFail($id);
-    
+
         if ($currentUser->role !== 'admin') {
             if ($currentUser->id !== $user->id) {
                 return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à supprimer ce compte.']);
             }
-    
+
             if (!Hash::check($request->password, $currentUser->password)) {
                 return redirect()->route('profile')->with('error', ['Mot de passe incorrect.']);
             }
         }
-    
+
         $user->delete();
-    
         return redirect()->route('admin.list')->with('success', ['Le compte a été supprimé.']);
-    }  
+    }
 }

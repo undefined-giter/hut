@@ -62,14 +62,14 @@
                         </div>
                         <div class="mb-4 flex">
                             <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Inscription :</strong> 
-                                {{ new Date(user.created_at).toLocaleDateString() }}
+                                <strong class="font-semibold !text-gray-700 w-32">Mise à jour :</strong>
+                                {{ new Date(user.updated_at).toLocaleDateString() }}
                             </p>
                         </div>
                         <div class="mb-4 flex">
                             <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Mise à jour :</strong>
-                                {{ new Date(user.updated_at).toLocaleDateString() }}
+                                <strong class="font-semibold !text-gray-700 w-32">Inscription :</strong> 
+                                {{ new Date(user.created_at).toLocaleDateString() }}
                             </p>
                         </div>
                         <div class="mb-4 flex">
