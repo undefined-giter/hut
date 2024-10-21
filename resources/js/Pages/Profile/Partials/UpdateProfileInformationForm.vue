@@ -22,7 +22,7 @@ const props = defineProps({
 const phoneError = ref(null);
 
 const form = useForm({
-    name: props.user.name,
+    name: props.user.name !== 'Profil' ? props.user.name : '',
     name2: props.user.name2 || '',
     email: props.user.email,
     phone: props.user.phone ?? '',
@@ -69,7 +69,7 @@ const submit = () => {
 
         <form @submit.prevent="submit" class="mt-3 space-y-6 max-w-sm mx-auto">
             <div>
-                <InputLabel for="name" value="Nom" />
+                <InputLabel for="name" value="Nom & Prénom" />
                 <TextInput
                     id="name"
                     type="text"
@@ -82,7 +82,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="name2" value="Accompagné de" />
+                <InputLabel for="name2" value="Accompagné(e) de" />
                 <TextInput
                     id="name2"
                     type="text"

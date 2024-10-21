@@ -4,7 +4,7 @@
         <h1>S'enregistrer</h1>
 
         <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
-            <div title="Veuillez entrer vos nom et prénom svp">
+            <!-- <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -35,7 +35,7 @@
                 />
 
                 <InputError :message="form.errors.name" />
-            </div>
+            </div> -->
 
             <div class="mt-4" title="votre_mail@exemple.com">
                 <div class="flex">
@@ -106,7 +106,7 @@
                 <InputError :message="form.errors.password_confirmation" />
             </div>
 
-            <div title="Veuillez enregistrer votre photo de profil svp">
+            <!-- <div title="Veuillez enregistrer votre photo de profil svp">
                 <br>
                 <InputLabel for="picture" value="Photo de profil" class="!mb-0.5" />
                 
@@ -122,7 +122,7 @@
                 </div>
                 
                 <InputError :message="form.errors.picture" />
-            </div>
+            </div> -->
             
             <div class="flex items-end justify-between mt-2">
                 
@@ -146,21 +146,21 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, useForm/*, usePage*/ } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import Layout from './../Layout.vue';
 
-const { baseUrl } = usePage().props;
+// const { baseUrl } = usePage().props;
 
 const form = useForm({
-    name: '',
-    name2: '',
+    // name: '',
+    // name2: '',
     email: '',
     phone: '',
     password: '',
     password_confirmation: '',
-    picture: null,
-    preview: null,
+    // picture: null,
+    // preview: null,
 });
 
 const phoneError = ref(null);
@@ -193,16 +193,16 @@ const validatePhone = () => {
     return true;
 };
 
-const changePicture = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        form.picture = file;
-        form.preview = URL.createObjectURL(file);
-    } else {
-        form.picture = null;
-        form.preview = null;
-    }
-};
+// const changePicture = (e) => {
+//     const file = e.target.files[0];
+//     if (file) {
+//         form.picture = file;
+//         form.preview = URL.createObjectURL(file);
+//     } else {
+//         form.picture = null;
+//         form.preview = null;
+//     }
+// };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const isValidEmail = (email) => {
@@ -210,12 +210,12 @@ const isValidEmail = (email) => {
 };
 
 const inputsValids = computed(() => {
-    const isNameValid = form.name.trim().length >= 2;
+    // const isNameValid = form.name.trim().length >= 2;
     const isEmailValid = isValidEmail(form.email);
     const isPasswordValid = form.password.trim() !== '';
     const isPasswordConfirmationValid = form.password === form.password_confirmation;
 
-    return isNameValid && isEmailValid && isPasswordValid && isPasswordConfirmationValid;
+    return isEmailValid && isPasswordValid && isPasswordConfirmationValid // && isNameValid ;
 });
 
 const submit = () => {

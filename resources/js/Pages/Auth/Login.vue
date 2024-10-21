@@ -3,7 +3,7 @@
     <Layout>
         <h1>Se Connecter</h1>
         
-        <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
+        <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8 mb-4">
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
                     <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
@@ -60,7 +60,49 @@ Inutile de vous surcharger de cookies 😉">
                     Se connecter
                 </PrimaryButton>
             </div>
+            <div class="mt-2 mb-12 text-center">
+                <Link
+                    :href="route('register')"
+                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                >
+                    Pas encore de compte ?
+                </Link>
+            </div>
         </form>
+
+        <vue-cal
+        locale="fr"
+        active-view="month"
+        class="vuecal--rounded-theme vuecal--blue-theme text-black dark:text-[#ccc]"
+        hide-view-selector
+        @cell-click="handleDateClick"
+        :disable-views="['years', 'year', 'week', 'day']"
+        :dblclick-to-navigate="false"
+        style="height:400px; cursor: default !important"
+        :min-date="today"
+        :selected-date="showMonth"
+        >
+            <template #cell-content="{ cell }">
+                <span 
+                    class="vuecal__cell-date cursor-default"
+
+                    :style="(() => {
+                        const result = isReservedDate(cell.formattedDate);
+                        switch (result) {
+                            case 'in':
+                                return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                            case 'inner':
+                                return 'background: red;';
+                            case 'out':
+                                return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                            default:
+                                return '';
+                        }
+                    })()">
+                    {{ cell.content }}
+                </span>
+            </template>
+        </vue-cal>
     </Layout>
 </template>
 
@@ -70,9 +112,11 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
 import Layout from './../Layout.vue';
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
 
 defineProps({
     canResetPassword: {
@@ -112,5 +156,28 @@ const submit = () => {
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
+};
+
+const today = new Date();
+const isReservedDate = (cellDate) => {
+  const in_date = usePage().props.in_date || [];
+  const inner_date = usePage().props.inner_date || [];
+  const out_date = usePage().props.out_date || [];
+
+  const formattedCellDate = new Date(cellDate);
+
+  if (formattedCellDate < today) {
+    return 'inner';
+  }
+
+  if (in_date.includes(cellDate)) {
+    return 'in';
+  } else if (inner_date.includes(cellDate)) {
+    return 'inner';
+  } else if (out_date.includes(cellDate)) {
+    return 'out';
+  } else {
+    return false;
+  }
 };
 </script>

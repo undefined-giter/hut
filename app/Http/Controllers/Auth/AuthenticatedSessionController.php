@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 use Carbon\Carbon;
+use App\Models\Reservation;
+use App\Http\Controllers\ReservationController;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -19,9 +21,21 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): Response
     {
+        $today = now()->startOfDay();
+        $reservations = Reservation::where('end_date', '>', $today)->orderBy('start_date')->get();
+
+        // Instancier ReservationController et appeler la méthode getCalendarColors
+        $reservationController = new ReservationController();
+        $calendarColors = $reservationController->getCalendarColors($reservations);
+        $calendarColors['inner_date'] = array_merge($calendarColors['inner_date'], $calendarColors['switch_date']);
+
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
+
+            'in_date' => $calendarColors['in_date'],
+            'inner_date' => $calendarColors['inner_date'],
+            'out_date' => $calendarColors['out_date'],
         ]);
     }
 

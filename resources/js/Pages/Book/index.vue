@@ -103,15 +103,17 @@
 
               switch (result) {
                   case 'in':
-                      return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                    return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
                   case 'inner':
-                      return 'background: red;';
+                    return 'background: red;';
                   case 'out':
-                      return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                    return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
                   case 'switch':
-                      return 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);';
-                  default:
-                      return '';
+                    return auth.user.role === 'admin' 
+                        ? 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);' 
+                        : 'background: red;';
+                default:
+                  return '';
               }
           })()">
           {{ cell.content }}

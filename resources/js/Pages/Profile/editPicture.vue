@@ -25,7 +25,7 @@
 
           <div class="relative overflow-hidden inline-block">
             <button class="bg-blue-600 text-white py-2 px-4 rounded-lg cursor-pointer focus:outline-none" id="input-file">
-              Choisir un fichier
+              Parcourir
             </button>
             <input
               type="file"

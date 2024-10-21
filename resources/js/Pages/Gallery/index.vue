@@ -1,7 +1,7 @@
 <template>
   <Head title="Gallerie | Cabane" />
 
-  <Layout>
+  <Layout :allImagesDisplayed="allImagesDisplayed">
       <h1>Votre Voyage</h1>
 
       <div class="gallery grid grid-cols-1 md:grid-cols-2 gap-2 px-0 xs:px-2.5 md:px-0">
@@ -40,6 +40,7 @@ const imagesPerLoadScroll = 4;
 const imagesLoaded = ref(0);
 const windowWidth = ref(window.innerWidth);
 const loading = ref(false);
+const allImagesDisplayed = ref(false);
 
 const loadImages = (initial = false) => {
   if (loading.value || imagesLoaded.value >= props.images.length) return;
@@ -49,10 +50,16 @@ const loadImages = (initial = false) => {
   const nextImages = props.images.slice(imagesLoaded.value, imagesLoaded.value + perLoad);
   displayedImages.value.push(...nextImages);
   imagesLoaded.value += perLoad;
-  
-  nextTick(() => {
+
+
+  if (imagesLoaded.value >= props.images.length) {
+    allImagesDisplayed.value = true;
     loading.value = false;
-  });
+  } else {
+    nextTick(() => {
+      loading.value = false;
+    });
+  }
 };
 
 const handleScroll = () => {

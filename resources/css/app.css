@@ -90,19 +90,13 @@ main, table {@apply bg-light dark:bg-dark;}
 
 .fade-out {opacity: 0;}
 
-/* fin Layout */
-
 .custom-underline {
     text-decoration: underline;
     text-decoration-color: #800064;
     text-underline-offset: 3px;
 }
 
-.custom-transparent-pink{background-color: rgba(80, 7, 36, 0.33) !important;}
-
-table tr:hover span, table tr:hover td{
-    color: black !important;
-}
+table tr:hover span, table tr:hover td{ color: black !important; }
 
 p, table td {
     @apply text-blue-800 dark:text-blue-400;
@@ -156,43 +150,44 @@ h3{
 }
 
 .open-menu {
-    width: 118px;
+    width: 106px;
     position: absolute;
-    right: 0;
-    top: 56px;
-    background-color: rgba(37, 40, 42, 0.66);
-    color: #ccc;
-    text-align: right;
+    right: 3px;
+    top: 22px;
+    background-color: #0029bc;
+    text-align: left;
     z-index: 100;
-    border-radius: 2em;
+    border-radius: 1em 0 1em 1em;
     overflow: hidden;
+    border-width: 2px;
+    border-color: theme('colors.orangeTheme');
 }
 
+.btn .block{border-radius: 0 !important;}
+
 .open-menu a:hover {
-    background-color: rgb(203, 108, 0) !important;
-    color: rgb(0, 21, 159) !important;
+    background-color: #0032e4;
+    color: rgb(50, 255, 0);
 }
 
 a:hover {z-index: 50;}
 
-.active, th, tr:hover{@apply bg-orange-500 dark:bg-orange-600 !important;}
-
-.open-menu .active{background-color: rgba(249, 115, 22, 0.66) !important;}
+th, tr:hover{ @apply bg-orange-500 dark:bg-orangeTheme !important; }
 
 .btn {
-    background-color: #004acb;
+    font-family: 'Oleo Script', sans-serif; 
+    background-color: #0029bc;
     color: #ccc;
     padding: 10px 20px;
-    border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
     font-family: mirza;
 }
 
-.btn:hover:not(:disabled) {
-    color: rgba(89, 233, 0, 0.861);
-    background-color: #0056b3;
+.btn:hover {
+    color: rgb(50, 255, 0);
+    background-color: #0032e4;
     box-shadow: 0 2px 4px -1px rgba(244, 155, 0, 0.756);
 }
 
@@ -208,6 +203,10 @@ a:hover {z-index: 50;}
     box-shadow: none !important;
 }
 
+.link-active { @apply bg-orange-500 dark:bg-orange-600 !important; }
+
+.link-active:hover { @apply hover:bg-orange-400 dark:bg-orange-500 !important; }
+
 * {
     scrollbar-width: thin;
     scrollbar-color: #e0f900 #b07501; /* Couleur de la barre et de la piste */
@@ -216,9 +215,7 @@ a:hover {z-index: 50;}
     user-drag: none;
 }
 
-label {
-    @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important;
-}
+label { @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important; }
 
 input[type="text"],
 input[type="number"],
@@ -301,7 +298,7 @@ input:-webkit-autofill:active {
 footer {
     background: transparent;
     position: fixed;
-    bottom: 12px;
+    bottom: 6px;
     left: 0;
     right: 0;
     margin-left: auto;
@@ -442,6 +439,8 @@ footer {
   border: 3px solid #009688;
   color: rgb(104, 252, 104);
 }
+
+.vuecal__cell--disabled { cursor: default !important; }
 
 /* .vuecal__cell-events-count{display: none;} */
 /* .vuecal__cell--selected {;} */

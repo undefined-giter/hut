@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationMail;
 use App\Mail\ReservationDeletedMail;
+use App\Http\Requests\ReservationRequest;
 
 class ReservationController extends Controller
 {
-    private function getCalendarColors($reservations, $resId = null)
+    public function getCalendarColors($reservations, $resId = null)
     {
         $in_date = [];
         $inner_date = [];
@@ -162,7 +163,7 @@ class ReservationController extends Controller
         ]);
     }
 
-    public function store(Request $request, $reservationId = null)
+    public function store(ReservationRequest $requestFrom, $reservationId = null)
     {
         $user = Auth::user();
 
@@ -170,36 +171,20 @@ class ReservationController extends Controller
             return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à effectuer de réservation en tant que fake_admin, ni à la modifiée, ni à modifier celles des autres à leur place.<br>
                 <span style="color:gray">Si vous réservez avec un autre profil sans réèlle intention de réserver le gîte, merci de SUPPRIMER VOS RÉSERVATIONS IMMEDIATEMENT après vos tests terminés svp.<br>Merci.<span>']);
         }
+    
+        $validatedData = $requestFrom->validated();
 
-        $optionsJson = $request->input('options');
-        $optionsData = json_decode($optionsJson, true);
-    
-        if (!is_array($optionsData)) { $optionsData = []; }
-    
-        $optionIds = collect($optionsData)->pluck('id')->toArray();
+        $optionIds = collect($validatedData['options'])->pluck('id')->toArray();
         $selectedOptions = Option::whereIn('id', $optionIds)->get();
-
-        $optionsWithByDay = $selectedOptions->mapWithKeys(function ($option) use ($optionsData) {
-            $byDay = collect($optionsData)->firstWhere('id', $option->id)['by_day'] ?? false;
+    
+        $optionsWithByDay = $selectedOptions->mapWithKeys(function ($option) use ($validatedData) {
+            $byDay = collect($validatedData['options'])->firstWhere('id', $option->id)['by_day'] ?? false;
             return [
                 $option->id => [
                     'by_day' => $byDay,
                 ]
             ];
         });
-
-        $request->merge(['options' => $optionsData]);
-
-        $validatedData = $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'nights' => 'required|integer|min:1',
-            'res_comment' => 'nullable|max:510',
-            'res_price' => 'required|numeric',
-            'options' => 'nullable|array',
-            'options.*.id' => 'nullable|exists:options,id',
-            'options.*.by_day' => 'nullable|boolean',
-        ]);
         
         if($reservationId == null){
             $existingReservation = Reservation::where('user_id', $user->id)
@@ -228,7 +213,7 @@ class ReservationController extends Controller
             $existingReservation = Reservation::findOrFail($reservationId);
 
             if ($existingReservation) {
-                // Séparée au cas ou des réservtions été passées sans enregistrer le prix, ce qui n'aura plus réèlement de sens en prod et créé qu'une requêtes supplementaire mais assure la maj du prix même si aucun n'était enregistré
+                // Séparée au cas ou des réservtions ont été passées sans enregistrer le prix (logiquement pas possible)
                 if (is_null($existingReservation->res_price)) {
                     $existingReservation->update(['res_price' => $validatedData['res_price']]);
                 }
@@ -271,7 +256,7 @@ class ReservationController extends Controller
                     return $user->role === 'admin' ?
                         redirect()->route('admin.list')->with('success', ['Les options de la réservation ont bien été mises à jour']) :
                         redirect()->route('profile')->with('success', ['Vos options ont bien été mises à jour']);
-                
+                        
                     } else {
                     $existingReservation->update([
                         'start_date' => $validatedData['start_date'],

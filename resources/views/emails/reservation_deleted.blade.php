@@ -82,7 +82,9 @@
                 <li><span class="label"><strong>Date de départ :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->end_date)->translatedFormat('l j F Y') }}</b>, jusqu'à 12h</li>
                 <li><span class="label"><strong>Nombre de nuits :</strong></span> <b>{{ $reservation->nights }}</b></li>
                 @if($isAdmin)
-                    <li><strong>Nom client :</strong> <b>{{ $userName }}</b></li>
+                    @if($userName && $userName !== 'Profil')
+                        <li><strong>Nom client :</strong> <b>{{ $userName }}</b></li>
+                    @endif
                     @if($name2)
                         <li><strong>Seconde personne :</strong> <b>{{ $name2 }}</b></li>
                     @endif

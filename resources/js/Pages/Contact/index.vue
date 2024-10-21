@@ -108,7 +108,7 @@ const props = defineProps({
     }
 });
 
-let finalName = props.user?.name || '';
+let finalName = props.user?.name && props.user.name !== 'Profil' ? props.user.name : '';
 if (props.user?.name2 && props.user.name2 != '') {
     const nameLength = finalName.length;
 

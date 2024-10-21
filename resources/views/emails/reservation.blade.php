@@ -53,20 +53,10 @@
             margin: 20px auto;
         }
     </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var phoneElement = document.getElementById('phone');
-            var phone = phoneElement.innerText;
-            if (phone && phone.length > 0) {
-                var formattedPhone = phone.replace(/(\d{2})(?=\d)/g, "$1 ");
-                phoneElement.innerText = formattedPhone;
-            }
-        });
-    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Bonjour {{ $isAdmin ? 'Admin' : $userName }},</h1>
+        <h1>Bonjour{{ $isAdmin ? ' Admin' : ($userName !== 'Profil' ? ' ' . $userName : ',') }}</h1>
 
         <div class="status-message">
             <p>
@@ -90,14 +80,16 @@
             <ul>
                 <li><span class="label"><strong>Date d'arrivée :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->start_date)->translatedFormat('l j F Y') }}</b>, à partir de 14h.</li>
                 <li><span class="label"><strong>Date de départ :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->end_date)->translatedFormat('l j F Y') }}</b>, jusqu'à 12h</li>
-                <li><span class="label"><strong>Nombre de nuits :</strong></span> <b>{{ $reservation->nights }}</b></li>
+                <li><span class="label"><strong>Nombre de {{ $reservation->nights == 1 ? 'nuit' : 'nuits' }} :</strong></span> <b>{{ $reservation->nights }}</b></li>
                 @if($isAdmin)
-                    <li><strong>Nom client :</strong> <b>{{ $userName }}</b></li>
+                    @if($userName && $userName !== 'Profil')
+                        <li><strong>Nom client :</strong> <b>{{ $userName }}</b></li>
+                    @endif
                     @if($name2)
                         <li><strong>Seconde personne :</strong> <b>{{ $name2 }}</b></li>
                     @endif
                     @if($phone)
-                        <li><strong>Téléphone :</strong> <b id="phone">{{ $phone }}</b></li>
+                        <li><strong>Téléphone :</strong> <b>{{ preg_replace('/(\d{2})(?=\d)/', '$1 ', $phone) }}</b></li>
                     @endif
                     <li><strong>Email :</strong> <b>{{ $email }}</b></li>
                     <li><strong>ID :</strong> {{ $userId }}</li>
@@ -128,7 +120,7 @@
             </ul>
         </div>
 
-        <p>Merci {{ $isAdmin ? 'de gérer cette réservation.' : 'pour votre confiance et à très vite ! 😊' }}</p>
+        <p>Merci {{ $isAdmin ? 'de faire un retour au client concernant leur réservation.' : 'pour votre confiance et à très vite ! 😊' }}</p>
 
         <div class="footer-message">
             <p>06 XX XX XX XX<br>

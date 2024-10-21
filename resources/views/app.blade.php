@@ -23,9 +23,10 @@
         <meta name="twitter:description" content="Réservez une cabane avec jacuzzi et vue panoramique dans le Trièves. Séjour inoubliable dans la nature.">
         <meta name="twitter:image" content="https://cabane.leorip.com/img/hut.png">
 
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icons/favicon-32x32.png') }}">
         <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('icons/favicon-16x16.png') }}">
+        <link rel="icon" type="image/png" sizes="192x192" href="icons/android-chrome-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="manifest" href="{{ asset('icons/site.webmanifest') }}">
         <link rel="mask-icon" href="{{ asset('icons/favicon.ico') }}" color="#5bbad5">
         <link rel="shortcut icon" href="{{ asset('icons/favicon.ico') }}">

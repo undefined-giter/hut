@@ -14,7 +14,7 @@ class UpdateProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|min:2|max:255',
             'name2' => 'nullable|string|max:255',
             'email' => [
                 'required',
@@ -31,7 +31,7 @@ class UpdateProfileRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Le nom est obligatoire.',
+            'name.size' => 'Le nom doit faire entre 2 et 255 caractères.',
             'email.required' => 'L\'email est obligatoire.',
             'email.regex' => 'L\'adresse email doit contenir un domaine valide (.com, .fr, etc).',
             'phone.size' => 'Le numéro de téléphone doit comporter exactement 10 chiffres.',
