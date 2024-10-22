@@ -37,26 +37,26 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(UpdateProfileRequest $request)
+    public function update(UpdateProfileRequest $request): RedirectResponse
     {
         $user = Auth::user();
 
-        $user->name = $request->name;
-        $user->name2 = $request->name2;
+        $user->name = $request->name ?: null;
+        $user->name2 = $request->name2 ?: null;
         $user->email = $request->email;
-        $user->phone = $request->phone;
+        $user->phone = $request->phone ?: $user->phone;
 
         $user->save();
 
         return redirect()->route('profile')->with('success', ['Profil modifié 👍']);
     }
 
-    public function editPicture()
+    public function editPicture(): Response
     {
         return Inertia::render('Profile/editPicture');
     }
 
-    public function updatePicture(UpdateProfilePictureRequest $request)
+    public function updatePicture(UpdateProfilePictureRequest $request): RedirectResponse
     {
         $user = Auth::user();
 

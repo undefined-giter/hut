@@ -6,7 +6,7 @@
         <table>
             <thead class="border-x border-orangeTheme">
                 <tr>
-                    <th class="py-2">Photo</th>
+                    <th class="hidden sm:table-cell py-2">Photo</th>
                     <th class="text-left">Nom</th>
                     <th class="text-left">Email</th>
                     <th style="width: 1%;" class="text-center">Actions</th>
@@ -14,16 +14,16 @@
             </thead>
             <tbody class="border-x border-orangeTheme">
                 <tr v-for="user in users.data" :key="user.id">
-                    <td class="px-4 py-1 border-b border-orangeTheme table-cell text-center w-[100px]">
+                    <td class="hidden sm:table-cell px-4 py-1 border-b border-orangeTheme table-cell text-center w-[100px]">
                         <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
-                    <td class="border-b border-orangeTheme max-w-[150px]" draggable="false">
+                    <td class="border-b border-orangeTheme max-w-[90px]" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
                             {{ user.name }}
                         </div>
                     </td>
 
-                    <td class="border-b max-w-[150px] border-orangeTheme" draggable="false">
+                    <td class="border-b max-w-[130px] border-orangeTheme" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
                             {{ user.email }}
                         </div>
@@ -33,7 +33,7 @@
                         <div class="flex justify-center">
                             <button 
                                 @click="goTo(`/user/${user.id}`)" 
-                                class="btn -m-1 text-sm rounded-xs" style="padding: 6px 18px;">
+                                class="btn -m-1 text-sm" style="padding: 6px 18px; border-radius: 0.3em;">
                                 Détails
                             </button>
                         </div>
@@ -42,16 +42,16 @@
             </tbody>
         </table>
 
-        <div class="mt-1 flex justify-between">
+        <div class="flex justify-between">
             <button
-                class="py-2 disabled:opacity-50 btn"
+                class="py-2 disabled:opacity-50 btn rounded-t-none"
                 :disabled="!users.prev_page_url"
                 @click="goTo(users.prev_page_url)"
             >
                 Précédent
             </button>
             <button
-                class="py-2 disabled:opacity-50 btn"
+                class="py-2 disabled:opacity-50 btn rounded-t-none"
                 :disabled="!users.next_page_url"
                 @click="goTo(users.next_page_url)"
             >
@@ -81,7 +81,7 @@
                 </tbody>
             </table>
             <p class="text-xs font-light text-gray-800" title="Pour une meilleure représentation des activités du site">
-                Ce qui est pris en compte sont les dates où l'utilisateur a demandé une réservation<span class="flex md:hidden"></span> - pas les réservations passées.
+                La date de création des réservation enregistrées sont prises en compte.
             </p>
         </div>
     </Layout>

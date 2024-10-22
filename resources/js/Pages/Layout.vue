@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-2 items-center">
+                <div class="hidden md:flex absolute full-nav left-1/2 transform -translate-x-1/2 space-x-1.5 items-center">
                     <Link :href="route('homepage')" :class="[isActive('homepage') ? 'link-active' : '', commonClasses]">Accueil</Link>
                     <Link :href="route('gallery')" :class="[isActive('gallery') ? 'link-active' : '', commonClasses]">Galerie</Link>
                     <Link :href="route('book')" :class="[isActive('book') ? 'link-active' : '', commonClasses]">Réserver</Link>
@@ -51,13 +51,13 @@
                         :class="[isActive('admin.list') ? 'link-active' : '', commonClasses]">Utilisateurs</Link>
                 </div>
 
-                <div class="hidden md:flex items-center mr-0 lg:mr-4 xl:mr-3">
+                <div class="hidden md:flex full-nav items-center mr-0 lg:mr-4 xl:mr-3">
                     <template v-if="!auth.user">
                         <Link :href="route('register')" :class="[isActive('register') ? 'link-active' : '', commonClasses]">Inscription</Link>
-                        <Link :href="route('login')" :class="[isActive('login') ? 'link-active' : '', commonClasses, 'ml-2']">Connexion</Link>
+                        <Link :href="route('login')" :class="[isActive('login') ? 'link-active' : '', commonClasses, 'ml-1.5']">Connexion</Link>
                     </template>
                     <template v-else>
-                        <Link :href="route('logout')" method="post" as="button" class="btn !bg-pink-950 hover:text-orange-600 transition duration-300 ease-in-out rounded">Déconnexion</Link>
+                        <Link :href="route('logout')" method="post" as="button" class="btn deconnection">Déconnexion</Link>
                     </template>
                 </div>
 
@@ -84,7 +84,7 @@
                     </template>
                     <template v-else>
                         <Link :href="route('profile')" :class="[isActive('profile') ? 'link-active' : '', menuLinkClasses]">Profil</Link>
-                        <button @click="logout" class="block px-4 py-1.5 text-left text-xs w-full hover:text-orange-600 transition duration-300 ease-in-out text-right !bg-pink-950">Déconnexion</button>
+                        <button @click="logout" class="block deconnection py-1.5 text-sm w-full !rounded-none">Déconnexion</button>
                     </template>
                 </div>
             </nav>

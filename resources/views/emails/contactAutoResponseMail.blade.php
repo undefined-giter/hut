@@ -50,14 +50,18 @@
         </div>
 
         <p>
-            Si vous avez des questions en attendant, n'hésitez pas à nous contacter à <strong>{{ $adminEmail }}</strong>,<br>Ou directement au <strong>06 XX XX XX XX</strong>.
+            Si vous avez des questions en attendant, n'hésitez pas à nous contacter directement.
         </p>
         
         <p>Cordialement,</p>
         
         <div class="footer-message">
-            <p>06 XX XX XX XX<br>
-            Cabane - Châtel-En-Trièves / Cordéac
+            <p>
+                @if($adminPhone)
+                    {{ $adminPhone }} -
+                @endif
+                {{ $adminEmail }}<br>
+                Cabane - Châtel-En-Trièves / Cordéac
             </p>
         </div>
 

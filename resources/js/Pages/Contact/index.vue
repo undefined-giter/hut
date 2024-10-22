@@ -3,7 +3,7 @@
 
     <Layout>
         <h1>Contact</h1>
-
+        
         <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
             <div title="Merci de renseigner vos nom et prénom">
                 <div class="flex">
@@ -24,9 +24,9 @@
                 <InputError :message="form.errors.name" />
             </div>
 
-            <div class="mt-4" title="Veuillez renségner votre Email ou votre Numéro de Téléphone, ou bien les deux">
+            <div class="mt-4" title="Veuillez renseigner votre Email svp">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" /><span class="text-xs text-orange-500">*</span>
+                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-500">*</span>
                 </div>
                 <TextInput
                     id="email"
@@ -34,14 +34,15 @@
                     class="mt-1 block w-full"
                     placeholder="Votre email"
                     v-model="form.email"
+                    required
                     autocomplete="email"
                 />
                 <InputError :message="form.errors.email" />
             </div>
 
-            <div class="mt-4" title="Veuillez renseigner votre Numéro de Téléphone ou votre Email, ou bien les deux">
+            <div class="mt-4" title="Veuillez renseigner votre Numéro de Téléphone svp">
                 <div class="flex">
-                    <InputLabel for="phone" value="Téléphone" /><span class="text-xs text-orange-500">*</span>
+                    <InputLabel for="phone" value="Téléphone" />
                 </div>
                 <input
                     id="phone"
@@ -49,10 +50,11 @@
                     class="mt-1 block w-full"
                     placeholder="Votre numéro de téléphone"
                     v-model="form.phone"
+                    pattern="\d{10}"
                     maxlength="10"
                     title="Numéro de téléphone avec 10 chiffres, commençant par 0"
                     autocomplete="phone"
-                    @input="clearPhoneError"
+                    @input="handlePhoneInput"
                     @blur="validatePhone"
                 />
                 <InputError :message="phoneError" />
@@ -105,10 +107,10 @@ const props = defineProps({
     user: {
         type: Object,
         default: null
-    }
+    },
 });
 
-let finalName = props.user?.name && props.user.name !== 'Profil' ? props.user.name : '';
+let finalName = props.user?.name ? props.user.name : '';
 if (props.user?.name2 && props.user.name2 != '') {
     const nameLength = finalName.length;
 
@@ -138,6 +140,14 @@ const isValidEmail = (email) => {
     return emailRegex.test(email) && email !== '';
 };
 
+const handlePhoneInput = (event) => {
+    const input = event.target;
+    const filteredValue = input.value.replace(/\D/g, '');
+    input.value = filteredValue;
+    form.phone = filteredValue;
+    clearPhoneError();
+};
+
 const clearPhoneError = () => {
     phoneError.value = '';
 };
@@ -151,8 +161,8 @@ const validatePhone = () => {
 const inputsValids = computed(() => {
     const isNameValid = form.name && form.name.trim().length >= 2 && form.name.trim().length <= 255;
     const isMessageValid = form.message && form.message.trim().length >= 20 && form.message.trim().length <= 500;
-    const isEmailOrPhoneValid = isValidEmail(form.email) || phoneError.value === "";
-    return isNameValid && isMessageValid && isEmailOrPhoneValid;
+    const isEmailValid = isValidEmail(form.email);
+    return isNameValid && isMessageValid && isEmailValid;
 });
 
 const resetFieldsOnErrors = () => {

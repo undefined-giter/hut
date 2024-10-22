@@ -7,37 +7,33 @@ use Illuminate\Foundation\Http\FormRequest;
 class ContactFormRequest extends FormRequest
 {
     /**
-     * Détermine si l'utilisateur est autorisé à faire cette requête.
-     *
-     * @return bool
+     * Determine if the user is authorized to make this request.
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
     /**
-     * Règles de validation qui s'appliquent à la requête.
+     * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|string|min:2|max:255',
-            'email' => 'nullable|email',
+            'email' => 'required|email',
             'phone' => 'nullable|regex:/^0[1-9][0-9]{8}$/',
             'message' => 'required|string|min:20|max:510',
         ];
     }
 
-    public function withValidator($validator)
+    public function messages(): array
     {
-        $validator->after(function ($validator) {
-            if (empty($this->email) && empty($this->phone)) {
-                $validator->errors()->add('email', 'Vous devez remplir au moins l\'email ou le téléphone.');
-                $validator->errors()->add('phone', 'Vous devez remplir au moins le téléphone ou l\'email.');
-            }
-        });
+        return [
+            'email.required' => 'L\'email est obligatoire.',
+            'phone.regex' => 'Le numéro de téléphone doit commencer par 0 et comporter 10 chiffres.',
+        ];
     }
 }

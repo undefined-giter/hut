@@ -6,89 +6,60 @@
         <Reservations :reservations="reservations" :connected_user_id="connected_user_id" />
 
         <div class="bg-light dark:bg-dark shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-300">            
-            <h2>Profil</h2>
-            <div class="max-w-2xl mx-auto p-8 pt-0">
+            <h2 class="text-center">Profil</h2>
+            <div class="max-w-[384px] mx-auto pt-0">
                 <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
 
-                <div class="flex justify-center">
-                    <div class="my-2 pl-20 mx-auto">
-                        <div class="mb-4 flex">
-                            <p class="break-words w-full max-w-[28ch] flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Nom :</strong>
-                                <span class="!select-text">{{ user.name }}</span>
-                            </p>
+                <div class="flex flex-col mt-4 dark:text-white font-semibold">
+                    <div class="my-2">
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Nom :</strong>
+                            {{ user.name === 'Profil' ? 'Non renseigné' : '' }}
+                            <span v-if="user.name !== 'Profil'" class="text-[1.2em] !select-text text-green-400">{{ user.name }}</span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="break-words w-full max-w-[28ch] flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Second :</strong> 
-                                <span v-if="user.phone" class="!select-text">
-                                    {{ user.name2 ? user.name2 : 'non renseigné' }}
-                                </span>
-                                <span v-else class="!select-none">
-                                    Non renseigné
-                                </span>
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Second :</strong>
+                            {{ !user.phone ? 'Non renseigné' : '' }}
+                            <span v-if="user.name2 && user.name2 !== ''" class="!select-text text-[1.1em] text-green-400">
+                                {{ user.name2 }}
+                            </span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="break-words w-full max-w-[28ch] flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Téléphone :</strong>
-                                <span v-if="user.phone" class="!select-text">
-                                    {{ user.phone.replace(/(\d{2})(?=\d)/g, '$1 ') }}
-                                </span>
-                                <span v-else class="!select-none">
-                                    Non renseigné
-                                </span>
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Téléphone :</strong>
+                            {{ !user.phone ? 'Non renseigné' : '' }}
+                            <span v-if="user.phone && user.phone !== 'Profil'" class="!select-text text-[1.2em] text-green-400">
+                                {{ user.phone.replace(/(\d{2})(?=\d)/g, '$1 ') }}
+                            </span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="break-words w-full max-w-[28ch] flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Email :</strong>
-                                <span class="!select-text">{{ user.email }}</span>
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Email :</strong>
+                            <span class="!select-text text-[1.2em] text-green-400">{{ user.email }}</span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Dernière co :</strong>
-                                {{ new Date(user.last_login).toLocaleDateString('fr-FR', { 
-                                    day: '2-digit', 
-                                    month: '2-digit', 
-                                    year: 'numeric'
-                                }) }} à {{ new Date(user.last_login).toLocaleTimeString('fr-FR', {
-                                    hour: '2-digit', 
-                                    minute: '2-digit',
-                                    second: undefined
-                                }) }}
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Dernière co :</strong>
+                            <span>{{ new Date(user.last_login).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) }} à {{ new Date(user.last_login).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: undefined }) }}</span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Mise à jour :</strong>
-                                {{ new Date(user.updated_at).toLocaleDateString() }}
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Mise à jour :</strong>
+                            <span>{{ new Date(user.updated_at).toLocaleDateString() }}</span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Inscription :</strong> 
-                                {{ new Date(user.created_at).toLocaleDateString() }}
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Inscription :</strong>
+                            <span>{{ new Date(user.created_at).toLocaleDateString() }}</span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">Role :</strong> 
-                                {{ user.role }}
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">Role :</strong>
+                            <span>{{ user.role }}</span>
                         </div>
-                        <div class="mb-4 flex">
-                            <p class="flex">
-                                <strong class="font-semibold !text-gray-700 w-32">ID :</strong>
-                                {{ user.id }}
-                            </p>
+                        <div class="mb-4 flex justify-between">
+                            <strong class="font-semibold !text-gray-700">ID :</strong>
+                            <span>{{ user.id }}</span>
                         </div>
                     </div>
                 </div>
             
-                <div class="flex justify-end">
-                    <button @click="deleteUser" class="btn !bg-red-700 text-white mr-4">
+                <div class="flex justify-end mt-4">
+                    <button @click="deleteUser" class="btn !bg-red-700 mr-4">
                         Supprimer
                     </button>
                     <button type="button" @click="goBack();" class="btn mr-4 py-2">

@@ -96,6 +96,8 @@ main, table {@apply bg-light dark:bg-dark;}
     text-underline-offset: 3px;
 }
 
+button{ border-radius: 1em; }
+
 table tr:hover span, table tr:hover td{ color: black !important; }
 
 p, table td {
@@ -103,6 +105,8 @@ p, table td {
     font-family: 'mirza', 'sans-serif'; 
     font-size: 1.15em;
 }
+
+th, tr:hover{ @apply bg-orange-500 dark:bg-orangeTheme !important; }
 
 h1, h2 {
     font-family: 'Kalnia Glaze', sans-serif;
@@ -150,11 +154,11 @@ h3{
 }
 
 .open-menu {
-    width: 106px;
+    width: 112px;
     position: absolute;
     right: 3px;
     top: 22px;
-    background-color: #0029bc;
+    background-color: #002ccd;
     text-align: left;
     z-index: 100;
     border-radius: 1em 0 1em 1em;
@@ -172,17 +176,14 @@ h3{
 
 a:hover {z-index: 50;}
 
-th, tr:hover{ @apply bg-orange-500 dark:bg-orangeTheme !important; }
 
 .btn {
     font-family: 'Oleo Script', sans-serif; 
-    background-color: #0029bc;
+    background-color: #002ccd;
     color: #ccc;
-    padding: 10px 20px;
-    font-weight: bold;
+    padding: 10px 16px;
     cursor: pointer;
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
-    font-family: mirza;
 }
 
 .btn:hover {
@@ -203,6 +204,20 @@ th, tr:hover{ @apply bg-orange-500 dark:bg-orangeTheme !important; }
     box-shadow: none !important;
 }
 
+.full-nav{ font-size: 1.15em; }
+
+.deconnection{ 
+    background-color: #380f61;
+    color: black;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    border-radius: 0.5rem;
+}
+.deconnection:hover{
+    background-color: #3c0040;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    @apply text-orangeTheme;
+}
+
 .link-active { @apply bg-orange-500 dark:bg-orange-600 !important; }
 
 .link-active:hover { @apply hover:bg-orange-400 dark:bg-orange-500 !important; }
@@ -213,6 +228,10 @@ th, tr:hover{ @apply bg-orange-500 dark:bg-orangeTheme !important; }
     user-select: none;
     -webkit-user-drag: none; /* Désactiver le drag pour Safari/Chrome */
     user-drag: none;
+}
+
+.pink{
+    color: red !important;
 }
 
 label { @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important; }

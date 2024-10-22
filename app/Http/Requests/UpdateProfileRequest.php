@@ -6,29 +6,42 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProfileRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
     {
         return [
             'name' => 'nullable|string|min:2|max:255',
-            'name2' => 'nullable|string|max:255',
+            'name2' => 'nullable|string|min:2|max:255',
             'email' => [
                 'required',
                 'string',
                 'email',
                 'max:255',
-                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             ],
             'phone' => 'nullable|string|size:10',
             'picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 
-    public function messages()
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
     {
         return [
             'name.size' => 'Le nom doit faire entre 2 et 255 caractères.',

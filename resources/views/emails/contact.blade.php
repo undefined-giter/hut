@@ -28,7 +28,7 @@
             margin-bottom: 20px;
         }
         .message-content {
-            background-color: #1f2937;
+            background-color: #0d1117;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -52,9 +52,7 @@
         <h1>Nouveau message de {{ $name }}</h1>
 
         <div class="contact-info">
-            @if (!empty($email))
-                <p><strong>Email :</strong> <b>{{ $email }}</b></p>
-            @endif
+            <p><strong>Email :</strong> <b>{{ $email }}</b></p>
             @if (!empty($phone))
                 @php
                     $formattedPhone = preg_replace('/\B(?=(..)+(?!\d))/', ' ', strrev($phone));
@@ -69,8 +67,11 @@
         </div>
 
         <div class="footer-message">
-            <p>06 XX XX XX XX<br>
-            Cabane - Châtel-En-Trièves / Cordéac
+            <p>
+                @if ( $adminPhone )
+                    {{ $adminPhone }}<br>
+                @endif
+                Cabane - Châtel-En-Trièves / Cordéac
             </p>
         </div>
 

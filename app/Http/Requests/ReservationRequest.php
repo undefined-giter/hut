@@ -6,23 +6,36 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ReservationRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
-    protected function prepareForValidation()
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
     {
         $optionsJson = $this->input('options');
         $optionsData = json_decode($optionsJson, true) ?? [];
-        if (!is_array($optionsData)) { $optionsData = []; }
+        if (!is_array($optionsData)) {
+            $optionsData = [];
+        }
 
         $this->merge([
             'options' => $optionsData,
         ]);
     }
 
-    public function rules()
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
     {
         return [
             'start_date' => 'required|date',

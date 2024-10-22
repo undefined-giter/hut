@@ -9,32 +9,22 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-class ContactMail extends Mailable
+class ContactAutoResponseMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $name;
-    public string $email;
-    public ?string $phone;
-    public string $messageContent;
-
+    public ?string $name;
     public string $adminEmail;
     public ?string $adminPhone;
 
     /**
-     * Create a new message instance.
+     * Constructor with typed properties allowing $name to be null.
      *
-     * @param string $name
-     * @param string $email
-     * @param string|null $phone
-     * @param string $messageContent
+     * @param string|null $name
      */
-    public function __construct(string $name, string $email, ?string $phone, string $message)
+    public function __construct(?string $name)
     {
         $this->name = $name;
-        $this->email = $email;
-        $this->phone = $phone;
-        $this->messageContent = $message;
 
         $this->adminEmail = config('admin.email');
         $this->adminPhone = format_phone_number(config('admin.phone'));
@@ -48,6 +38,7 @@ class ContactMail extends Mailable
         return new Envelope(
             subject: 'Cabane - ' . $this->name,
             from: new Address($this->adminEmail, 'Cabane'),
+            replyTo: [new Address($this->adminEmail, 'Cabane')]
         );
     }
 
@@ -57,21 +48,17 @@ class ContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact',
-            // with: [
-            //     'name' => $this->name,
-            //     'email' => $this->email,
-            //     'phone' => $this->phone,
-            //     'messageContent' => $this->message,
-            //     'adminPhone' => $this->adminPhone,
-            // ]
+            view: 'emails.contactAutoResponseMail',
+            with: [
+                'name' => $this->name,
+                'adminEmail' => $this->adminEmail,
+                'adminPhone' => $this->adminPhone,
+            ]
         );
     }
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array
      */
     public function attachments(): array
     {

@@ -78,11 +78,11 @@
         <div class="reservation-details">
             <p><strong>Détails de la réservation annulée :</strong></p>
             <ul>
-                <li><span class="label"><strong>Date d'arrivée :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->start_date)->translatedFormat('l j F Y') }}</b>, à partir de 14h.</li>
-                <li><span class="label"><strong>Date de départ :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->end_date)->translatedFormat('l j F Y') }}</b>, jusqu'à 12h</li>
+                <li><span class="label"><strong>Date d'arrivée :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->start_date)->translatedFormat('l j F Y') }}</b>.</li>
+                <li><span class="label"><strong>Date de départ :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->end_date)->translatedFormat('l j F Y') }}</b>.</li>
                 <li><span class="label"><strong>Nombre de nuits :</strong></span> <b>{{ $reservation->nights }}</b></li>
                 @if($isAdmin)
-                    @if($userName && $userName !== 'Profil')
+                    @if($userName)
                         <li><strong>Nom client :</strong> <b>{{ $userName }}</b></li>
                     @endif
                     @if($name2)
@@ -92,6 +92,7 @@
                     @if($phone)
                         <li><strong>Téléphone :</strong> <b id="phone">{{ $phone }}</b></li>
                     @endif
+                    <small><li><strong>user ID / res ID :</strong> {{ $userId }} / {{ $reservation->id }}</li></small>
                 @endif
             </ul>
         </div>
@@ -99,8 +100,11 @@
         <p>{{ $isAdmin ? 'Sniff sniff.' : 'Nous espérons vous revoir à l\'avenir ! 🙂' }}</p>
 
         <div class="footer-message">
-            <p>06 XX XX XX XX<br>
-            Cabane - Châtel-En-Trièves / Cordéac
+            <p>
+                @if ( $adminPhone )
+                    {{ $adminPhone }}<br>
+                @endif
+                Cabane - Châtel-En-Trièves / Cordéac
             </p>
         </div>
 

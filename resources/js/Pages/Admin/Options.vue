@@ -4,10 +4,10 @@
         <h1>Liste des Options</h1>
 
         <div class="flex justify-between mb-4">
-            <Link :href="route('admin.prices')" class="btn !bg-blue-700 text-white -mb-3 mr-1 rounded-lg shadow">
+            <Link :href="route('admin.prices')" class="btn -mb-4 mr-1" style="border-radius: 0.5em 0.5em 0 0;">
                 Modifier Prix Réservation
             </Link>
-            <Link :href="route('admin.options.create')" class="btn !bg-blue-700 text-white -mb-3 rounded-lg shadow">
+            <Link :href="route('admin.options.create')" class="btn -mb-4" style="border-radius: 0.5em 0.5em 0 0;">
                 Ajouter une Option
             </Link>
         </div>
@@ -27,7 +27,7 @@
     Exemple si '/jour' est séléctionné : 2 nuits = 2 x le prix de l'option à régler.
     Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle sera prise tous les jours de la réservation
     -> Peut être déselectionné par l'utilisateur lors de sa réservation.">Présél/jr</th>
-                        <th class="text-center">Actions</th>
+                        <th class="text-center">Actions </th>
                     </tr>
                 </thead>
                 <tbody class="border-x border-orangeTheme">
@@ -77,14 +77,14 @@
                                 <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-800"></div>
                             </label>
                         </td>
-                        <td class="border-b text-center border-orangeTheme w-[200px]">
-                            <div class="flex justify-center space-x-1.5">
+                        <td class="border-b text-center border-orangeTheme">
+                            <div class="flex justify-center space-x-1.5 mr-1">
                                 <button @click="goTo(route('admin.options.edit', option.id))"
-                                    class="btn text-sm bg-blue-700 text-white px-2 rounded shadow">
+                                    class="btn text-sm">
                                     Modifier
                                 </button>
                                 <button @click="deleteOption(option.id)" 
-                                    class="btn text-sm !bg-red-700 text-white px-2 rounded shadow hover:text-orange-300">
+                                    class="hidden md:block btn text-sm !bg-red-700 hover:text-orange-500">
                                     Supprimer
                                 </button>
                             </div>

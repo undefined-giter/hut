@@ -75,7 +75,6 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-                    required
                     autocomplete="name"
                 />
                 <InputError :message="form.errors.name" />
@@ -139,7 +138,7 @@ const submit = () => {
             
             <div>
                 <div class="-mt-3 flex justify-between">
-                    <Link :href="route('profile.edit-picture')" class="btn">Modifier la photo de profil</Link>
+                    <Link :href="route('profile.edit-picture')" class="btn rounded-[1em]">Modifier la photo de profil</Link>
 
                     <div class="flex items-center">
                         <Transition

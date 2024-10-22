@@ -7,29 +7,32 @@ use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $users = User::latest()->paginate(15);
     
-        // Calculer la date limite
-        $twelveMonthsAgo = now()->subMonths(12);
+        // Calculate the cut-off date -> all reservations CREATED within the last 12 months
+        $twelveMonthsAgo = Carbon::now()->subMonths(12);
     
-        // Total des réservations et total d'argent dépensé
+        // Total reservations and total money spent
         $reservations = Reservation::where('created_at', '>=', $twelveMonthsAgo)->get();
     
-        // Calculer le panier TTC : total d'argent dépensé divisé par le nombre de réservations
-        $totalSpent = $reservations->sum('res_price'); // Somme des prix des réservations
-        $totalReservations = $reservations->count(); // Nombre de réservations
+        // Calculate the average total basket (TTC): total money spent divided by the number of reservations
+        $totalSpent = $reservations->sum('res_price'); // Sum of reservation prices
+        $totalReservations = $reservations->count(); // Number of reservations
         $averageTtcBasket = $totalReservations > 0 ? round($totalSpent / $totalReservations, 2) : 'Indisponible';
     
-        // Calculer le nombre de nuits réservées moyen : nombre total de nuits réservées divisé par le nombre de réservations
-        $totalNightsReserved = $reservations->sum('nights'); // Somme des nuits réservées
+        // Calculate the average number of nights reserved: total number of nights reserved divided by the number of reservations
+        $totalNightsReserved = $reservations->sum('nights'); // Sum of nights reserved
         $averageDaysReserved = $totalReservations > 0 ? round($totalNightsReserved / $totalReservations, 2) : 'Indisponible';
     
-        // Calculer la moyenne des options prises par réservation
+        // Calculate average options per reservation in euros
         $averageOptionBasket = DB::table('option_reservation')
             ->join('options', 'option_reservation.option_id', '=', 'options.id')
             ->join('reservations', 'option_reservation.reservation_id', '=', 'reservations.id')
@@ -42,10 +45,10 @@ class UserController extends Controller
             $averageOptionBasket = floatval($averageOptionBasket);
         }
     
-        // Récupérer le nombre total de réservations dans les 12 derniers mois
+        // fetch the total or reservations last 12 months
         $averageReservationsPerMonth = $totalReservations > 0 
-        ? round($totalReservations / 12, 2) 
-        : 'Indisponible';
+            ? round($totalReservations / 12, 2) 
+            : 'Indisponible';
     
         return Inertia::render('Admin/Index', [
             'users' => $users,
@@ -55,9 +58,8 @@ class UserController extends Controller
             'averageReservationsPerMonth' => round($averageReservationsPerMonth, 2),
         ]);
     }
-    
 
-    public function show($id)
+    public function show($id): Response
     {
         $user = User::with('reservations.options')->findOrFail($id);
         $connected_user_id = auth()->id();
@@ -69,7 +71,7 @@ class UserController extends Controller
         ]);
     }    
 
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $user = User::findOrFail($id);
         $user->delete();

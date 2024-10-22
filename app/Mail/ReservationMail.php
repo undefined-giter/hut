@@ -14,29 +14,31 @@ class ReservationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $reservation;
-    public $userName;
-    public $name2;
-    public $phone;
-    public $email;
-    public $userId;
-    public $action;
+    public ?string $userName;
+    public ?string $name2;
+    public ?string $phone;
+    public ?string $email;
+    public ?int $userId;
+    public string $action;
     public $options;
-    public $isAdmin;
+    public bool $isAdmin;
+    public string $adminEmail;
+    public ?string $adminPhone;
 
     /**
      * Create a new message instance.
      *
-     * @param $reservation
-     * @param $userName
-     * @param $name2
-     * @param $phone
-     * @param $email
-     * @param $userId
-     * @param $action
-     * @param $options
+     * @param mixed $reservation
+     * @param string|null $userName
+     * @param string|null $name2
+     * @param string|null $phone
+     * @param string $email
+     * @param int|null $userId
+     * @param string $action
+     * @param mixed $options
      * @param bool $isAdmin
      */
-    public function __construct($reservation, $userName, $name2 = null, $phone = null, $email = null, $userId = null, $action, $options, $isAdmin = false)
+    public function __construct($reservation, ?string $userName = null, ?string $name2 = null, ?string $phone = null, string $email, ?int $userId = null, string $action, $options, bool $isAdmin = false)
     {
         $this->reservation = $reservation;
         $this->userName = $userName;
@@ -47,6 +49,9 @@ class ReservationMail extends Mailable
         $this->action = $action;
         $this->options = $options;
         $this->isAdmin = $isAdmin;
+
+        $this->adminEmail = config('admin.email');
+        $this->adminPhone = format_phone_number(config('admin.phone'));
     }
 
     /**
@@ -54,10 +59,17 @@ class ReservationMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $emailTo = $this->isAdmin ? $this->adminEmail : $this->email;
+
+        if (!$emailTo) {
+            throw new \Exception("L'adresse email est manquante.");
+        }
+
         return new Envelope(
             subject: 'Demande de réservation ' . 
                 ($this->action === 'created' ? 'réalisée' : 
                 ($this->action === 'updated_options' ? 'options mises à jour' : 'date et options mises à jour')),
+                to: [$emailTo],
         );
     }
 
@@ -67,18 +79,20 @@ class ReservationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.reservation', // vue correspondante
-            with: [
-                'reservation' => $this->reservation,
-                'userName' => $this->userName,
-                'name2' => $this->name2,
-                'phone' => $this->phone,
-                'email' => $this->email,
-                'userId' => $this->userId,
-                'action' => $this->action,
-                'options' => $this->options,
-                'isAdmin' => $this->isAdmin,
-            ]
+            view: 'emails.reservation',
+            // with: [
+            //     'reservation' => $this->reservation,
+            //     'userName' => $this->userName,
+            //     'name2' => $this->name2,
+            //     'phone' => $this->phone,
+            //     'email' => $this->email,
+            //     'userId' => $this->userId,
+            //     'action' => $this->action,
+            //     'options' => $this->options,
+            //     'isAdmin' => $this->isAdmin,
+            //     'adminEmail' => $this->adminEmail,
+            //     'adminPhone' => $this->adminPhone,
+            // ]
         );
     }
 
@@ -91,7 +105,6 @@ class ReservationMail extends Mailable
     {
         return [
             Attachment::fromPath(public_path('img/hut.png'))
-                // ->as('reservation-image.jpg') // Nom de l'image jointe renommée
                 ->withMime('image/png') // Type MIME de l'image
         ];
     }

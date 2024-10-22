@@ -11,7 +11,7 @@ class UpdateProfilePictureRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Autorise tous les utilisateurs connectés à effectuer cette action
+        // Allowed for all connected users
         return auth()->check();
     }
 
@@ -29,6 +29,8 @@ class UpdateProfilePictureRequest extends FormRequest
 
     /**
      * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {

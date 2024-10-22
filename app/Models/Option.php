@@ -1,9 +1,10 @@
-<?php
+<?php 
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Option extends Model
 {
@@ -20,7 +21,12 @@ class Option extends Model
         'by_day_preselected',
     ];
 
-    public function reservations()
+    /**
+     * The reservations that belong to the option.
+     *
+     * @return BelongsToMany
+     */
+    public function reservations(): BelongsToMany
     {
         return $this->belongsToMany(Reservation::class, 'option_reservation');
     }

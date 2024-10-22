@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Reservation extends Model
 {
@@ -19,13 +21,23 @@ class Reservation extends Model
         'res_comment',
     ];
 
-    public function options()
+    /**
+     * Get the options that belong to the reservation.
+     *
+     * @return BelongsToMany
+     */
+    public function options(): BelongsToMany
     {
         return $this->belongsToMany(Option::class, 'option_reservation')
                     ->withPivot('by_day');
     }
 
-    public function user()
+    /**
+     * Get the user that owns the reservation.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

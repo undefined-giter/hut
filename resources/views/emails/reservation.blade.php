@@ -56,7 +56,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bonjour{{ $isAdmin ? ' Admin' : ($userName !== 'Profil' ? ' ' . $userName : ',') }}</h1>
+        <h1>Bonjour{{ $isAdmin ? ' Admin' : ($userName ? ' ' . $userName : '') }},</h1>
 
         <div class="status-message">
             <p>
@@ -82,7 +82,7 @@
                 <li><span class="label"><strong>Date de départ :</strong></span> <b>{{ \Carbon\Carbon::parse($reservation->end_date)->translatedFormat('l j F Y') }}</b>, jusqu'à 12h</li>
                 <li><span class="label"><strong>Nombre de {{ $reservation->nights == 1 ? 'nuit' : 'nuits' }} :</strong></span> <b>{{ $reservation->nights }}</b></li>
                 @if($isAdmin)
-                    @if($userName && $userName !== 'Profil')
+                    @if($userName)
                         <li><strong>Nom client :</strong> <b>{{ $userName }}</b></li>
                     @endif
                     @if($name2)
@@ -92,7 +92,7 @@
                         <li><strong>Téléphone :</strong> <b>{{ preg_replace('/(\d{2})(?=\d)/', '$1 ', $phone) }}</b></li>
                     @endif
                     <li><strong>Email :</strong> <b>{{ $email }}</b></li>
-                    <li><strong>ID :</strong> {{ $userId }}</li>
+                    <small><li><strong>user ID / res ID :</strong> {{ $userId }} / {{ $reservation->id }}</li></small>
                 @endif
                 @if($reservation->res_comment)
                     <li><span class="label"><strong style="text-decoration:underline">Commentaire :</strong></span> {!! nl2br(e($reservation->res_comment)) !!}</li>
@@ -123,8 +123,11 @@
         <p>Merci {{ $isAdmin ? 'de faire un retour au client concernant leur réservation.' : 'pour votre confiance et à très vite ! 😊' }}</p>
 
         <div class="footer-message">
-            <p>06 XX XX XX XX<br>
-            Cabane - Châtel-En-Trièves / Cordéac
+            <p>
+                @if ( $adminPhone )
+                    {{ $adminPhone }}<br>
+                @endif
+                Cabane - Châtel-En-Trièves / Cordéac
             </p>
         </div>
 

@@ -156,13 +156,12 @@
       </div>
 
       <h3 v-if="options.length >= 1" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
-      <div v-if="options.length >= 1" :class="gridClass" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3  min-h-[324px] max-h-[450px] overflow-y-auto shadow-sm overflow-x-hidden" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
+      <div v-if="options.length >= 1" :class="[gridClass, 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3  min-h-[324px] max-h-[450px] overflow-y-auto shadow-sm overflow-x-hidden']" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
         paddingRight: isScrollbarVisible && gridClass == 'one-column' ? '7px' : isScrollbarVisible ? '1px' : '0'}">
         <label v-for="(option, index) in options" :key="option.id"
-              class="relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10"
-              :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600']">
+              :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600', 'relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10']">
           <div class="flex items-center w-full">
-            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1.5 -mt-0.5 form-checkbox"/>
+            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1.5 form-checkbox"/>
             <div class="flex justify-between w-full">
               <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
@@ -170,25 +169,26 @@
             </div>
           </div>
 
-          <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words mb-0.5' : 'text-orange-600 dark:text-gray-200 break-words mb-0.5'" class="overflow-y-scroll max-h-[80px] whitespace-pre-wrap hide-scrollbar">
+          <p :class="selectedOptionsIds.includes(option.id) ? 'text-green-700 dark:text-gray-200 break-words' : 'text-orange-600 dark:text-gray-200 break-words'" class="mb-0.5 overflow-y-scroll max-h-[80px] whitespace-pre-wrap hide-scrollbar">
             {{ option.description }}
           </p>
 
-          <label v-if="option.by_day_display" class="cursor-pointer absolute bottom-1.5 right-2 flex items-center space-x-0.5">
-            <span class="text-sm absolute right-12 w-[60px] flex text-gray-800 mirza font-semibold -mr-2 -mt-1">Par jour ?</span>
-            <input type="checkbox" 
-              v-model="option.by_day" 
-              @change="handleOptionChange(option)" 
-              class="sr-only peer" 
-              :disabled="!selectedOptionsIds.includes(option.id)" 
-            />
-            <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] 
-              after:absolute after:top-[2px] after:left-[4px] peer-checked:bg-green-800 peer-checked:after:bg-green-300 
-              after:bg-gray-300 peer-checked:before:bg-green-800 after:rounded-full after:h-5 after:w-5 after:transition-all border border-black border-[1.5px]"
-            ></div>
-          </label>
+          <div class="absolute bottom-1 right-4 flex items-center space-x-1">
+            <span v-if="option.by_day_display" :class="[selectedOptionsIds.includes(option.id) && !option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']">1 pour le séjour</span>
+            <label v-if="option.by_day_display" class="cursor-pointer flex items-center">
+              <input type="checkbox" 
+                v-model="option.by_day" 
+                @change="handleOptionChange(option)" 
+                class="sr-only peer hover:scale-105" 
+                :disabled="!selectedOptionsIds.includes(option.id)"
+              />
+              <div :class="[selectedOptionsIds.includes(option.id) ? 'hover:scale-105 hover:bg-gray-500' : '!border-purple-800', option.by_day ? 'hover:scale-105 hover:bg-gray-500 border-green-500' : 'border-orangeTheme', `w-11 h-6 bg-gray-600 rounded-full relative peer peer-checked:after:translate-x-[20px] after:content-[''] after:absolute peer-checked:bg-green-800 peer-checked:after:bg-green-300 after:bg-gray-400 after:rounded-full after:h-5 after:w-5 after:transition-all border border-[2px] peer-checked:hover:bg-green-900 transition-transform duration-300`]"></div>
+            </label>
+            <span v-if="option.by_day_display" :class="[option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']">Par jour</span>
+          </div>
         </label>
       </div>
+
       <div class="flex">
         <div class="flex-1 mr-4 relative max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
@@ -213,7 +213,6 @@
         <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-orangeTheme"></div>
       </div>
     </form>
-      
     
     <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
       <h3 class="underline text-red-600 text-xl -mb-2">Nuits déjà réservées :</h3>
@@ -280,17 +279,20 @@ onMounted(() => {
       if (reservationEdit) {
         const editedOption = reservationEdit.options.find(resOption => resOption.id === option.id);
         if (editedOption) {
+          selectedOptionsIds.value.push(option.id);
           option.by_day = editedOption.pivot.by_day ? true : false;
         } else {
-          option.by_day = option.by_day_preselected == 1;
+          option.by_day = option.by_day_preselected == 1 && selectedOptionsIds.value.includes(option.id);
         }
       } else {
-        option.by_day = option.by_day_preselected == 1;
+        if (option.preselected) {
+          selectedOptionsIds.value.push(option.id);
+        }
+        option.by_day = option.preselected && option.by_day_preselected == 1;
       }
     });
 
-    selectedOptionsObjects.value = options.filter(option => option.preselected || (reservationEdit && reservationEdit.options.some(resOption => resOption.id === option.id)));
-    selectedOptionsIds.value = selectedOptionsObjects.value.map(option => option.id);
+    selectedOptionsObjects.value = options.filter(option => selectedOptionsIds.value.includes(option.id));
 
     if (reservationEdit) {
       arrivalDate.value = new Date(reservationEdit.start_date);
@@ -304,28 +306,19 @@ onMounted(() => {
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   previousAuthUser.value = auth.user;
-
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
 });
 
-watch(
-  () => usePage().props.auth.user,
-  (newUser, oldUser) => {
-    if (!previousAuthUser.value && newUser) {
-      window.location.reload();
-    }
-    previousAuthUser.value = newUser;
-  }
-);
+
 
 watch(selectedOptionsIds, (newSelectedIds, oldSelectedIds) => {
   const updatedOptions = options.filter(option => newSelectedIds.includes(option.id));
-
+  
   if (JSON.stringify(updatedOptions) !== JSON.stringify(selectedOptionsObjects.value)) {
     selectedOptionsObjects.value = updatedOptions;
   }
-
+  
   options.forEach(option => {
     if (newSelectedIds.includes(option.id)) {
       if (!oldSelectedIds.includes(option.id)) {
@@ -347,6 +340,17 @@ const handleOptionChange = (option) => {
     selectedOptionsObjects.value = options.filter(opt => selectedOptionsIds.value.includes(opt.id));
   }
 };
+
+
+watch(
+  () => usePage().props.auth.user,
+  (newUser, oldUser) => {
+    if (!previousAuthUser.value && newUser) {
+      window.location.reload();
+    }
+    previousAuthUser.value = newUser;
+  }
+);
 
 const isReservedDate = (cellDate) => {
   if (in_date.includes(cellDate)) {
