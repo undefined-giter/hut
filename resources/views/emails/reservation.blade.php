@@ -122,14 +122,7 @@
 
         <p>Merci {{ $isAdmin ? 'de faire un retour au client concernant leur réservation.' : 'pour votre confiance et à très vite ! 😊' }}</p>
 
-        <div class="footer-message">
-            <p>
-                @if ( $adminPhone )
-                    {{ $adminPhone }}<br>
-                @endif
-                Cabane - Châtel-En-Trièves / Cordéac
-            </p>
-        </div>
+        @include('emails.partials.footer')
 
         <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Représentation de la Cabane">
     </div>

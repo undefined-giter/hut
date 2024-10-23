@@ -99,14 +99,7 @@
 
         <p>{{ $isAdmin ? 'Sniff sniff.' : 'Nous espérons vous revoir à l\'avenir ! 🙂' }}</p>
 
-        <div class="footer-message">
-            <p>
-                @if ( $adminPhone )
-                    {{ $adminPhone }}<br>
-                @endif
-                Cabane - Châtel-En-Trièves / Cordéac
-            </p>
-        </div>
+        @include('emails.partials.footer')
 
         <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Représentation de la Cabane">
     </div>

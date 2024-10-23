@@ -6,9 +6,14 @@
 
         <div class="flex justify-between oleoScript font-bold">
 
-            <p class="ml-4">Réservez directement au <span class="text-2xl text-orangeTheme select-text">06 XX XX XX XX</span></p>
+            <p class="ml-3 -mt-1">Réservez directement au 
+                <span class="text-2xl text-orangeTheme">
+                    <span style="font-size:0.8em">📱</span>
+                    <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">{{ adminPhone }}</a>
+                </span>
+            </p>
 
-            <Link :href="route('book')" class="mr-4 text-right"><p>Réservez votre séjour dans notre cabane dès maintenant</p></Link>
+            <Link :href="route('book')" class="mr-3 text-right"><p>Réservez votre séjour dans notre cabane dès maintenant</p></Link>
             
         </div>
         <div class="relative inset-0 h-[50vh] overflow-hidden mb-4 max-h-[630px] sm:h-[70vh]">
@@ -48,6 +53,17 @@ const images = [
     `${baseUrl}/gallery/hut_porch.jpg`,
     `${baseUrl}/gallery/hut_side.jpg`
 ];
+
+const props = defineProps({
+  adminPhone: {
+    type: String,
+    required: false,
+  },
+  adminPhoneHref: {
+    type: String,
+    required: false,
+  },
+})
 
 const currentImageIndex = ref(0);
 

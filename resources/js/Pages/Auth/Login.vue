@@ -10,6 +10,7 @@
                 </div>
 
                 <TextInput
+                    ref="emailInput"
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
@@ -50,7 +51,7 @@ Inutile de vous surcharger de cookies 😉">
                         <Link
                             v-if="canResetPassword"
                             :href="route('password.request', { email: form.email })"
-                            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
                         >
                             Mot de passe oublié ?
                         </Link>
@@ -60,10 +61,10 @@ Inutile de vous surcharger de cookies 😉">
                     Se connecter
                 </PrimaryButton>
             </div>
-            <div class="mt-2 mb-12 text-center">
+            <div class="mt-4 mb-10 text-center">
                 <Link
                     :href="route('register')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                    class="underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>
@@ -71,11 +72,11 @@ Inutile de vous surcharger de cookies 😉">
         </form>
 
         <vue-cal
+        @click="focusEmail"
         locale="fr"
         active-view="month"
         class="vuecal--rounded-theme vuecal--blue-theme text-black dark:text-[#ccc]"
         hide-view-selector
-        @cell-click="handleDateClick"
         :disable-views="['years', 'year', 'week', 'day']"
         :dblclick-to-navigate="false"
         style="height:400px; cursor: default !important"
@@ -85,7 +86,7 @@ Inutile de vous surcharger de cookies 😉">
             <template #cell-content="{ cell }">
                 <span 
                     class="vuecal__cell-date cursor-default"
-
+                    
                     :style="(() => {
                         const result = isReservedDate(cell.formattedDate);
                         switch (result) {
@@ -113,7 +114,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-import { computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import Layout from './../Layout.vue';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
@@ -132,6 +133,11 @@ const form = useForm({
     password: '',
     remember: false,
 });
+
+const emailInput = ref(null)
+const focusEmail = () => {
+  emailInput.value?.focus()
+}
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const isValidEmail = (email) => {

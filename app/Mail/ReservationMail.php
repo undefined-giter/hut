@@ -23,6 +23,7 @@ class ReservationMail extends Mailable
     public $options;
     public bool $isAdmin;
     public string $adminEmail;
+    public ?string $adminPhoneHref;
     public ?string $adminPhone;
 
     /**
@@ -37,6 +38,9 @@ class ReservationMail extends Mailable
      * @param string $action
      * @param mixed $options
      * @param bool $isAdmin
+     * @param bool $adminEmail
+     * @param string|null $adminPhoneHref
+     * @param string|null $adminPhone
      */
     public function __construct($reservation, ?string $userName = null, ?string $name2 = null, ?string $phone = null, string $email, ?int $userId = null, string $action, $options, bool $isAdmin = false)
     {
@@ -51,7 +55,8 @@ class ReservationMail extends Mailable
         $this->isAdmin = $isAdmin;
 
         $this->adminEmail = config('admin.email');
-        $this->adminPhone = format_phone_number(config('admin.phone'));
+        $this->adminPhoneHref = config('admin.phone');
+        $this->adminPhone = format_phone_number($this->adminPhoneHref);
     }
 
     /**

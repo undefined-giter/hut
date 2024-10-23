@@ -11,7 +11,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
 use Inertia\Inertia;
 
-Route::get('/', function () { return Inertia::render('Welcome'); })->name('homepage');
+Route::get('/', function () {
+    $adminPhone = config('admin.phone');
+    return Inertia::render('Welcome', [
+        'adminPhoneHref' => $adminPhone,
+        'adminPhone' => format_phone_number($adminPhone),
+    ]);
+})->name('homepage');
 
 Route::get('/gallerie', [GalleryController::class, 'index'])->name('gallery');
 

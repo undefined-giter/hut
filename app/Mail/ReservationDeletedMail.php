@@ -21,6 +21,7 @@ class ReservationDeletedMail extends Mailable
     public ?int $userId;
     public bool $isAdmin;
     public string $adminEmail;
+    public ?string $adminPhoneHref; 
     public ?string $adminPhone;
 
     /**
@@ -32,6 +33,9 @@ class ReservationDeletedMail extends Mailable
      * @param string $email
      * @param string|null $phone
      * @param bool $isAdmin
+     * @param string $adminEmail
+     * @param string|null $adminPhoneHref
+     * @param string|null $adminPhone
      */
     public function __construct($reservation, ?string $userName, ?string $name2, string $email, ?string $phone, ?int $userId = null, bool $isAdmin)
     {
@@ -44,7 +48,8 @@ class ReservationDeletedMail extends Mailable
         $this->isAdmin = $isAdmin;
         
         $this->adminEmail = config('admin.email');
-        $this->adminPhone = format_phone_number(config('admin.phone'));
+        $this->adminPhoneHref = config('admin.phone');
+        $this->adminPhone = format_phone_number($this->adminPhoneHref);
     }
 
     /**

@@ -55,15 +55,7 @@
         
         <p>Cordialement,</p>
         
-        <div class="footer-message">
-            <p>
-                @if($adminPhone)
-                    {{ $adminPhone }} -
-                @endif
-                {{ $adminEmail }}<br>
-                Cabane - Châtel-En-Trièves / Cordéac
-            </p>
-        </div>
+        @include('emails.partials.footer')
 
         <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Location gîte cabane dans le Trièves">
     </div>

@@ -19,6 +19,7 @@ class ContactMail extends Mailable
     public string $messageContent;
 
     public string $adminEmail;
+    public ?string $adminPhoneHref;
     public ?string $adminPhone;
 
     /**
@@ -26,8 +27,10 @@ class ContactMail extends Mailable
      *
      * @param string $name
      * @param string $email
-     * @param string|null $phone
      * @param string $messageContent
+     * @param string $adminEmail
+     * @param string|null $adminPhoneHref
+     * @param string|null $adminPhone
      */
     public function __construct(string $name, string $email, ?string $phone, string $message)
     {
@@ -37,7 +40,8 @@ class ContactMail extends Mailable
         $this->messageContent = $message;
 
         $this->adminEmail = config('admin.email');
-        $this->adminPhone = format_phone_number(config('admin.phone'));
+        $this->adminPhoneHref = config('admin.phone');
+        $this->adminPhone = format_phone_number($this->adminPhoneHref);
     }
 
     /**

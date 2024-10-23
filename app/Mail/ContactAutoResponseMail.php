@@ -15,6 +15,7 @@ class ContactAutoResponseMail extends Mailable
 
     public ?string $name;
     public string $adminEmail;
+    public ?string $adminPhoneHref;
     public ?string $adminPhone;
 
     /**
@@ -27,7 +28,8 @@ class ContactAutoResponseMail extends Mailable
         $this->name = $name;
 
         $this->adminEmail = config('admin.email');
-        $this->adminPhone = format_phone_number(config('admin.phone'));
+        $this->adminPhoneHref = config('admin.phone');
+        $this->adminPhone = format_phone_number($this->adminPhoneHref);
     }
 
     /**

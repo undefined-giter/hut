@@ -159,12 +159,15 @@
       <div v-if="options.length >= 1" :class="[gridClass, 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3  min-h-[324px] max-h-[450px] overflow-y-auto shadow-sm overflow-x-hidden']" :style="{ padding: `2px ${gridClass === 'one-column' ? '5px' : '0'}`,
         paddingRight: isScrollbarVisible && gridClass == 'one-column' ? '7px' : isScrollbarVisible ? '1px' : '0'}">
         <label v-for="(option, index) in options" :key="option.id"
-              :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600', 'relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10']">
-          <div class="flex items-center w-full">
+        :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600', 'relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10']">
+          <div class="flex items-center">
             <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1.5 form-checkbox"/>
-            <div class="flex justify-between w-full">
-              <div class="oleoScript text-xl overflow-y-auto max-w-[200px]">{{ option.name }}</div> 
-              <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">{{ option.price }}€</div>
+            <div class="flex justify-between w-full max-w-[98%]">
+              <div :title="option.name.length >= 25 ? option.name : ''"
+              class="oleoScript text-xl whitespace-nowrap overflow-hidden text-ellipsis">{{ option.name }}</div>
+              <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">
+                 {{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small> €</small>
+              </div>
               <div v-if="option.price === '0.00'">Inclu</div>
             </div>
           </div>
@@ -174,7 +177,7 @@
           </p>
 
           <div class="absolute bottom-1 right-4 flex items-center space-x-1">
-            <span v-if="option.by_day_display" :class="[selectedOptionsIds.includes(option.id) && !option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']">1 pour le séjour</span>
+            <span v-if="option.by_day_display" :class="[selectedOptionsIds.includes(option.id) && !option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']" title="1 unité pour l'entièreté du séjour / bouton gris">1 pour le séjour</span>
             <label v-if="option.by_day_display" class="cursor-pointer flex items-center">
               <input type="checkbox" 
                 v-model="option.by_day" 
@@ -184,7 +187,8 @@
               />
               <div :class="[selectedOptionsIds.includes(option.id) ? 'hover:scale-105 hover:bg-gray-500' : '!border-purple-800', option.by_day ? 'hover:scale-105 hover:bg-gray-500 border-green-500' : 'border-orangeTheme', `w-11 h-6 bg-gray-600 rounded-full relative peer peer-checked:after:translate-x-[20px] after:content-[''] after:absolute peer-checked:bg-green-800 peer-checked:after:bg-green-300 after:bg-gray-400 after:rounded-full after:h-5 after:w-5 after:transition-all border border-[2px] peer-checked:hover:bg-green-900 transition-transform duration-300`]"></div>
             </label>
-            <span v-if="option.by_day_display" :class="[option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']">Par jour</span>
+            <span v-if="option.by_day_display" title="1 par nuit réservée / bouton vert
+(distribué en journée si applicable pour l'option)" :class="[option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']">Par jour</span>
           </div>
         </label>
       </div>
