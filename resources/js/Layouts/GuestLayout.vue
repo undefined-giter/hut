@@ -6,7 +6,7 @@ import { Link } from '@inertiajs/vue3';
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 !bg-gray-400 !dark:bg-gray-900">
         <div>
             <Link href="/">
-                Retour à l'Accueil
+                <p class="!text-blue-600 font-semibold text-xl shadow-lg hover:scale-110 transition duration-300">Retour à l'Accueil</p>
             </Link>
         </div>
 

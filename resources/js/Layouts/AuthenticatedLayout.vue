@@ -20,14 +20,14 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('/')">
-                                    Retour à l'Accueil
+                                    <p class="text-blue-500">Retour à l'Accueil</p>
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('/')" :active="route().current('index')">
-                                    Welcome
+                                    Bienvenue
                                 </NavLink>
                             </div>
                         </div>
@@ -39,7 +39,7 @@ const showingNavigationDropdown = ref(false);
                                     <template #content>
                                         <DropdownLink :href="route('profile')"> Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            Déconnexion
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -86,7 +86,7 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('login')" :active="route().current('login')">
-                            login
+                            Connexion
                         </ResponsiveNavLink>
                     </div>
 
@@ -102,7 +102,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                Déconnexion
                             </ResponsiveNavLink>
                         </div>
                     </div>

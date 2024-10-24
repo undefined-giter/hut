@@ -37,7 +37,12 @@
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <em><span class="dark:text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
+                                <li
+                                    v-for="option in reservation.options"
+                                    :key="option.id"
+                                    class="dark:text-blue-400"
+                                    style="white-space: normal; word-wrap: break-word;"
+                                >
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -105,7 +110,12 @@
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <em><span class="dark:text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
+                                <li
+                                    v-for="option in reservation.options"
+                                    :key="option.id"
+                                    class="dark:text-blue-400"
+                                    style="white-space: normal; word-wrap: break-word;"
+                                >
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -150,7 +160,12 @@
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <em><span class="text-blue-600">Options demandées :</span></em>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400">
+                                <li
+                                    v-for="option in reservation.options"
+                                    :key="option.id"
+                                    class="dark:text-blue-400"
+                                    style="white-space: normal; word-wrap: break-word;"
+                                >
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>

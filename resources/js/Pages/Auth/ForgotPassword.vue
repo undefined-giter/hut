@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     status: {
@@ -19,8 +20,17 @@ const form = useForm({
     email: emailFromUrl,
 });
 
+const isSubmitted = ref(false);
+
 const submit = () => {
-    form.post(route('password.email'));
+    form.post(route('password.email'), {
+        onSuccess: () => {
+            isSubmitted.value = true;
+            setTimeout(() => {
+                window.location.href = route('gallery');
+            }, 4000);
+        }
+    });
 };
 </script>
 
@@ -55,7 +65,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
+                    Recevoir un mail de réinitialisation mdp
                 </PrimaryButton>
             </div>
         </form>

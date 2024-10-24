@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminComment;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -61,9 +62,9 @@ class UserController extends Controller
 
     public function show($id): Response
     {
-        $user = User::with('reservations.options')->findOrFail($id);
+        $user = User::with(['reservations.options', 'adminComments'])->findOrFail($id);
         $connected_user_id = auth()->id();
-    
+        
         return Inertia::render('Admin/Details', [
             'user' => $user,
             'reservations' => $user->reservations,

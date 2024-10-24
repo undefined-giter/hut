@@ -14,8 +14,8 @@
                     <div class="my-2">
                         <div class="mb-4 flex justify-between">
                             <strong class="font-semibold !text-gray-700">Nom :</strong>
-                            {{ user.name === 'Profil' ? 'Non renseigné' : '' }}
-                            <span v-if="user.name !== 'Profil'" class="text-[1.2em] !select-text text-green-400">{{ user.name }}</span>
+                            <span v-if="user.name === null">Non renseigné</span>
+                            <span v-else class="text-[1.2em] !select-text text-green-400">{{ user.name }}</span>
                         </div>
                         <div class="mb-4 flex justify-between">
                             <strong class="font-semibold !text-gray-700">Second :</strong>
@@ -58,11 +58,13 @@
                     </div>
                 </div>
             
-                <div class="flex justify-end mt-4">
-                    <button @click="deleteUser" class="btn !bg-red-700 mr-4">
+                <AdminComment :user_id="user.id" :admin_comments="user.admin_comments" />
+
+                <div class="flex justify-between m-4 mb-0">
+                    <button @click="deleteUser" class="btn !bg-red-700 hover:text-orange-500">
                         Supprimer
                     </button>
-                    <button type="button" @click="goBack();" class="btn mr-4 py-2">
+                    <button type="button" @click="goBack();" class="btn py-2">
                         Retour
                     </button>
                 </div>
@@ -73,6 +75,7 @@
 
 <script setup>
 import Reservations from './../Components/Reservations.vue';
+import AdminComment from './../Components/AdminComment.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, usePage } from '@inertiajs/vue3';
 import Layout from '../Layout.vue';
@@ -84,6 +87,7 @@ const props = defineProps({
   reservations: Array,
   connected_user_id: Number,
 });
+console.log(props.user);
 
 const goBack = () => {
     if (window.history.length > 1) {
@@ -94,7 +98,7 @@ const goBack = () => {
 };
 
 const deleteUser = () => {
-  if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+  if (confirm('Êtes-vous sûr de vouloir supprimer cet UTILISATEUR ?')) {
     Inertia.delete(route('user.delete', props.user.id));
   }
 };

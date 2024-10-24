@@ -56,14 +56,14 @@ const form = useForm({
 });
 
 const updatePrices = () => {
-    form.post('/prices/update');
+    form.post(route('admin.prices.update'));
 };
 
 const goBack = () => {
     if (window.history.length > 1) {
         window.history.back();
     } else {
-        Inertia.visit('/options');
+        Inertia.visit(route('options.index'));
     }
 };
 </script>

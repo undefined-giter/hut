@@ -77,4 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function adminComments(): HasMany
+    {
+        return $this->hasMany(AdminComment::class);
+    }
 }

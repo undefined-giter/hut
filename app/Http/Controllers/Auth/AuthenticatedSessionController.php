@@ -54,7 +54,7 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        if (Auth::user()->role === 'admin') {
+        if (in_array(Auth::user()->role, ['admin', 'fake_admin']))  {
             return redirect()->intended(route('admin.list'));
         }
 
@@ -72,6 +72,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

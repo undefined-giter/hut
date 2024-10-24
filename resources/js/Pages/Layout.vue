@@ -122,7 +122,7 @@ const commonClasses = 'btn transition duration-300 ease-in-out rounded';
 const menuLinkClasses = 'btn block px-4 py-1.5 hover:text-green-200';
 
 const isActive = (routeName) => {
-    return route().current() === routeName;
+    return route().current(routeName);
 };
 
 const logout = () => { Inertia.post('/logout'); };

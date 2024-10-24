@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\AdminCommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
 use Inertia\Inertia;
@@ -43,17 +44,23 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
-    Route::get('/list', [UserController::class, 'index'])->name('list');
-    Route::get('/user/{id}', [UserController::class, 'show'])->name('details');
+    Route::get('/liste-utilisateurs', [UserController::class, 'index'])->name('list');
+    Route::get('/utilisateur/{id}', [UserController::class, 'show'])->name('details');
 
-    Route::resource('/options', OptionController::class)->except(['show']);
+    Route::get('/comments/{user}', [AdminCommentController::class, 'index'])->name('comments');
+    Route::post('/comments', [AdminCommentController::class, 'store'])->name('comment.store');
+    Route::put('/comments/{comment}', [AdminCommentController::class, 'update'])->name('comment.update');
+    Route::delete('/comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comment.delete');
+
+    Route::resource('/options', OptionController::class)->except(['show', 'create']);
+    Route::get('/option/creer-nouvelle-option', [OptionController::class, 'create'])->name('options.create');
     Route::put('/options/{option}/toggle-availability', [OptionController::class, 'toggleAvailability'])->name('options.toggle-availability');
     Route::put('/options/{option}/toggle-preselected', [OptionController::class, 'togglePreselected'])->name('options.toggle-preselected');
     Route::put('/options/{option}/toggle-by-day-display', [OptionController::class, 'toggleByDayDisplay'])->name('options.toggle-by-day-display');
     Route::put('/options/{option}/toggle-by-day-preselected', [OptionController::class, 'toggleByDayPreselected'])->name('options.toggle-by-day-preselected');
 
-    Route::get('/prices', [PriceController::class, 'getPrices'])->name('prices');
-    Route::post('/prices/update', [PriceController::class, 'updatePrices'])->name('prices.update');
+    Route::get('/prix', [PriceController::class, 'getPrices'])->name('prices');
+    Route::post('/prix', [PriceController::class, 'updatePrices'])->name('prices.update');
 });
 
 require __DIR__.'/auth.php';

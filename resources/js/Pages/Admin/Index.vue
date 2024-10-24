@@ -32,7 +32,7 @@
                     <td class="px-2 py-2 border-b text-center border-orangeTheme w-[80px]" draggable="false">
                         <div class="flex justify-center">
                             <button 
-                                @click="goTo(`/user/${user.id}`)" 
+                                @click="goTo(route('admin.details', { id: user.id }))" 
                                 class="btn -m-1 text-sm" style="padding: 6px 18px; border-radius: 0.3em;">
                                 Détails
                             </button>
@@ -81,7 +81,7 @@
                 </tbody>
             </table>
             <p class="text-xs font-light text-gray-800" title="Pour une meilleure représentation des activités du site">
-                La date de création des réservation enregistrées sont prises en compte.
+                Les dates de création de réservation sont prises en compte.
             </p>
         </div>
     </Layout>

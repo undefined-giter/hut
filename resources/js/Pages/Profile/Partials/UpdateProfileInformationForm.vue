@@ -38,8 +38,8 @@ const validatePhone = () => {
         phoneError.value = "Le numéro doit contenir 10 chiffres.";
         return false;
     }
-    if (phone.startsWith('3')) {
-        phoneError.value = "Format 33 non accepté. Merci de remplacer par 0.";
+    if (!phone.startsWith('0')) {
+        phoneError.value = "Le numéro doit commencer par 0. Merci de le corriger et de compléter votre numéro.";
         return false;
     }
     phoneError.value = null;

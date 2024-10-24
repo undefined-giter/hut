@@ -100,7 +100,7 @@ button{ border-radius: 1em; }
 
 table tr:hover span, table tr:hover td{ color: black !important; }
 
-p, table td {
+p, .p, table td {
     @apply text-blue-800 dark:text-blue-400;
     font-family: 'mirza', 'sans-serif'; 
     font-size: 1.15em;
