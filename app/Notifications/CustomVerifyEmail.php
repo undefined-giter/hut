@@ -28,6 +28,6 @@ class CustomVerifyEmail extends BaseVerifyEmail
                 'adminPhoneHref' => $adminPhoneHref,
                 'adminPhone' => $adminPhone,
             ])
-            ->subject('Merci de vérifier votre adresse email');
+            ->subject('Cabane - Merci de vérifier votre adresse email');
     }
 }

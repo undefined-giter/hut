@@ -47,7 +47,7 @@ class OptionController extends Controller
     public function update(OptionRequest $request, Option $option): RedirectResponse
     {
         if (auth()->user()->role === 'fake_admin') {
-            return redirect()->route('admin.options.create')->with('error', ['En tans que fake_admin, vous ne pouvez pas modifier d\'option.']);
+            return redirect()->route('admin.options.create')->with('error', ['En tant que fake_admin, vous ne pouvez pas modifier d\'option.']);
         }
         
         $validated = $request->validated();
@@ -60,7 +60,7 @@ class OptionController extends Controller
     public function toggleAvailability(Request $request, Option $option): RedirectResponse
     {
         if (auth()->user()->role === 'fake_admin') {
-            return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer la disponibilité de l'option.<br>Elle correspond à afficher ou non l'option dans la page de réservation."]);
+            return redirect()->route('admin.options.index')->with('error', ["En tant que fake_admin, vous n'êtes pas autorisé à changer la disponibilité de l'option.<br>Elle correspond à afficher ou non l'option dans la page de réservation."]);
         }
 
         $option->update(['available' => $request->available]);
@@ -71,7 +71,7 @@ class OptionController extends Controller
     public function togglePreselected(Request $request, Option $option): RedirectResponse
     {
         if (auth()->user()->role === 'fake_admin') {
-            return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer la présélection de l'option.<br>Elle correspond à préselectionner l'option ou non (visuel vert ou orange sur la page de réservation)."]);
+            return redirect()->route('admin.options.index')->with('error', ["En tant que fake_admin, vous n'êtes pas autorisé à changer la présélection de l'option.<br>Elle correspond à préselectionner l'option ou non (visuel vert ou orange sur la page de réservation)."]);
         }
 
         $option->update(['preselected' => $request->preselected]);
@@ -82,7 +82,7 @@ class OptionController extends Controller
     public function toggleByDayDisplay(Request $request, Option $option): RedirectResponse
     {
         if (auth()->user()->role === 'fake_admin') {
-            return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin... vous n'allez pas toutes les essayer, si ?<br>Affichage de l'input \"par jour ?\" en bas à droite de l'option sur la page de réservation."]);
+            return redirect()->route('admin.options.index')->with('error', ["En tant que fake_admin... vous n'allez pas toutes les essayer, si ?<br>Affichage de l'input \"par jour ?\" en bas à droite de l'option sur la page de réservation."]);
         }
 
         $option->update(['by_day_display' => $request->by_day_display]);
@@ -93,7 +93,7 @@ class OptionController extends Controller
     public function toggleByDayPreselected(Request $request, Option $option): RedirectResponse
     {
         if (auth()->user()->role === 'fake_admin') {
-            return redirect()->route('admin.options.index')->with('error', ["En tans que fake_admin, vous n'êtes pas autorisé à changer la présélection de l'option d'option \"Par jour ?\"<br>Cela correspond préselectionner l'option d'option ou non."]);
+            return redirect()->route('admin.options.index')->with('error', ["En tant que fake_admin, vous n'êtes pas autorisé à changer la présélection de l'option d'option \"Par jour ?\"<br>Cela correspond préselectionner l'option d'option ou non."]);
         }
 
         $option->update(['by_day_preselected' => $request->by_day_preselected]);
