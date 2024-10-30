@@ -87,7 +87,6 @@ const props = defineProps({
   reservations: Array,
   connected_user_id: Number,
 });
-console.log(props.user);
 
 const goBack = () => {
     if (window.history.length > 1) {

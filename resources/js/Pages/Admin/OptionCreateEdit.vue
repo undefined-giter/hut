@@ -74,8 +74,6 @@ const props = defineProps({
         default: null
     }
 });
-console.log(props.option);
-
 
 const form = reactive({
     name: props.option ? props.option.name : '',

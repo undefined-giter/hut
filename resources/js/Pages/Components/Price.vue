@@ -8,7 +8,7 @@ import { ref, watch, onMounted } from 'vue';
 const props = defineProps({
     resNights: {
         type: Number,
-        default: 1
+        default: 1,
     },
     resOptions: {
         type: Array,
@@ -16,11 +16,11 @@ const props = defineProps({
     },
     PRICE_PER_NIGHT: {
         type: Number,
-        required: true
+        default: 160,
     },
     PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS: {
         type: Number,
-        required: true
+        default: 120,
     },
 });
 

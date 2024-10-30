@@ -4,7 +4,7 @@
     
     <h1>Réservez Votre Bonheur !</h1>
 
-    <TextRes />
+    <TextRes :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" />
     
     <vue-cal
       locale="fr"

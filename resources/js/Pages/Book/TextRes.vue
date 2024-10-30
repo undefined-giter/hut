@@ -28,3 +28,18 @@
       <p class="text-lg">Parking inclus</p>
     </div>
 </template>
+
+<script setup>
+import { defineProps, watch } from 'vue';
+
+const props = defineProps({
+  PRICE_PER_NIGHT: {
+    type: Number,
+    default: 160,
+  },
+  PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS: {
+    type: Number,
+    default: 120,
+  },
+});
+</script>
