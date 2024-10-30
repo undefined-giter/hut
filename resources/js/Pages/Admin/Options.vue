@@ -18,8 +18,9 @@
                     <tr>
                         <th class="text-left pl-2 py-1" title="Nom de l'option">Nom</th>
                         <th class="hidden sm:table-cell text-left" title="Description de l'option">Description</th>
-                        <th class="hidden sm:table-cell text-center" title="Si vide = rien de n'affiche; Si 0.00 = 'Inclu' s'affichera dans l'option;">€</th>
-                        <th class="hidden xs:table-cell text-center" title="Décocher pour ne plus rendre l'option disponible, sans la supprimée pour autant.">Dispo</th>
+                        <th class="hidden sm:table-cell text-center" title="Si vide : rien de n'affiche,
+Si 0.00 : 'Inclu' s'affichera dans l'option">€</th>
+                        <th class="hidden xs:table-cell text-center" title="Décocher pour ne plus rendre l'option disponible aux futures réservations, sans la supprimée pour autant.">Dispo</th>
                         <th class="hidden xs:table-cell text-center" title="Présélectionner l'option par défault">Présélect</th>
                         <th class="hidden xs:table-cell text-center" title="Afficher l'option Par jour ?">Voir/jr</th>
                         <th class="hidden xs:table-cell text-center" title="NE PAS SELECTIONNER si la colone précédente 'Voir/jr' n'est pas séléctionnée, à moins de vouloir imposer la récurence du prix par jour réservé.

@@ -19,14 +19,9 @@
             text-align: center;
         }
         .container {
-            background-color: rgba(19, 21, 22, 0.9); /* Dark theme */
+            background-color: rgba(19, 21, 22, 0.9);
             padding: 40px;
             border-radius: 10px;
-        }
-        h1 {
-            font-size: 3rem;
-            color: #EA580C; /* Orange theme */
-            margin-bottom: 20px;
         }
         p {
             font-size: 1.2rem;
@@ -49,7 +44,7 @@
     <div class="container">
         <h1>Oups !</h1>
         <p>La page que vous recherchez est introuvable.</p>
-        <a href="{{ url('/') }}">Revenez donc à la page d'accueil !</a>
+        <a href="{{ route('homepage') }}">Revenez donc à la page d'accueil !</a>
     </div>
 </body>
 </html>

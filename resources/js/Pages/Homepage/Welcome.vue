@@ -8,8 +8,9 @@
 
             <p class="ml-3 -mt-1">Réservez directement au 
                 <span class="text-2xl text-orangeTheme">
-                    <span style="font-size:0.8em">📱</span>
-                    <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">{{ adminPhone }}</a>
+                    <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">
+                        <span style="font-size:0.8em">📱</span> <span class="-ml-2">{{ adminPhone }}</span>
+                    </a>
                 </span>
             </p>
 
@@ -46,7 +47,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
-import Layout from './Layout.vue';
+import Layout from './../Layout.vue';
 
 const images = [
     `${baseUrl}/gallery/hut_front.jpg`,

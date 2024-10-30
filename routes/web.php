@@ -1,20 +1,23 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\OptionController;
-use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\AdminCommentController;
+
+use App\Http\Controllers\Admin\OptionController;
+use App\Http\Controllers\Admin\PriceController;
+use App\Http\Controllers\Admin\AdminCommentController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
 use Inertia\Inertia;
 
+
 Route::get('/', function () {
     $adminPhone = config('admin.phone');
-    return Inertia::render('Welcome', [
+    return Inertia::render('Homepage/Welcome', [
         'adminPhoneHref' => $adminPhone,
         'adminPhone' => format_phone_number($adminPhone),
     ]);
@@ -25,7 +28,7 @@ Route::get('/gallerie', [GalleryController::class, 'index'])->name('gallery');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reserver', [ReservationController::class, 'index'])->name('book');
     Route::post('/book', [ReservationController::class, 'store']);
     

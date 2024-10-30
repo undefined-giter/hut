@@ -4,55 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $isAdmin ? 'Notification Admin - Réservation Annulée' : 'Votre Réservation a été Annulée' }}</title>
+    
     <style>
-        body {
-            background-color: #141a23;
-            color: #ffffff;
-            font-family: Verdana, sans-serif;
-        }
-        h1, p, strong, label { color: #EA580C; }
-        li {
-            color: #cccccc;
-            line-height: 1.6;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li { margin-bottom: 10px; }
-        .container {
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto;
-            background-color: #1f2937;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .option-item, .reservation-details, .status-message {
-            background-color: #0d1117;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .green {
-            color: green;
-            font-size: 1.04rem;
-        }
-        b { font-size: 1.04rem; }
-        .bolder { font-weight: 600; }
-        .footer-message {
-            color: gray;
-            margin-top: 30px;
-            text-align: center;
-        }
-        img {
-            max-width: 300px;
-            height: auto;
-            border-radius: 50%;
-            display: block;
-            margin: 20px auto;
-        }
+        {{ file_get_contents(public_path('css/mailCSS.css')) }}
     </style>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var phoneElement = document.getElementById('phone');
@@ -100,8 +56,6 @@
         <p>{{ $isAdmin ? 'Sniff sniff.' : 'Nous espérons vous revoir à l\'avenir ! 🙂' }}</p>
 
         @include('emails.partials.footer')
-
-        <img src="{{ asset('img/hut.png') }}" loading="lazy" alt="Représentation de la Cabane">
     </div>
 </body>
 </html>

@@ -60,6 +60,7 @@
                 <TextInput
                     id="phone"
                     type="tel"
+                    autocomplete="tel"
                     class="mt-1 block w-full"
                     v-model="form.phone"
                     maxlength="10"

@@ -166,7 +166,7 @@
       </div>
 
       <div class="flex">
-        <div class="flex-1 mr-4 relative max-w-[840px]">
+        <div class="flex-1 mr-4 relative max-w-[230px] sm:max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5 no-scrollbar"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>

@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\AdminComment;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;

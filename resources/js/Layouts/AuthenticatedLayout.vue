@@ -19,14 +19,14 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('/')">
+                                <Link :href="route('homepage')">
                                     <p class="text-blue-500">Retour à l'Accueil</p>
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('/')" :active="route().current('index')">
+                                <NavLink :href="route('homepage')" :active="route().current('index')">
                                     Bienvenue
                                 </NavLink>
                             </div>

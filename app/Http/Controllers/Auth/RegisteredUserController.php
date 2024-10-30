@@ -55,13 +55,10 @@ class RegisteredUserController extends Controller
             'picture' => $picturePath,
         ]);
 
-        event(new Registered($user));
+        $user->sendEmailVerificationNotification();
 
         Auth::login($user);
 
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.list');
-        }
-        return redirect()->route('book');
+        return redirect()->intended(route('login'))->with('success', ['Veuillez vérifier vos mails pour confirmer votre inscription svp.']);
     }
 }

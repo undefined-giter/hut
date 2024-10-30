@@ -109,8 +109,8 @@ class ReservationMail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromPath(public_path('img/hut.png'))
-                ->withMime('image/png') // Type MIME de l'image
+            // Attachment::fromPath(public_path('img/hut.png'))
+            //     ->withMime('image/png') // Type MIME de l'image
         ];
     }
 }

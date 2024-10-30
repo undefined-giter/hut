@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\AdminComment;
-use App\Http\Requests\AdminCommentRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Admin\AdminComment;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
