@@ -1,3 +1,12 @@
 User-agent: *
 Disallow: /admin/
+Disallow: /css/
+Disallow: /js/
+Disallow: /vendor/
+Disallow: /storage/
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
 Sitemap: https://cabane.leorip.com/sitemap.xml
