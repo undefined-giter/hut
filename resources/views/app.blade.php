@@ -8,7 +8,7 @@
 
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
 
-        <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="{{ asset('icons/favicon.ico') }}" type="image/x-icon">
 
         <meta name="description" content="Gîte à louer dans le Trièves avec jacuzzi, parfait pour un séjour nature et détente en montagne. Réservation en ligne pour un moment inoubliable en pleine nature." />
         <meta name="keywords" content="location gîte, cabane, Trièves, réserver, séjour, nature, jacuzzi, montagne, détente">
