@@ -191,7 +191,7 @@
     </form>
     
     <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
-      <h3 class="underline text-red-600 text-xl -mb-2">Nuits déjà réservées :</h3>
+      <h3 class="underline text-red-600 text-xl md:-mb-2">Nuits déjà réservées :</h3>
       <div style="max-height: 350px; overflow-y: auto; padding-left:2px;">
         <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
           <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
