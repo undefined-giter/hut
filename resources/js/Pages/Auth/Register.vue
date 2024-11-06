@@ -3,15 +3,15 @@
     <Layout title="S'enregistrer">
         <h1>S'enregistrer</h1>
 
-        <div class="text-center mt-4">
+        <!-- <div class="text-center mt-4">
             <button @click="loginWithGoogle" class="btn">
                 S'enregistrer avec
                 <img src="/img/google_logo.png" alt="Logo de Google" width="352px"/>
             </button>
-        </div>
+        </div> -->
 
         <form @submit.prevent="submit" class="max-w-sm mx-auto my-12">
-            <p>Ou s'enregistrer manuellement</p>
+            <!-- <p>Ou s'enregistrer manuellement</p> -->
             <!-- <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>

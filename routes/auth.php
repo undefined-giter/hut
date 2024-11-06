@@ -19,8 +19,8 @@ Route::middleware('guest')->group(function () {
 
     Route::post('inscription', [RegisteredUserController::class, 'store']);
 
-    Route::get('/auth/google', [GoogleRegisterController::class, 'redirectToGoogle'])->name('auth.google');
-    Route::get('/auth/google/callback', [GoogleRegisterController::class, 'handleGoogleCallback']);
+    // Route::get('/auth/google', [GoogleRegisterController::class, 'redirectToGoogle'])->name('auth.google');
+    // Route::get('/auth/google/callback', [GoogleRegisterController::class, 'handleGoogleCallback']);
 
     Route::get('/politique-de-confidentialite', function () { return Inertia::render('Legal/privacy-policy'); })->name('privacy-policy');
     Route::get('/conditions-d-utilisation', function () { return Inertia::render('Legal/terms-of-service'); })->name('terms-of-service');
