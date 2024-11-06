@@ -3,6 +3,13 @@
     <Layout title="S'enregistrer">
         <h1>S'enregistrer</h1>
 
+        <div class="text-center mt-4">
+            <button @click="loginWithGoogle" class="btn">
+                S'enregistrer avec
+                <img src="/img/google_logo.png" alt="Logo de Google" width="352px"/>
+            </button>
+        </div>
+
         <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
             <!-- <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
@@ -163,6 +170,12 @@ const form = useForm({
     // picture: null,
     // preview: null,
 });
+
+
+function loginWithGoogle() {
+    window.location.href = route('auth.google');
+}
+
 
 const phoneError = ref(null);
 
