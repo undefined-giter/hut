@@ -3,6 +3,15 @@
     <Layout>
         <h1>Se Connecter</h1>
         
+        <div class="flex justify-center my-12">
+            <button class="text-center btn w-[384px] border-2 border-orangeTheme">
+                <a :href="route('google.redirect')">
+                    Se connecter avec
+                    <img src="/img/google_logo.png" alt="Logo de Google" />
+                </a>
+            </button>
+        </div>
+
         <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8 mb-4">
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
@@ -16,7 +25,6 @@
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
-                    autofocus
                     autocomplete="username"
                 />
 
@@ -118,6 +126,7 @@ import { ref, computed, watch } from 'vue';
 import Layout from './../Layout.vue';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
+
 
 defineProps({
     canResetPassword: {

@@ -29,7 +29,7 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'reservations' => $reservations,
-            'user' => $user->only(['id', 'name', 'name2', 'email', 'phone']),
+            'user' => $user->only(['id', 'name', 'name2', 'email', 'phone', 'google_id']),
             'connected_user_id' => $connected_user_id,
         ]);
     }
@@ -98,6 +98,13 @@ class ProfileController extends Controller
         if ($currentUser->role !== 'admin') {
             if ($currentUser->id !== $user->id) {
                 return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à supprimer ce compte.']);
+            }
+
+            if ($currentUser->google_id && $currentUser->id === $user->id) {
+                $currentUser->delete();
+                Auth::logout();
+            
+                return redirect()->route('homepage')->with('success', ['Votre compte a bien été supprimé.']);
             }
 
             if (!Hash::check($request->password, $currentUser->password)) {

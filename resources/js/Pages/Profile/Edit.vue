@@ -38,7 +38,7 @@ const props = defineProps({
                     />
                 </div>
 
-                <div class="p-4 sm:p-8 bg-light dark:bg-dark shadow-md sm:rounded-lg hover:scale-105 transform transition-transform duration-300">
+                <div v-if="!user.google_id" class="p-4 sm:p-8 bg-light dark:bg-dark shadow-md sm:rounded-lg hover:scale-105 transform transition-transform duration-300">
                     <UpdatePasswordForm class="max-w-xl" />
                 </div>
 

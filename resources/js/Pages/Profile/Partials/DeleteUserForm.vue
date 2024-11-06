@@ -21,6 +21,12 @@ const confirmUserDeletion = () => {
     nextTick(() => passwordInput.value.focus());
 };
 
+const confirmDeletion = () => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+        deleteUser();
+    }
+};
+
 const deleteUser = () => {
     form.delete(route('user.delete', { id: usePage().props.auth.user.id }), {
         preserveScroll: true,
@@ -44,7 +50,7 @@ const closeModal = () => {
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
                 Supprimer votre compte supprimera toutes vos réservations.
-               <br>Toutes vos données seront supprimées définitivement.
+                <br>Toutes vos données seront supprimées définitivement.
             </p>
         </header>
 
@@ -71,7 +77,7 @@ const closeModal = () => {
                         type="password"
                         class="mt-1 block w-3/4"
                         placeholder="Password"
-                        @keyup.enter="deleteUser"
+                        @keyup.enter="confirmDeletion"
                     />
 
                     <InputError :message="form.errors.password" />
@@ -84,7 +90,7 @@ const closeModal = () => {
                         class="ms-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
-                        @click="deleteUser"
+                        @click="confirmDeletion"
                     >
                         Supprimer Compte
                     </DangerButton>

@@ -10,7 +10,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\GoogleRegisterController;
+use App\Http\Controllers\Auth\GoogleController;
 use Inertia\Inertia;
 
 
@@ -19,9 +19,9 @@ Route::middleware('guest')->group(function () {
 
     Route::post('inscription', [RegisteredUserController::class, 'store']);
 
-    // Route::get('/auth/google', [GoogleRegisterController::class, 'redirectToGoogle'])->name('auth.google');
-    // Route::get('/auth/google/callback', [GoogleRegisterController::class, 'handleGoogleCallback']);
-
+    Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.redirect');
+    Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+    
     Route::get('/politique-de-confidentialite', function () { return Inertia::render('Legal/privacy-policy'); })->name('privacy-policy');
     Route::get('/conditions-d-utilisation', function () { return Inertia::render('Legal/terms-of-service'); })->name('terms-of-service');
 
