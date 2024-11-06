@@ -3,9 +3,9 @@
 
     <Layout>
         <div>
-            <a href="#english_use" class="bold orangeTheme underline">**English below**</a><br><br>
+            <a href="#english_use" class="bold text-orangeTheme underline px-12">**English below**</a><br><br>
 
-            <pre class="p">
+            <pre class="p whitespace-pre-wrap px-12 text-justify">
                 <span class="mx-auto">CONDITIONS D'UTILISATION</span>
 
 
@@ -210,13 +210,15 @@ Les femmes enceintes sont fortement déconseillées d'utiliser le jacuzzi.
 En cas de non-respect de ces conditions, la direction se réserve le droit de demander aux contrevenants de quitter la zone immédiatement.
             </pre>
 
-            <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
-                Retour
-            </button>
+            <div class="w-full text-right mb-8">
+                <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
+                    Retour
+                </button>
+            </div>
         </div>
 
         <div id="english_use">
-            <pre class="p">
+            <pre class="p whitespace-pre-wrap px-12 text-justify">
                 <span class="mx-auto">TERMS OF USE</span>
 
 OVERVIEW
@@ -429,9 +431,11 @@ Pregnant women are strongly advised against using the jacuzzi.
 In the event of non-compliance with these conditions, management reserves the right to ask violators to leave the area immediately.
             </pre>
 
-            <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
-                Retour
-            </button>
+            <div class="w-full text-right mb-8 px-12">
+                <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
+                    Go Back
+                </button>
+            </div>
         </div>
     </Layout>
 </template>

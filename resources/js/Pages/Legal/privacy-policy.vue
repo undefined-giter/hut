@@ -3,10 +3,10 @@
 
     <Layout>
 
-        <div>
-            <a href="#english_policies" class="bold orangeTheme">**English below**</a><br><br>
+        <div class="px-12">
+            <a href="#english_policies" class="bold text-orangeTheme underline px-12">**English below**</a><br><br>
 
-            <pre class="p">
+            <pre class="p whitespace-pre-wrap px-12 text-justify">
                 <span class="mx-auto">Politique de Confidentialité</span>
 
 Dernière mise à jour : 6 novembre 2024
@@ -33,18 +33,18 @@ Service : désigne le site web.
 Fournisseur de Services : désigne toute personne physique ou morale qui traite les données pour le compte de la Société. Il s'agit de sociétés ou d'individus tiers employés par la Société pour faciliter le Service, fournir le Service pour le compte de la Société, exécuter des services liés au Service ou aider la Société à analyser comment le Service est utilisé.
 Service de Réseaux Sociaux Tiers : désigne tout site web ou tout site de réseau social par lequel un Utilisateur peut se connecter ou créer un compte pour utiliser le Service.
 Données d'Utilisation : désigne les données collectées automatiquement, soit générées par l'utilisation du Service, soit provenant de l'infrastructure du Service lui-même (par exemple, la durée d'une visite de page).
-Site Web : désigne Cabane, accessible depuis https://cabane.leorip.com.
+Site Web : désigne Cabane, accessible depuis <a href="https://cabane.leorip.com" class="font-bold">l'Accueil</a>.
 Vous : désigne l'individu accédant ou utilisant le Service, ou la société, ou autre entité juridique pour le compte de laquelle cet individu accède ou utilise le Service, selon le cas.
 Collecte et Utilisation de Vos Données Personnelles
 Types de Données Collectées
 Données Personnelles
 En utilisant notre Service, il peut vous être demandé de nous fournir certaines informations personnelles identifiables qui peuvent être utilisées pour vous contacter ou vous identifier. Les informations personnelles identifiables peuvent inclure, sans s'y limiter :
+* Adresse email
+* Prénom et nom
+* Numéro de téléphone
+* Données d'Utilisation
+* Données d'Utilisation
 
-Adresse email
-Prénom et nom
-Numéro de téléphone
-Données d'Utilisation
-Données d'Utilisation
 Les Données d'Utilisation sont collectées automatiquement lors de l'utilisation du Service.
 
 Ces données peuvent inclure des informations telles que l'adresse IP de votre appareil, le type de navigateur, la version du navigateur, les pages de notre Service que vous visitez, l'heure et la date de votre visite, le temps passé sur ces pages, les identifiants uniques des appareils et d'autres données de diagnostic.
@@ -55,12 +55,12 @@ Nous pouvons également collecter les informations envoyées par votre navigateu
 
 Informations provenant de Services de Réseaux Sociaux Tiers
 La Société vous permet de créer un compte et de vous connecter pour utiliser le Service par le biais des services suivants de réseaux sociaux tiers :
+* Google
+* Facebook
+* Instagram
+* Twitter
+* LinkedIn
 
-Google
-Facebook
-Instagram
-Twitter
-LinkedIn
 Si vous décidez de vous inscrire via ou de nous accorder l'accès à un Service de Réseaux Sociaux Tiers, nous pouvons collecter les Données Personnelles déjà associées au compte de votre Service de Réseaux Sociaux Tiers, telles que votre nom, votre adresse e-mail, vos activités ou votre liste de contacts associée à ce compte.
 
 Vous pouvez également avoir la possibilité de partager des informations supplémentaires avec la Société via votre compte de Service de Réseaux Sociaux Tiers. Si vous choisissez de fournir de telles informations et Données Personnelles, lors de l'inscription ou autrement, vous autorisez la Société à les utiliser, les partager et les stocker de manière conforme à cette Politique de Confidentialité.
@@ -103,19 +103,21 @@ Nous pouvons mettre à jour notre Politique de Confidentialité de temps à autr
 
 Contactez-nous
 Si vous avez des questions concernant cette Politique de Confidentialité, vous pouvez nous contacter :
-
 Par email : leo.ripert@gmail.com
-En visitant cette page sur notre site web : https://cabane.leorip.com/contact
-Par téléphone : 0615166490
+En visitant cette page sur notre site web : <a href="https://cabane.leorip.com/contact" class="font-bold undeline">Contact</a>
+Par téléphone : 06 15 16 64 90
             </pre>
 
-            <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
-                Retour
-            </button>
+            <div class="w-full text-right px-12">
+                <button type="button" @click="goBack();" class="btn py-2">
+                    Retour
+                </button>
+            </div>
         </div>
+        <br><br><br>
 
-        <div id="english_policies">
-            <pre class="p">
+        <div id="english_policies"  class="px-12">
+            <pre class="p whitespace-pre-wrap px-12 text-justify">
                 <span class="mx-auto">Privacy Policy</span>
 Last updated: November 06, 2024
 
@@ -152,7 +154,7 @@ Third-party Social Media Service refers to any website or any social network web
 
 Usage Data refers to data collected automatically, either generated by the use of the Service or from the Service infrastructure itself (for example, the duration of a page visit).
 
-Website refers to Cabane, accessible from https://cabane.leorip.com
+Website refers to Cabane, accessible from <a href="https://cabane.leorip.com" class="font-bold">Homepage</a>
 
 You means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.
 
@@ -160,16 +162,11 @@ Collecting and Using Your Personal Data
 Types of Data Collected
 Personal Data
 While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You. Personally identifiable information may include, but is not limited to:
+* Email address
+* First name and last name
+* Phone number
+* Usage Data
 
-Email address
-
-First name and last name
-
-Phone number
-
-Usage Data
-
-Usage Data
 Usage Data is collected automatically when using the Service.
 
 Usage Data may include information such as Your Device's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those pages, unique device identifiers and other diagnostic data.
@@ -180,12 +177,12 @@ We may also collect information that Your browser sends whenever You visit our S
 
 Information from Third-Party Social Media Services
 The Company allows You to create an account and log in to use the Service through the following Third-party Social Media Services:
+* Google
+* Facebook
+* Instagram
+* Twitter
+* LinkedIn
 
-Google
-Facebook
-Instagram
-Twitter
-LinkedIn
 If You decide to register through or otherwise grant us access to a Third-Party Social Media Service, We may collect Personal data that is already associated with Your Third-Party Social Media Service's account, such as Your name, Your email address, Your activities or Your contact list associated with that account.
 
 You may also have the option of sharing additional information with the Company through Your Third-Party Social Media Service's account. If You choose to provide such information and Personal Data, during registration or otherwise, You are giving the Company permission to use, share, and store it in a manner consistent with this Privacy Policy.
@@ -310,17 +307,16 @@ You are advised to review this Privacy Policy periodically for any changes. Chan
 
 Contact Us
 If you have any questions about this Privacy Policy, You can contact us:
-
 By email: leo.ripert@gmail.com
-
-By visiting this page on our website: https://cabane.leorip.com/contact
-
-By phone number: 0615166490
+By visiting this page on our website: <a href="https://cabane.leorip.com/contact" class="font-bold">Contact</a>
+By phone number: 06 15 16 64 90
             </pre>
 
-            <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
-                Retour
-            </button>
+            <div class="w-full text-right mb-8 px-12">
+                <button type="button" @click="goBack();" class="btn py-2">
+                    Go Back
+                </button>
+            </div>
         </div>
     </Layout>
 </template>

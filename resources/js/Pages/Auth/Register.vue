@@ -10,7 +10,8 @@
             </button>
         </div>
 
-        <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
+        <form @submit.prevent="submit" class="max-w-sm mx-auto my-12">
+            <p>Ou s'enregistrer manuellement</p>
             <!-- <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
@@ -44,7 +45,7 @@
                 <InputError :message="form.errors.name" />
             </div> -->
 
-            <div class="mt-4" title="votre_mail@exemple.com">
+            <div title="votre_mail@exemple.com">
                 <div class="flex">
                     <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
                 </div>
@@ -146,6 +147,11 @@
                     </PrimaryButton>
             </div>
         </form>
+
+        <div class="flex justify-between max-w-sm mx-auto text-xs">
+            <a :href="route('privacy-policy')" class="p">Politique de confidentialité</a>
+            <a :href="route('terms-of-service')" class="p">Conditions d'utilisation</a>
+        </div>
     </Layout>
 </template>
 
