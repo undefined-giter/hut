@@ -11,17 +11,19 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleRegisterController;
+use Inertia\Inertia;
+
 
 Route::middleware('guest')->group(function () {
     Route::get('inscription', [RegisteredUserController::class, 'create'])->name('register');
 
     Route::post('inscription', [RegisteredUserController::class, 'store']);
 
-    Route::get('/auth/google', [GoogleRegisterController::class, 'redirectToGoogle'])->name('auth.google');
-    Route::get('/auth/google/callback', [GoogleRegisterController::class, 'handleGoogleCallback']);
+    // Route::get('/auth/google', [GoogleRegisterController::class, 'redirectToGoogle'])->name('auth.google');
+    // Route::get('/auth/google/callback', [GoogleRegisterController::class, 'handleGoogleCallback']);
 
-    Route::view('/politique-de-confidentialite', 'Legal.privacy-policy')->name('privacy-policy');
-    Route::view('/conditions-d-utilisation', 'Legal.terms-of-service')->name('terms-of-service');
+    Route::get('/politique-de-confidentialite', function () { return Inertia::render('Legal/privacy-policy'); })->name('privacy-policy');
+    Route::get('/conditions-d-utilisation', function () { return Inertia::render('Legal/terms-of-service'); })->name('terms-of-service');
 
     Route::get('connexion', [AuthenticatedSessionController::class, 'create'])->name('login');
 

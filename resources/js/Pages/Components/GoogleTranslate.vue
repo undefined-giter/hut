@@ -7,6 +7,7 @@
             loading="lazy"
             alt="Translate" 
             @click="openDropdown" 
+            title="Choose language 🌎🗣️🤌"
             style="width: 26px; height: 26px;"
             class="hidden md:block transform transition-transform duration-300 hover:scale-110 origin-top-right cursor-pointer"
         />
