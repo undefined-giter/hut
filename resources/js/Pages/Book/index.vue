@@ -191,8 +191,8 @@
     </form>
     
     <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
-      <div class="flex inline" @click="toggleUnroll">
-        <h3 class="underline text-red-600 text-xl md:-mb-2 cursor-pointer">{{ unrolled ? 'Cacher' : 'Afficher' }} les nuits déjà réservées</h3>
+      <div class="flex inline cursor-pointer" @click="toggleUnroll">
+        <h3 class="underline text-red-600 text-xl md:-mb-2">{{ unrolled ? 'Cacher' : 'Afficher' }} les nuits déjà réservées</h3>
         <span class="text-2xl -mt-0.5">{{ unrolled ? '🔺' : '🔻' }}</span>
       </div>
 

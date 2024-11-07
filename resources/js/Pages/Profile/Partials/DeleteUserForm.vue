@@ -64,6 +64,7 @@ const closeModal = () => {
 
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     <span class="text-red-600 text-2xl">Supprimer votre compte supprimera toutes vos réservations !</span>
+                    <br>Si vous vous êtes connecté avec google, laissez le mot-de-passe vide pour supprimer définitivement votre compte ainsi que vos réservations.
                     <br>Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.
                 </p>
 
