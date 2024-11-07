@@ -5,14 +5,25 @@
         
         <div class="flex justify-center my-12">
             <button class="text-center btn w-[384px] border-2 border-orangeTheme">
-                <a :href="route('google.redirect')">
-                    Se connecter avec
-                    <img src="/img/google_logo.png" alt="Logo de Google" />
+                <a :href="route('google.redirect')" class="flex flex-col items-center">
+                    <span>Se connecter avec</span>
+                    
+                    <img 
+                        v-show="imageLoaded" 
+                        @load="imageLoaded = true"
+                        src="/img/google_logo.png" 
+                        alt="Logo de Google" 
+                        height="140"
+                    />
+                    
+                    <div v-show="!imageLoaded" class="h-[110px] w-auto pt-8">Chargement...</div>
                 </a>
             </button>
         </div>
 
         <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8 mb-4">
+            <p>Ou se connecter manuellement</p>
+
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
                     <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
@@ -69,10 +80,10 @@ Inutile de vous surcharger de cookies 😉">
                     Se connecter
                 </PrimaryButton>
             </div>
-            <div class="mt-4 mb-10 text-center">
+            <div class="my-10 text-center">
                 <Link
                     :href="route('register')"
-                    class="underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
+                    class="text-2xl font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>
@@ -136,6 +147,8 @@ defineProps({
         type: String,
     },
 });
+
+const imageLoaded = ref(false)
 
 const form = useForm({
     email: '',

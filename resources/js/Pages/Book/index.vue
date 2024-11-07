@@ -191,28 +191,34 @@
     </form>
     
     <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
-      <h3 class="underline text-red-600 text-xl md:-mb-2">Nuits déjà réservées :</h3>
-      <div style="max-height: 350px; overflow-y: auto; padding-left:2px;">
-        <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
-          <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
-          <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's ' : ' ')"></span>
-          <span v-if="auth && auth.user && auth.user.id === reservation.user_id">
-            <Link :href="route('profile', reservation.user_id)" class="text-blue-600">
-              <span class="text-sm">🟢</span><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
-            </Link>
-          </span>
-          <span v-if="auth && auth.user && auth.user.role === 'admin'">
-            => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
-                <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
-                <input type="hidden" name="_method" value="DELETE" />
-                <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
-            </form>
-            <span class="text-zinc-800 text-sm"> | </span> 
-            <Link :href="route('admin.details', reservation.user_id)"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
-            <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ Math.floor(reservation.res_price) }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
-          </span>
-        </li></p>
+      <div class="flex inline" @click="toggleUnroll">
+        <h3 class="underline text-red-600 text-xl md:-mb-2">{{ unrolled ? 'Cacher' : 'Afficher' }} les nuits déjà réservées</h3>
+        <span class="text-2xl -mt-0.5">{{ unrolled ? '🔺' : '🔻' }}</span>
       </div>
+
+      <transition name="fade-slide">
+        <div v-show="unrolled" style="max-height: 350px; overflow-y: auto; padding-left:2px;">
+          <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
+            <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
+            <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's ' : ' ')"></span>
+            <span v-if="auth && auth.user && auth.user.id === reservation.user_id">
+              <Link :href="route('profile', reservation.user_id)" class="text-blue-600">
+                <span class="text-sm">🟢</span><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
+              </Link>
+            </span>
+            <span v-if="auth && auth.user && auth.user.role === 'admin'">
+              => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
+                  <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
+                  <input type="hidden" name="_method" value="DELETE" />
+                  <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
+              </form>
+              <span class="text-zinc-800 text-sm"> | </span> 
+              <Link :href="route('admin.details', reservation.user_id)"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
+              <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ Math.floor(reservation.res_price) }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
+            </span>
+          </li></p>
+        </div>
+      </transition>
     </div>
   </Layout>
 </template>
@@ -426,6 +432,11 @@ const updateCalculatedPrice = (price) => {
   calculatedPrice.value = price;
 };
 
+const unrolled = ref(false);
+const toggleUnroll = () => {
+  unrolled.value = !unrolled.value;
+};
+
 const handleSubmit = async () => {
   isSubmitting.value = true;
 
@@ -459,4 +470,16 @@ onUnmounted(() => {
   100% { transform: rotate(360deg); }
 }
 .animate-spin {animation: spin 1s linear infinite;}
+
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fade-slide-enter-from, .fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.fade-slide-enter-to, .fade-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>

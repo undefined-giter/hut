@@ -24,7 +24,14 @@
                     <div class="flex items-center w-auto absolute top-2.5 md:-top-0 !bg-transparent z-20">
                         <template v-if="auth.user">
                             <Link :href="route('profile')" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
-                                <img :src="auth.user.picture ? `${baseUrl}/profiles/` + auth.user.picture : `${baseUrl}/profiles/default_user.png`"
+                                <img 
+                                    :src="
+                                        auth.user.picture ? 
+                                        auth.user.picture.startsWith('https') ?
+                                        auth.user.picture 
+                                        :
+                                        `${baseUrl}/profiles/` + auth.user.picture 
+                                        : `${baseUrl}/profiles/default_user.png`"
                                     loading="lazy"
                                     alt="Photo de profil"
                                     class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"

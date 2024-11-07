@@ -15,7 +15,15 @@
             <tbody class="border-x border-orangeTheme">
                 <tr v-for="user in users.data" :key="user.id">
                     <td class="hidden sm:table-cell px-4 py-1 border-b border-orangeTheme table-cell text-center w-[100px]">
-                        <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
+                        <img 
+                            :src="
+                            auth.user.picture ? 
+                            auth.user.picture.startsWith('https') ?
+                            auth.user.picture 
+                            :
+                            `${baseUrl}/profiles/` + auth.user.picture 
+                            : `${baseUrl}/profiles/default_user.png`"
+                            loading="lazy" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
                     <td class="border-b border-orangeTheme max-w-[90px]" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">

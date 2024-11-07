@@ -58,7 +58,7 @@ class GoogleController extends Controller
                 Auth::login($user);
             }
 
-            return redirect()->route('book')->with('success', ['Bienvenue sur la page de réservation']);
+            return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);
         }
@@ -81,7 +81,7 @@ class GoogleController extends Controller
             // Tentative de connexion classique
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
-                return redirect()->intended('/book')->with('success', ['Bienvenue sur la page de réservation']);
+                return redirect()->intended('/book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
             }
         }
 
