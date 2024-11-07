@@ -60,6 +60,7 @@ class GoogleController extends Controller
 
             return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
         } catch (\Exception $e) {
+            \Log::error('Erreur de connexion avec Google : '.$e->getMessage());
             return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);
         }
     }
