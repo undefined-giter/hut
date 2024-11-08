@@ -37,12 +37,6 @@
   </div>
   <br>
 
-  <h2>Ce que Disent nos Hôtes</h2>
-  <div class="mb-6 text-center">
-    <p class="italic">"Un endroit incroyable pour se ressourcer. Le jacuzzi avec vue sur les montagnes est tout simplement magique !" — <strong>Lorie et Mickaël</strong></p>
-    <p class="italic mt-2">"Nous avons passé un week-end inoubliable. La cabane est magnifique et le service est impeccable. Nous reviendrons !" — <strong>Sophie et Thomas</strong></p>
-  </div>
-
   <div class="flex justify-between">
     <p class="hidden mb:block text-lg">Location pour une nuit : {{ PRICE_PER_NIGHT }}€, location par nuit pour 2 nuits et plus : {{ PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS }}€.</p>
     <p class="block text-sm md:hidden">1 nuit : {{ PRICE_PER_NIGHT }}€, 2 nuits et plus : {{ PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS }}€/nuit</p>
@@ -52,7 +46,7 @@
 
 
 <script setup>
-import { defineProps, watch } from 'vue';
+import { defineProps } from 'vue';
 
 const props = defineProps({
   PRICE_PER_NIGHT: {

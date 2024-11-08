@@ -118,6 +118,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { ref, onMounted, onUnmounted } from 'vue';
 import ThemeSwitcher from './Components/DarkMode.vue';
 import GoogleTranslate from './Components/GoogleTranslate.vue';
+import { handleScroll, showFooter } from './../shared/utils';
 
 const { baseUrl, auth } = usePage().props;
 
@@ -133,25 +134,6 @@ const isActive = (routeName) => {
 };
 
 const logout = () => { Inertia.post('/logout'); };
-
-const showFooter = ref(false);
-
-const handleScroll = () => {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollTop = window.scrollY || window.pageYOffset;
-
-    showFooter.value = windowHeight + scrollTop >= documentHeight - 40;
-};
-
-const checkInitialFooterVisibility = () => {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    if (documentHeight <= windowHeight) {
-        showFooter.value = true;
-    }
-};
 
 const handleDocumentClick = (event) => {
   if (
@@ -170,9 +152,13 @@ const props = defineProps({
   }
 });
 
+const observer = new MutationObserver(() => {
+    handleScroll();
+});
+observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
 onMounted(() => {
     window.addEventListener('scroll', handleScroll);
-    checkInitialFooterVisibility();
     
     const pageProps = usePage().props;
     

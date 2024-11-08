@@ -1,8 +1,11 @@
 <template>
     <div v-if="reservations.length > 0" class="bg-light dark:bg-dark shadow-md rounded-lg pt-4 mx-auto mb-4 hover:scale-105 transform transition-transform duration-300">
-        <h2 class="text-lg">Réservations</h2>
+        <div @click="toggleUnroll(4)" class="flex justify-center">
+            <h2 class="text-lg cursor-pointer">Réservations</h2>
+            <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(4) ? '🔼' : '🔽' }}</h2>
+        </div>
 
-        <div class="max-w-sm mx-auto pb-6 mb-6">
+        <transition name="fade-slide" v-show="isUnrolled(4)" class="max-w-sm mx-auto pb-6 mb-6 px-2 md:px-0">
             <div style="max-height: 350px; overflow-y: auto;">
                 <h3 class="text-center dark:text-orangeTheme" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
                 <ul v-if="currentReservations.length > 0" class="mb-6">
@@ -198,27 +201,31 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </transition>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { useUnroll } from './../../shared/utils';
 import { Link } from '@inertiajs/vue3';
 
 const csrfToken = ref(null);
-const isCommentVisible = ref(false);
+
+const { isUnrolled, toggleUnroll, setUnroll } = useUnroll();
+
+const visibleComments = ref({});
 
 onMounted(() => {
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  setUnroll(4, true)
 });
 
 const props = defineProps({
     reservations: Array,
     connected_user_id: Number,
 });
-
-const visibleComments = ref({});
 
 const today = new Date();
 

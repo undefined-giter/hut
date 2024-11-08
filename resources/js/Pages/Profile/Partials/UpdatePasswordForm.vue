@@ -2,6 +2,7 @@
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { useUnroll } from './../../../shared/utils';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -31,15 +32,18 @@ const updatePassword = () => {
         },
     });
 };
+
+const { isUnrolled, toggleUnroll } = useUnroll();
 </script>
 
 <template>
     <section class="mx-auto">
-        <header>
-            <h2 class="text-lg">Modifier Votre Mot de Passe</h2>
-        </header>
+        <div @click="toggleUnroll(2)" class="flex justify-center">
+            <h2 class="text-lg">Votre Mot de Passe</h2>
+            <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(2) ? '🔼' : '🔽' }}</h2>
+        </div>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6 max-w-sm mx-auto">
+        <form @submit.prevent="updatePassword" v-show="isUnrolled(2)" class="mt-6 space-y-6 max-w-sm mx-auto">
             <div>
                 <InputLabel for="current_password" value="Mot de Passe Actuel" />
 

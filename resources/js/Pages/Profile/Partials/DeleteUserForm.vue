@@ -1,11 +1,12 @@
 <script setup>
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Modal from '@/Components/Modal.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { useUnroll } from './../../../shared/utils';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
+import Modal from '@/Components/Modal.vue';
 import { nextTick, ref } from 'vue';
 
 const confirmingUserDeletion = ref(false);
@@ -14,6 +15,8 @@ const passwordInput = ref(null);
 const form = useForm({
     password: '',
 });
+
+const { isUnrolled, toggleUnroll } = useUnroll();
 
 const confirmUserDeletion = () => {
     confirmingUserDeletion.value = true;
@@ -45,16 +48,24 @@ const closeModal = () => {
 
 <template>
     <section class="space-y-6 max-w-sm mx-auto">
-        <header>
-            <h2 class="text-lg">Supprimer Votre Compte</h2>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
-                Supprimer votre compte supprimera toutes vos réservations.
-                <br>Toutes vos données seront supprimées définitivement.
-            </p>
-        </header>
+        <div @click="toggleUnroll(3)">
+            <div class="flex justify-center cursor-pointer">
+                <h2 class="text-lg">Supprimer Votre Compte</h2>
+                <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(3) ? '🔼' : '🔽' }}</h2>
+            </div>
+        </div>
 
-        <DangerButton @click="confirmUserDeletion" class="ml-24 !mt-4">Supprimer Compte</DangerButton>
+
+        <transition name="fade-slide" v-show="isUnrolled(3)" class="max-w-sm mx-auto text-sm">
+            <div>
+                <p>
+                    Supprimer votre compte supprimera toutes vos réservations.
+                    <br>Toutes vos données seront supprimées définitivement.
+                </p>
+                <DangerButton v-if="isUnrolled(3)" @click="confirmUserDeletion" class="mt-2">Supprimer Compte</DangerButton>
+            </div>
+        </transition>
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
@@ -62,7 +73,7 @@ const closeModal = () => {
                     Etes-vous sûr de vouloir supprimer votre compte ?
                 </h2>
 
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                <p>
                     <span class="text-red-600 text-2xl">Supprimer votre compte supprimera toutes vos réservations !</span>
                     <br>Si vous vous êtes connecté avec google, laissez le mot-de-passe vide pour supprimer définitivement votre compte ainsi que vos réservations.
                     <br>Une fois que votre compte est supprimé, toutes vos données sont supprimées définitivement.
@@ -88,7 +99,6 @@ const closeModal = () => {
                     <SecondaryButton @click="closeModal"> Annuler </SecondaryButton>
 
                     <DangerButton
-                        class="ms-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="confirmDeletion"
