@@ -14,7 +14,8 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        $users = User::latest()->paginate(15);
+        $paginateLength = 15;
+        $users = User::latest()->paginate($paginateLength);
     
         // Calculate the cut-off date -> all reservations CREATED within the last 12 months
         $twelveMonthsAgo = Carbon::now()->subMonths(12);
@@ -55,6 +56,7 @@ class UserController extends Controller
             'averageOptionBasket' => $averageOptionBasket,
             'averageDaysReserved' => $averageDaysReserved,
             'averageReservationsPerMonth' => round($averageReservationsPerMonth, 2),
+            'paginateLength' => $paginateLength,
         ]);
     }
 

@@ -46,8 +46,6 @@
 
 
 <script setup>
-import { defineProps } from 'vue';
-
 const props = defineProps({
   PRICE_PER_NIGHT: {
     type: Number,

@@ -184,25 +184,28 @@ a:hover {z-index: 50;}
     padding: 10px 16px;
     cursor: pointer;
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    box-shadow: inset 0px 0px 6px 3px rgba(0, 0, 255, 0.9);
 }
 
 .btn:hover {
-    color: rgb(50, 255, 0);
+    color: #98FF98;
     background-color: #0032e4;
-    box-shadow: 0 2px 4px -1px rgba(244, 155, 0, 0.756);
+    box-shadow: inset 0px 0px 6px 3px rgba(255, 255, 255, 0.4);
 }
 
 .btn-disabled {
-    cursor: not-allowed;
+    cursor: default;
     opacity: 0.75;
     background-color: #4b5563;
     color: #9ca3af;
+    box-shadow: inset 0px 0px 6px 3px rgba(31, 31, 31, 0.9);
 }
 .btn-disabled:hover {
     color: #9ca3af !important;
-    background: #595959 !important;
+    background: #2c2c2c !important;
     box-shadow: none !important;
 }
+.red-shadow{box-shadow: inset 0px 0px 6px 3px rgba(96, 0, 0, 0.9);}
 
 .full-nav{ font-size: 1.15em; }
 
@@ -211,6 +214,7 @@ a:hover {z-index: 50;}
     color: black;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     border-radius: 0.5rem;
+    box-shadow: inset 0px 0px 6px 3px rgba(52, 0, 71, 0.9);
 }
 .deconnection:hover{
     background-color: #3c0040;
@@ -218,7 +222,10 @@ a:hover {z-index: 50;}
     @apply text-orangeTheme;
 }
 
-.link-active { @apply bg-orange-500 dark:bg-orange-600 !important; }
+.link-active { 
+    @apply bg-orange-500 dark:bg-orange-600 !important;
+    box-shadow: inset 0px 0px 6px 3px rgba(255, 153, 0, 0.9);
+}
 
 .link-active:hover { @apply hover:bg-orange-400 dark:bg-orange-500 !important; }
 
@@ -228,10 +235,6 @@ a:hover {z-index: 50;}
     user-select: none;
     -webkit-user-drag: none; /* Désactiver le drag pour Safari/Chrome */
     user-drag: none;
-}
-
-.pink{
-    color: red !important;
 }
 
 label { @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important; }

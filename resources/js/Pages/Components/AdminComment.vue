@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { checkCharacterCount } from './../../../js/shared/utils';
 

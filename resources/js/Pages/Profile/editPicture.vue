@@ -58,7 +58,11 @@ const user = usePage().props.auth.user;
 const form = useForm({
     picture: null,
     delete_picture: false,
-    preview: user.picture ? `${baseUrl}/profiles/${user.picture}` : `${baseUrl}/profiles/default_user.png`,
+    preview: user.picture 
+        ? user.picture.startsWith('https') 
+            ? user.picture 
+            : `${baseUrl}/profiles/` + user.picture
+        : `${baseUrl}/profiles/default_user.png`,
 });
 
 const changePicture = (e) => {

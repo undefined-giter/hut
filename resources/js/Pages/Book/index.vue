@@ -124,7 +124,7 @@
             {{ dateError }}
           </div>
         </div>
-        <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">Réinitialiser</button>
+        <button type="button" class="btn !bg-orangeTheme !shadow-none !px-2" @click="resetReservation">Réinitialiser</button>
       </div>
 
       <h3 v-if="options.length >= 1" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
@@ -166,20 +166,20 @@
       </div>
 
       <div class="flex">
-        <div class="flex-1 mr-4 relative max-w-[230px] sm:max-w-[840px]">
+        <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
-          <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5 no-scrollbar"></textarea>
+          <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="resCommentPlaceholder" class="w-full no-scrollbar"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
-        <div class="ml-auto mt-auto mb-1">
-          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" class="mb-3" />
+        <div class="flex flex-col items-center">
+          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" />
           <button
             type="submit"
             form="reservationForm"
             :disabled="!isReservationValid || resCommentLength > 510"
             :class="[
-              (!isReservationValid || resCommentLength > 510) ? '!bg-gray-600 hover:text-gray-400 opacity-75 cursor-not-allowed' : '', 
-              'btn ml-auto block'
+              (!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 
+              'btn ml-auto block !p-12 !font-bold text-2xl'
             ]">
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
@@ -242,7 +242,7 @@ const showMonth = ref(showMonthEdit ?? null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
-const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour\nComme votre heure d'arrivée envisagée, etc.";
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, etc.";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();

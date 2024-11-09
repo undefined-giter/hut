@@ -20,18 +20,18 @@
                         <ThemeSwitcher class="mt-4 md:mt-0.5" />
                         <GoogleTranslate />
                     </div>
-
+                    
                     <div class="flex items-center w-auto absolute top-2.5 md:-top-0 !bg-transparent z-20">
                         <template v-if="auth.user">
                             <Link :href="route('profile')" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
                                 <img 
-                                    :src="
-                                        auth.user.picture ? 
-                                        auth.user.picture.startsWith('https') ?
-                                        auth.user.picture 
-                                        :
-                                        `${baseUrl}/profiles/` + auth.user.picture 
-                                        : `${baseUrl}/profiles/default_user.png`"
+                                    :src="(() => {
+                                        return auth.user.picture
+                                            ? auth.user.picture.startsWith('https') 
+                                                ? auth.user.picture 
+                                                : `${baseUrl}/profiles/` + auth.user.picture
+                                            : `${baseUrl}/profiles/default_user.png`;
+                                    })()"
                                     loading="lazy"
                                     alt="Photo de profil"
                                     class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"
@@ -105,7 +105,11 @@
 
         <transition name="fade">
             <footer v-if="showFooter && allImagesDisplayed">
-                <hr class="border border-orangeTheme h-[3px] bg-orangeTheme rounded-xl max-w-6xl mx-auto " />
+                <div class="mx-1 sm:mx-2 md:mx-4 lg:mx-2 xl:mx-0">
+                    <div class="mx-0.5">
+                        <hr class="border border-orangeTheme h-[3px] bg-orangeTheme rounded-xl max-w-6xl mx-auto " />
+                    </div>
+                </div>
                 &copy; {{ new Date().getFullYear() }} - Votre moment de tranquilité
             </footer>
         </transition>

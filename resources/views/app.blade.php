@@ -37,7 +37,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="mask-icon" href="{{ asset('icons/favicon.ico') }}" color="#ad5205">
 
-        <title>Nuit Insolite en Cabane avec Jacuzzi Relaxant - Vue Panoramique Trièves</title>
+        <title>Cabane avec Jacuzzi et Vue Panoramique - Nuit Insolite en Trièves</title>
 
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
@@ -49,7 +49,7 @@
             "name": "Nuit Cabane Jacuzzi",
             "additionalType": "https://schema.org/LodgingBusiness",
             "image": "https://cabane.leorip.com/img/hut.png",
-            "description": "Réservez une cabane avec jacuzzi relaxant et sa vue panoramique dans le Trièves pour un séjour unique. Tout en ayant le confort d'un minibar à portée de main.",
+            "description": "Réservez une cabane avec jacuzzi relaxant et sa vue panoramique dans le Trièves pour un séjour unique. Le confort d'un minibar intégré.",
             "url": "https://cabane.leorip.com/",
             "telephone": "+33-6-15-16-64-90",
             "address": {

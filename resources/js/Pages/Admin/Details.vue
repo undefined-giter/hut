@@ -61,7 +61,7 @@
                 <AdminComment :user_id="user.id" :admin_comments="user.admin_comments" />
 
                 <div class="flex justify-between m-4 mb-0">
-                    <button @click="deleteUser" class="btn !bg-red-700 hover:text-orange-500">
+                    <button @click="deleteUser" class="btn !bg-red-700 red-shadow hover:text-orange-500">
                         Supprimer
                     </button>
                     <button type="button" @click="goBack();" class="btn py-2">

@@ -19,10 +19,11 @@ class GoogleController extends Controller
 
     public function handleGoogleCallback()
     {
-        try {
             $googleUser = Socialite::driver('google')->stateless()->user();
 
-            $phone = $googleUser->user['phoneNumbers'][0]['value'] ?? null;
+            $phone = $googleUser->user['phoneNumbers'][0]['value'] ?? $googleUser->user['phone_number'] ?? null;
+dd($googleUser);
+            if ($phone) { $phone = preg_replace('/^(\+33|33)/', '0', $phone); }
 
             // Vérifie si l'utilisateur existe déjà dans la base de données
             $user = User::where('google_id', $googleUser->getId())
@@ -59,10 +60,10 @@ class GoogleController extends Controller
             }
 
             return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
-        } catch (\Exception $e) {
+
             \Log::error('Erreur de connexion avec Google : '.$e->getMessage());
             return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);
-        }
+        
     }
 
     // Méthode de connexion classique

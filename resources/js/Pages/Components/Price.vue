@@ -1,9 +1,9 @@
 <template>
-    <p class="!text-green-400 text-right mr-1.5 -mt-">Total : {{ totalPriceDisplay }}<span class="text-sm">€</span></p>
+    <p class="!text-green-500 mt-1 -mb-1">Total : {{ totalPriceDisplay }}<span class="text-sm">€</span></p>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     resNights: {
