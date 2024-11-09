@@ -48,6 +48,11 @@
             <p class="italic">"La vue est incroyable et la cabane isolée. Le jacuzzi donne sur les montagnes, et offre un panorama vraiment exceptionnelle !" — <strong>Sophie et Mickaël</strong></p>
             <p class="italic mt-2">"Nous avons passé un weekend inoubliable. La cabane est magnifique et les hôtes très arrangeants. Super souvenirs !" — <strong>Laura et Thomas</strong></p>
         </div>
+
+        <div class="flex justify-between mt-8 mx-2 text-gray-800 dark:text-gray-400 text-sm">
+            <a :href="route('privacy-policy')">Politique de confidentialité</a>
+            <a :href="route('terms-of-service')">Conditions d'utilisation</a>
+        </div>
     </Layout>
 </template>
 

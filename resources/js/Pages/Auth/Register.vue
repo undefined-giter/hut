@@ -149,11 +149,6 @@
                     </PrimaryButton>
             </div>
         </form>
-
-        <div class="flex justify-between max-w-sm mx-auto text-xs">
-            <a :href="route('privacy-policy')" class="p">Politique de confidentialité</a>
-            <a :href="route('terms-of-service')" class="p">Conditions d'utilisation</a>
-        </div>
     </Layout>
 </template>
 

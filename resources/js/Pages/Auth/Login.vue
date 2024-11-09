@@ -83,7 +83,7 @@ Inutile de vous surcharger de cookies 😉">
             <div class="my-10 text-center">
                 <Link
                     :href="route('register')"
-                    class="text-2xl font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
+                    class="text-lg font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>

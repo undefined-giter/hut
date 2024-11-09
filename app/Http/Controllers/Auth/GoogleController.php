@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use GuzzleHttp\Client;
+
 
 class GoogleController extends Controller
 {
@@ -19,11 +21,27 @@ class GoogleController extends Controller
 
     public function handleGoogleCallback()
     {
+        try {
             $googleUser = Socialite::driver('google')->stateless()->user();
 
             $phone = $googleUser->user['phoneNumbers'][0]['value'] ?? $googleUser->user['phone_number'] ?? null;
-dd($googleUser);
-            if ($phone) { $phone = preg_replace('/^(\+33|33)/', '0', $phone); }
+
+            if (!$phone) {
+                $client = new Client();
+                $response = $client->get('https://people.googleapis.com/v1/people/me', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $googleUser->token,
+                    ],
+                    'query' => [
+                        'personFields' => 'phoneNumbers',
+                    ],
+                ]);
+
+                $person = json_decode($response->getBody(), true);
+                $phone = $person['phoneNumbers'][0]['value'] ?? null;
+            }
+            
+            if($phone){ $phone = preg_replace('/^(\+33|33)/', '0', $phone); }
 
             // Vérifie si l'utilisateur existe déjà dans la base de données
             $user = User::where('google_id', $googleUser->getId())
@@ -36,15 +54,12 @@ dd($googleUser);
                     $user->update(['google_id' => $googleUser->getId()]);
                 }
 
-                // Marque l'email comme vérifié si ce n'est pas déjà fait
                 if (is_null($user->email_verified_at)) {
                     $user->update(['email_verified_at' => now()]);
                 }
 
-                // Connecte l'utilisateur existant
                 Auth::login($user);
             } else {
-                // Si l'utilisateur n'existe pas, on le crée
                 $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
@@ -55,16 +70,16 @@ dd($googleUser);
                     'password' => Hash::make(str()->random(24)),
                 ]);
 
-                // Connecte le nouvel utilisateur
                 Auth::login($user);
             }
 
             return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
-
+        } catch (\Exception $e) {
             \Log::error('Erreur de connexion avec Google : '.$e->getMessage());
             return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);
-        
+        }
     }
+
 
     // Méthode de connexion classique
     public function login(Request $request)
