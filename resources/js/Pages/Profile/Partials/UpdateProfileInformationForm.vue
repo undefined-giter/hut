@@ -6,6 +6,7 @@ import { useUnroll } from './../../../shared/utils';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { validatePhone } from './../../../shared/utils';
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 
@@ -31,30 +32,22 @@ const form = useForm({
     phone: props.user.phone ?? '',
 });
 
-const validatePhone = () => {
-    const phone = form.phone;
-    if (!phone) {
-        phoneError.value = null;
-        return true;
-    }
-    if (phone.length !== 10) {
-        phoneError.value = "Le numéro doit contenir 10 chiffres.";
-        return false;
-    }
-    if (!phone.startsWith('0')) {
-        phoneError.value = "Le numéro doit commencer par 0. Merci de le corriger et de compléter votre numéro.";
-        return false;
-    }
-    phoneError.value = null;
-    return true;
+const checkPhone = () => {
+    form.phone = form.phone.replace(/\D/g, '');
+
+    const { isValid, error } = validatePhone(form.phone);
+    phoneError.value = error;
+    return isValid;
 };
 
-const submit = () => {    
+const submit = () => {   
+    phoneError.value = null;
+     
     if (props.user.email === 'fake_admin@fake.admin') {
         alert("En tant que fake_admin, vous n'avez pas le droit de modifier vos informations.");
         return;
     }
-    if (validatePhone()) {
+    if (checkPhone()) {
         form.patch(route('profile.update'));
     }
 };
@@ -119,6 +112,7 @@ const submit = () => {
                         v-model="form.phone"
                         maxlength="10"
                         autocomplete="tel"
+                        @input="checkPhone"
                     />
                     <InputError :message="form.errors.phone" />
                     <p v-if="phoneError" class="!text-red-600 text-sm mt-2">{{ phoneError }}</p>

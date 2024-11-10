@@ -2,21 +2,21 @@
     <Head title="Se Connecter | Cabane" />
     <Layout>
         <h1>Se Connecter</h1>
-        
+
         <div class="flex justify-center my-12">
             <button class="text-center btn w-[384px] border-2 border-orangeTheme">
-                <a :href="route('google.redirect')" class="flex flex-col items-center">
-                    <span>Se connecter avec</span>
+                <a :href="route('google.redirect')">
+                    Inscription & connexion
                     
                     <img 
                         v-show="imageLoaded" 
                         @load="imageLoaded = true"
                         src="/img/google_logo.png" 
                         alt="Logo de Google" 
-                        height="140"
+                        class="-mt-6"
                     />
                     
-                    <div v-show="!imageLoaded" class="h-[110px] w-auto pt-8">Chargement...</div>
+                    <div v-show="!imageLoaded" class="h-[90px] w-auto pt-8">Chargement...</div>
                 </a>
             </button>
         </div>

@@ -6,8 +6,17 @@
         <div class="flex justify-center my-12">
             <button class="text-center btn w-[384px] border-2 border-orangeTheme">
                 <a :href="route('google.redirect')">
-                    S'enregistrer avec
-                    <img src="/img/google_logo.png" alt="Logo de Google" />
+                    Inscription & connexion
+
+                    <img 
+                        v-show="imageLoaded" 
+                        @load="imageLoaded = true"
+                        src="/img/google_logo.png" 
+                        alt="Logo de Google" 
+                        class="-mt-6"
+                    />
+                    
+                    <div v-show="!imageLoaded" class="h-[90px] w-auto pt-8">Chargement...</div>
                 </a>
             </button>
         </div>
@@ -76,11 +85,11 @@
                     maxlength="10"
                     pattern="[0-9]*"
                     @input="filterInput"
-                    @blur="validatePhone"
+                    @blur="checkPhone"
                 />
 
+                <p v-if="phoneError" class="!text-red-600 text-sm ml-1">{{ phoneError }}</p>
                 <InputError :message="form.errors.phone" />
-                <p v-if="phoneError" class="!text-red-600 text-sm mt-2">{{ phoneError }}</p>
             </div>
 
             <div class="mt-4" title="Assurez-vous d'avoir un mot de passe sécurisé et unique d'au moins 8 caractères">
@@ -160,6 +169,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm/*, usePage*/ } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import Layout from './../Layout.vue';
+import { validatePhone } from './../../shared/utils.js';
 
 // const { baseUrl } = usePage().props;
 
@@ -174,6 +184,7 @@ const form = useForm({
     // preview: null,
 });
 
+const imageLoaded = ref(false)
 
 const phoneError = ref(null);
 
@@ -182,27 +193,6 @@ const filterInput = (event) => {
     form.phone = event.target.value;
 
     phoneError.value = null;
-};
-
-const validatePhone = () => {
-    const phone = form.phone;
-
-    if (!phone) {
-        phoneError.value = null;
-        return true;
-    }
-
-    if (phone.length !== 10) {
-        phoneError.value = "Le numéro doit contenir 10 chiffres.";
-        return false;
-    }
-
-    if (!phone.startsWith('0')) {
-        phoneError.value = "Le numéro doit commencer par 0. Merci de le corriger et de compléter votre numéro.";
-        return false;
-    }
-    phoneError.value = null;
-    return true;
 };
 
 // const changePicture = (e) => {
@@ -230,8 +220,14 @@ const inputsValids = computed(() => {
     return isEmailValid && isPasswordValid && isPasswordConfirmationValid // && isNameValid ;
 });
 
+const checkPhone = () => {
+    const { isValid, error } = validatePhone(form.phone);
+    phoneError.value = error;
+    return isValid;
+};
+
 const submit = () => {
-    if (validatePhone()) {
+    if (checkPhone()) {
         form.submit('post', route('register'), {
             forceFormData: true,
             onFinish: () => form.reset('password', 'password_confirmation'),

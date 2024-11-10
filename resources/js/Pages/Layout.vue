@@ -25,17 +25,12 @@
                         <template v-if="auth.user">
                             <Link :href="route('profile')" class="flex items-center z-20 origin-right md:origin-left transition-transform duration-300 hover:scale-110 hover:shadow-lg ml-2 md:ml-0">
                                 <img 
-                                    :src="(() => {
-                                        return auth.user.picture
-                                            ? auth.user.picture.startsWith('https') 
-                                                ? auth.user.picture 
-                                                : `${baseUrl}/profiles/` + auth.user.picture
-                                            : `${baseUrl}/profiles/default_user.png`;
-                                    })()"
+                                    :src="profilePicture"
                                     loading="lazy"
                                     alt="Photo de profil"
                                     class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"
-                                    draggable="false">
+                                    draggable="false"
+                                />
                                 <p :class="[isActive('profile') ? 'custom-underline' : '', 'hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none']">
                                     {{ auth.user.name }}
                                 </p>
@@ -156,6 +151,25 @@ const props = defineProps({
   }
 });
 
+const profilePicture = ref(`${baseUrl}/profiles/default_user.png`);
+const fetchProfilePicture = async () => {
+  const imageUrl = auth.user.picture?.startsWith('https')
+    ? auth.user.picture
+    : `${baseUrl}/profiles/${auth.user.picture || 'default_user.png'}`;
+
+  try {
+    const response = await fetch(imageUrl, { method: 'HEAD' });
+    if (response.ok) {
+      profilePicture.value = imageUrl;
+    } else {
+      profilePicture.value = `${baseUrl}/profiles/default_user.png`;
+    }
+  } catch (error) {
+    //console.error("Erreur lors de la récupération de l'image :", error);
+    profilePicture.value = `${baseUrl}/profiles/default_user.png`;
+  }
+};
+
 const observer = new MutationObserver(() => {
     handleScroll();
 });
@@ -188,6 +202,7 @@ onMounted(() => {
         }, 8000);
     }
 
+    fetchProfilePicture();
     document.addEventListener('click', handleDocumentClick);
 });
 

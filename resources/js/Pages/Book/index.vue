@@ -219,11 +219,14 @@
       </transition>
     </div>
   </Layout>
+
+  <PhoneModal v-if="showPhoneModal" />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
+import PhoneModal from './../Components/PhoneModal.vue';
 import { useUnroll } from './../../shared/utils';
 import Price from './../Components/Price.vue';
 import TextRes from './TextRes.vue';
@@ -289,8 +292,10 @@ onMounted(() => {
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   previousAuthUser.value = auth.user;
+
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
+  displayPhoneModalAfterDelay();
 });
 
 
@@ -408,6 +413,12 @@ const sortedReservations = computed(() => {
   return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 });
 
+const showPhoneModal = ref(false);
+const displayPhoneModalAfterDelay = () => {
+  setTimeout(() => {
+    showPhoneModal.value = true;
+  }, 6000);
+};
 
 const updateGridClass = () => {
   const windowWidth = window.innerWidth;

@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('/get-phone', [ProfileController::class, 'fetchPhone']);
+    Route::patch('/update-phone', [ProfileController::class, 'updatePhone']);
+
     Route::get('/profile/edit-picture', [ProfileController::class, 'editPicture'])->name('profile.edit-picture');
     Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update-picture');
     

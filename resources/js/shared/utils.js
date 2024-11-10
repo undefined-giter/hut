@@ -57,3 +57,22 @@ export function useUnroll() {
 
   return { isUnrolled, toggleUnroll, setUnroll };
 }
+
+
+export function validatePhone(phone) {
+  phone = phone.replace(/\D/g, '');
+
+  if (!phone || phone === '') {
+    return { isValid: true, error: null };
+  }
+
+  if (phone.length !== 10) {
+    return { isValid: false, error: "Le numéro doit contenir 10 chiffres." };
+  }
+
+  if (!phone.startsWith('0')) {
+    return { isValid: false, error: "Le numéro doit commencer par 0." };
+  }
+
+  return { isValid: true, error: null };
+}

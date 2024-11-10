@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
@@ -44,7 +45,7 @@ class ProfileController extends Controller
         $user->name = $request->name ?: null;
         $user->name2 = $request->name2 ?: null;
         $user->email = $request->email;
-        $user->phone = $request->phone ?: $user->phone;
+        $user->phone = $request->phone ?: null;
 
         $user->save();
 
@@ -81,6 +82,26 @@ class ProfileController extends Controller
 
         return redirect()->route('profile')->with('success', ['Photo mise à jour 👍']);
     }
+
+
+    public function fetchPhone(Request $request)
+    {
+        return response()->json(['phone' => Auth::user()->phone]);
+    }
+
+    public function updatePhone(Request $request): JsonResponse
+    {
+        $request->validate([
+            'phone' => 'required|regex:/^0[1-9][0-9]{8}$/',
+        ]);
+    
+        $user = Auth::user();
+        $user->phone = $request->phone;
+        $user->save();
+    
+        return response()->json(['message' => ['Numéro de téléphone mis à jour avec succès']]);
+    }
+
 
     /**
      * Delete the user's account.

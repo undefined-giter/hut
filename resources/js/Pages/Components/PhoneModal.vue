@@ -1,0 +1,140 @@
+<template>
+  <div>
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content mx-2">
+        <h2>Entrez votre numéro de téléphone</h2>
+        <p class="ml-0.5 text-md">Optionnel mais recommandé</p>
+        <input
+          v-model="phone"
+          type="tel"
+          maxlength="10"
+          placeholder="Numéro de téléphone"
+          @input="handlePhoneInput"
+        />
+        <p v-if="phoneError" class="!text-red-600">{{ phoneError }}</p>
+        <div class="flex justify-between mt-1">
+          <button @click="closeModal" class="btn">Ne pas renseigner</button>
+          <button @click="submitPhone" :disabled="!isPhoneValid" class="btn">Ajouter Numéro</button>
+        </div>
+      </div>
+    </div>
+    
+    <p v-if="showConfirmation" class="confirmation-message">Merci !</p>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { validatePhone } from './../../shared/utils.js';
+import axios from 'axios';
+
+const showModal = ref(false);
+const phone = ref('');
+const phoneError = ref(null);
+const showConfirmation = ref(false);
+
+const isPhoneValid = computed(() => {
+  const { isValid } = validatePhone(phone.value);
+  return isValid;
+});
+
+const handlePhoneInput = () => {
+  phone.value = phone.value.replace(/\D/g, '').slice(0, 10);
+  const { isValid, error } = validatePhone(phone.value);
+  phoneError.value = error;
+};
+
+const closeModal = () => {
+  phone.value = '';
+  phoneError.value = null;
+  showModal.value = false;
+};
+
+const handleOutsideClick = (event) => {
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent && !modalContent.contains(event.target)) {
+    closeModal();
+  }
+};
+
+const submitPhone = async () => {
+  if (isPhoneValid.value) {
+    try {
+      await axios.patch('/update-phone', { phone: phone.value });
+      closeModal();
+      showConfirmationMessage();
+    } catch (error) {
+      //console.error("Erreur lors de la mise à jour du numéro de téléphone :", error);
+    }
+  }
+};
+
+const showConfirmationMessage = () => {
+  showConfirmation.value = true;
+  setTimeout(() => {
+    const confirmationElement = document.querySelector('.confirmation-message');
+    if (confirmationElement) {
+      confirmationElement.classList.add('fade-out');
+    }
+  }, 5000);
+  setTimeout(() => {
+    showConfirmation.value = false;
+  }, 6000);
+};
+
+const checkUserPhone = async () => {
+  try {
+    const response = await axios.get('/get-phone');
+    if (!response.data.phone) {
+      showModal.value = true;
+    }
+  } catch (error) {
+    //console.error("Erreur lors de la récupération du numéro de téléphone :", error);
+  }
+};
+
+onMounted(() => {
+  checkUserPhone();
+  document.addEventListener('click', handleOutsideClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick);
+});
+</script>
+
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 800;
+  @apply bg-orangeTheme bg-opacity-75;
+}
+.modal-content {
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  transform: translateY(-25%);
+  @apply bg-light dark:bg-dark bg-opacity-100 dark:bg-opacity-100;
+}
+.confirmation-message {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.confirmation-message.fade-out {
+  opacity: 0;
+}
+</style>

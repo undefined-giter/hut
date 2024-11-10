@@ -15,7 +15,12 @@ class GoogleController extends Controller
     public function redirectToGoogle()
     {
         return Socialite::driver('google')
-            ->scopes(['openid', 'profile', 'email', 'https://www.googleapis.com/auth/user.phonenumbers.read'])
+            ->scopes([
+                'openid',
+                'profile',
+                'email',
+                'https://www.googleapis.com/auth/user.phonenumbers.read'
+            ])
             ->redirect();
     }
 
@@ -36,7 +41,7 @@ class GoogleController extends Controller
                         'personFields' => 'phoneNumbers',
                     ],
                 ]);
-
+                
                 $person = json_decode($response->getBody(), true);
                 $phone = $person['phoneNumbers'][0]['value'] ?? null;
             }
@@ -49,16 +54,11 @@ class GoogleController extends Controller
                         ->first();
 
             if ($user) {
-                // Si l'utilisateur existe mais n'a pas de google_id, on l'ajoute
-                if (!$user->google_id) {
-                    $user->update(['google_id' => $googleUser->getId()]);
-                }
-
-                if (is_null($user->email_verified_at)) {
-                    $user->update(['email_verified_at' => now()]);
-                }
-
-                Auth::login($user);
+                $user->update([
+                    'google_id' => $user->google_id ?? $googleUser->getId(),
+                    'email_verified_at' => $user->email_verified_at ?? now(),
+                    'last_login' => now(),
+                ]);
             } else {
                 $user = User::create([
                     'name' => $googleUser->getName(),
@@ -68,12 +68,13 @@ class GoogleController extends Controller
                     'phone' => $phone,
                     'picture' => $googleUser->getAvatar() ?? 'default_user.png',
                     'password' => Hash::make(str()->random(24)),
+                    'last_login' => now(),
                 ]);
-
-                Auth::login($user);
             }
+            
+            Auth::login($user);
 
-            return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
+            return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre séjour de bonheur']);
         } catch (\Exception $e) {
             \Log::error('Erreur de connexion avec Google : '.$e->getMessage());
             return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);

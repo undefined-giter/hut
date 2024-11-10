@@ -4,14 +4,14 @@
   <Layout>
     <h2 class="text-lg">Modifier votre photo de profil</h2>
 
-    <form @submit.prevent="submit" class="space-y-6">
+    <form @submit.prevent="submit" class="space-y-6 mx-2">
 
-      <div class="text-center w-[384px] mx-auto">
-        <div class="w-[384px] h-[250px] mx-auto">
+      <div class="text-center w-[340px] md:w-[384px] mx-auto">
+        <div class="w-[340px] md:w-[384px] h-[250px] mx-auto">
           <img :src="form.preview" loading="lazy" alt="Photo actuelle" class="object-cover w-full h-full rounded-xl">
         </div>
 
-        <div class="flex justify-between items-center mt-2 mx-2">
+        <div class="flex justify-between items-center mt-1">
           <div class="text-left -mt-6">
             <label for="delete_picture" class="inline-flex items-center">
               <input
@@ -24,7 +24,7 @@
           </div>
 
           <div class="relative overflow-hidden inline-block">
-            <button class="bg-blue-600 text-white py-2 px-4 rounded-lg cursor-pointer focus:outline-none" id="input-file">
+            <button class="btn" id="input-file">
               Parcourir
             </button>
             <input
@@ -37,8 +37,9 @@
 
         <InputError :message="form.errors.picture" />
 
-        <div class="mt-4 mx-2 text-right">
-          <PrimaryButton :disabled="form.processing" class="!bg-blue-700 !text-gray-200">Enregistrer</PrimaryButton>
+        <div class="mt-4 flex justify-between">
+          <button type="button" @click="goBack();" class="btn">Retour</button>
+          <PrimaryButton :disabled="form.processing" class="btn">Enregistrer</PrimaryButton>
         </div>
       </div>
       
@@ -64,6 +65,14 @@ const form = useForm({
             : `${baseUrl}/profiles/` + user.picture
         : `${baseUrl}/profiles/default_user.png`,
 });
+
+const goBack = () => {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        Inertia.visit('/list');
+    }
+};
 
 const changePicture = (e) => {
     const file = e.target.files[0];

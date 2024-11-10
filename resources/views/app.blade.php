@@ -46,10 +46,10 @@
         {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
-            "name": "Nuit Cabane Jacuzzi",
+            "name": "Cabane Jacuzzi Trièves",
             "additionalType": "https://schema.org/LodgingBusiness",
             "image": "https://cabane.leorip.com/img/hut.png",
-            "description": "Réservez une cabane avec jacuzzi relaxant et sa vue panoramique dans le Trièves pour un séjour unique. Le confort d'un minibar intégré.",
+            "description": "Réservez une cabane avec jacuzzi et sa vue panoramique exceptionnelle dans le Trièves. Un séjour unique et confortable.",
             "url": "https://cabane.leorip.com/",
             "telephone": "+33-6-15-16-64-90",
             "address": {
@@ -65,10 +65,10 @@
                 "longitude": "5.830722"
             },
             "priceRange": "€€",
-            "sameAs": [
-                "https://www.facebook.com/tonprofil",
-                "https://www.instagram.com/tonprofil"
-            ],
+            <!-- "sameAs": [
+                "https://www.facebook.com/TODO",
+                "https://www.instagram.com/TODO"
+            ], -->
             "openingHoursSpecification": [
                 {
                     "@type": "OpeningHoursSpecification",
@@ -87,14 +87,14 @@
             "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.8",
-                "reviewCount": "27"
+                "reviewCount": "56"
             },
             "review": [
                 {
                     "@type": "Review",
                     "author": "Mickaël",
                     "datePublished": "2024-10-10",
-                    "reviewBody": "Séjour fantastique dans une cabane avec vue panoramique. Jacuzzi au top!",
+                    "reviewBody": "Séjour fantastique dans cette cabane, les hôtes sont au top et le jacuzzi offre un panorama qu'on ne voit pas tous les jours !",
                     "reviewRating": {"@type": "Rating", "ratingValue": "5"}
                 }
             ]

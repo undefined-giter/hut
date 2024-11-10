@@ -71,12 +71,27 @@ class UserController extends Controller
             'connected_user_id' => $connected_user_id,
         ]);
     }    
-
+    
     public function destroy($id): RedirectResponse
     {
         $user = User::findOrFail($id);
+        
+        $today = Carbon::today();
+        $reservations = $user->reservations()
+                             ->where('end_date', '>=', $today)
+                             ->get();
+    
+        $admin = User::where('role', 'admin')->first();
+        if ($admin) {
+            $admin->notify(new UserDeletedNotification($user, $reservations));
+        }
+    
         $user->delete();
-
-        return redirect()->route('admin.list')->with('success', ['Utilisateur supprimé.']);
+    
+        if (in_array(Auth::user()->role, ['admin', 'fake_admin'])) {
+            return redirect()->route('admin.list')->with('success', ['Utilisateur supprimé.']);
+        }
+        
+        return redirect()->route('register')->with('success', ['Votre compte a bien été supprimé.']);
     }
 }
