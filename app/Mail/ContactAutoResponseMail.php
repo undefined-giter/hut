@@ -51,19 +51,11 @@ class ContactAutoResponseMail extends Mailable
     {
         return new Content(
             view: 'emails.contactAutoResponseMail',
-            with: [
-                'name' => $this->name,
-                'adminEmail' => $this->adminEmail,
-                'adminPhone' => $this->adminPhone,
-            ]
+            // with: [
+            //     'name' => $this->name,
+            //     'adminEmail' => $this->adminEmail,
+            //     'adminPhone' => $this->adminPhone,
+            // ]
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }

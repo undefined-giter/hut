@@ -3,7 +3,7 @@
 
     <Layout>
         <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec Jacuzzi</h1>
-
+        
         <div class="flex justify-between oleoScript font-bold">
 
             <p class="ml-3 -mt-1">Réservez directement au 
@@ -13,10 +13,10 @@
                     </a>
                 </span>
             </p>
-
+            
             <Link :href="route('book')" class="mr-3 text-right"><p>Réservez votre séjour dans notre cabane dès maintenant</p></Link>
         </div>
-
+        
         <div class="relative inset-0 h-[45vh] overflow-hidden mb-4 max-h-[580px] sm:h-[70vh]">
 
             <div class="eyes-container">
@@ -25,7 +25,7 @@
                     <div><i></i></div>
                 </div>
             </div>
-
+            
             <div 
                 v-for="(image, index) in images" 
                 :key="index" 
@@ -33,7 +33,7 @@
                 :style="{ backgroundImage: `url(${image})`, opacity: currentImageIndex === index ? 1 : 0 }">
             </div>
         </div>
-
+        
         <div class="relative w-full pb-[56.25%] mb-4">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d76894.95095827775!2d5.810677613083541!3d44.81160184397263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cb2c55c34b1d6d%3A0x439021acadf94417!2zQ29yZMOpYWMsIDM4NzEwIENow6J0ZWwtZW4tVHJpw6h2ZXM!5e1!3m2!1sen!2sfr!4v1729516566125!5m2!1sen!2sfr&amp;zoom=14&amp;controls=0"
                 class="absolute inset-0 w-full h-full rounded-2xl border-0"
@@ -53,6 +53,8 @@
             <a :href="route('privacy-policy')">Politique de confidentialité</a>
             <a :href="route('terms-of-service')">Conditions d'utilisation</a>
         </div>
+
+        <div v-if="isVisible" class="account-deleted-message">Votre compte ainsi que vos réservations ont bien été supprimés.<br>N'hésitez pas à recréer un compte,<br>à bientôt.</div>
     </Layout>
 </template>
 
@@ -68,14 +70,18 @@ const images = [
 ];
 
 const props = defineProps({
-  adminPhone: {
-    type: String,
-    required: false,
-  },
-  adminPhoneHref: {
-    type: String,
-    required: false,
-  },
+    adminPhone: {
+        type: String,
+        required: false,
+    },
+    adminPhoneHref: {
+        type: String,
+        required: false,
+    },
+    accountDeleted: {
+        type: Boolean,
+        default: false
+    },
 })
 
 const currentImageIndex = ref(0);
@@ -87,6 +93,8 @@ const changeImage = () => {
     currentImageIndex.value = (currentImageIndex.value + 1) % images.length;
 };
 
+const isVisible = ref(props.accountDeleted);
+
 onMounted(() => {
     timeoutId = setTimeout(() => {
         changeImage();
@@ -94,6 +102,12 @@ onMounted(() => {
             changeImage();
         }, 6500);
     }, 4000);
+
+    if (isVisible.value) {
+        setTimeout(() => {
+            isVisible.value = false;
+        }, 7000);
+    }
 });
 
 onUnmounted(() => {

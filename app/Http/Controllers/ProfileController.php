@@ -109,9 +109,11 @@ class ProfileController extends Controller
     public function destroy(Request $request, $id): RedirectResponse
     {
         $currentUser = auth()->user();
+
+        $userEmail = $user->email;
         
         if ($currentUser->role === 'fake_admin'){
-            return redirect()->route('profile')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris fake_admin.']); 
+            return redirect()->route('profile')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris {$userEmail}.']); 
         }
 
         $user = User::findOrFail($id);
@@ -122,18 +124,22 @@ class ProfileController extends Controller
             }
 
             if ($currentUser->google_id && $currentUser->id === $user->id) {
-                $currentUser->delete();
+                $user->delete();
                 Auth::logout();
             
-                return redirect()->route('homepage')->with('success', ['Votre compte a bien été supprimé.']);
+                return redirect()->route('homepage', ['account_deleted' => 'true']);
             }
 
             if (!Hash::check($request->password, $currentUser->password)) {
                 return redirect()->route('profile')->with('error', ['Mot de passe incorrect.']);
+            }else{
+                $user->delete();
+                Auth::logout();
+                return redirect()->route('homepage', ['account_deleted' => 'true']);
             }
         }
 
         $user->delete();
-        return redirect()->route('admin.list')->with('success', ['Le compte a été supprimé.']);
+        return redirect()->route('admin.list')->with('success', ['Le compte de l\'utilisateur {$userEmail} a bien été supprimé.']);
     }
 }

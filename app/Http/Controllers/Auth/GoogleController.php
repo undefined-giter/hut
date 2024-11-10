@@ -68,7 +68,7 @@ class GoogleController extends Controller
                     'phone' => $phone,
                     'picture' => $googleUser->getAvatar() ?? 'default_user.png',
                     'password' => Hash::make(str()->random(24)),
-                    'last_login' => now(),
+                    //'last_login' => now(),
                 ]);
             }
             

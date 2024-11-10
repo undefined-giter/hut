@@ -20,6 +20,7 @@ Route::get('/', function () {
     return Inertia::render('Homepage/Welcome', [
         'adminPhoneHref' => $adminPhone,
         'adminPhone' => format_phone_number($adminPhone),
+        'accountDeleted' => request()->query('account_deleted') === 'true',
     ]);
 })->name('homepage');
 

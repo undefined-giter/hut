@@ -60,7 +60,7 @@ class ReservationDeletedMail extends Mailable
         $toEmail = $this->isAdmin ? $this->adminEmail : $this->email;
 
         return new Envelope(
-            subject: 'Réservation Annulée',
+            subject: 'Cabane - Réservation Annulée',
             from: new Address($this->adminEmail, 'Cabane'),
             to: [new Address($toEmail, $this->isAdmin ? 'Admin' : $this->userName)],
         );
@@ -74,15 +74,5 @@ class ReservationDeletedMail extends Mailable
         return new Content(
             view: 'emails.reservation_deleted',
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }

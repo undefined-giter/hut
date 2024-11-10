@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <transition name="modal">
     <div v-if="showModal" class="modal-overlay">
       <div class="modal-content mx-2">
-        <h2>Entrez votre numéro de téléphone</h2>
-        <p class="ml-0.5 text-md">Optionnel mais recommandé</p>
+        <h2 class="md:mt-0">Renseignez Votre Téléphone</h2>
+        <p class="ml-0.5 -mt-2.5 md:mt-0">Optionnel mais recommandé</p>
         <input
           v-model="phone"
           type="tel"
@@ -18,9 +18,11 @@
         </div>
       </div>
     </div>
-    
+  </transition>
+
+  <transition name="fade">
     <p v-if="showConfirmation" class="confirmation-message">Merci !</p>
-  </div>
+  </transition>
 </template>
 
 <script setup>
@@ -51,7 +53,7 @@ const closeModal = () => {
 };
 
 const handleOutsideClick = (event) => {
-  const modalContent = document.querySelector('.modal-content');
+  const modalContent = document.querySelector('.modal-overlay');
   if (modalContent && !modalContent.contains(event.target)) {
     closeModal();
   }
@@ -106,21 +108,37 @@ onUnmounted(() => {
 <style scoped>
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 60px;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 800;
+  height: 25vh;
   @apply bg-orangeTheme bg-opacity-75;
+  
+  @screen md {
+    height: 28vh;
+  }
 }
+
 .modal-content {
-  padding: 20px;
+  padding: 18px;
   border-radius: 8px;
-  max-width: 400px;
-  width: 100%;
-  transform: translateY(-25%);
-  @apply bg-light dark:bg-dark bg-opacity-100 dark:bg-opacity-100;
+  width: 400px;
+  height: 23vh;
+  @apply bg-light dark:bg-dark rounded-lg bg-opacity-100 dark:bg-opacity-100;
 }
+
+.modal-enter-active, .modal-leave-active { transition: opacity 1s ease, transform 1s ease; }
+.modal-enter-from, .modal-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.fade-enter-active, .fade-leave-active { transition: opacity 1s ease-in-out; }
+
 .confirmation-message {
   position: fixed;
   top: 15px;
@@ -134,7 +152,6 @@ onUnmounted(() => {
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
 }
-.confirmation-message.fade-out {
-  opacity: 0;
-}
+
+.confirmation-message.fade-out, .fade-enter-from, .fade-leave-to, .modal-enter-from, .modal-leave-to { opacity: 0; }
 </style>
