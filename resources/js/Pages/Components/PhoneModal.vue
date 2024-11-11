@@ -23,6 +23,10 @@
   <transition name="fade">
     <p v-if="showConfirmation" class="confirmation-message">Merci !</p>
   </transition>
+
+  <transition name="fade">
+    <p v-if="showPhoneReminder" class="reminder-message">Pensez à renseigner votre numéro de téléphone dans votre profil pour améliorer votre expérience.</p>
+  </transition>
 </template>
 
 <script setup>
@@ -34,6 +38,7 @@ const showModal = ref(false);
 const phone = ref('');
 const phoneError = ref(null);
 const showConfirmation = ref(false);
+const showPhoneReminder = ref(false);
 
 const isPhoneValid = computed(() => {
   const { isValid } = validatePhone(phone.value);
@@ -47,6 +52,13 @@ const handlePhoneInput = () => {
 };
 
 const closeModal = () => {
+  if (!phone.value) {
+    showPhoneReminder.value = true;
+    setTimeout(() => {
+      showPhoneReminder.value = false;
+    }, 8000);
+  }
+
   phone.value = '';
   phoneError.value = null;
   showModal.value = false;
@@ -65,6 +77,7 @@ const submitPhone = async () => {
       await axios.patch('/update-phone', { phone: phone.value });
       closeModal();
       showConfirmationMessage();
+      showPhoneReminder.value = false;
     } catch (error) {
       //console.error("Erreur lors de la mise à jour du numéro de téléphone :", error);
     }
@@ -139,9 +152,9 @@ onUnmounted(() => {
 
 .fade-enter-active, .fade-leave-active { transition: opacity 1s ease-in-out; }
 
-.confirmation-message {
+.confirmation-message, .reminder-message {
   position: fixed;
-  top: 15px;
+  top: 64px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;
@@ -151,7 +164,10 @@ onUnmounted(() => {
   font-weight: bold;
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
+  z-index : 750;
 }
 
 .confirmation-message.fade-out, .fade-enter-from, .fade-leave-to, .modal-enter-from, .modal-leave-to { opacity: 0; }
+
+.reminder-message { @apply bg-orangeTheme; }
 </style>
