@@ -21,8 +21,8 @@
             </button>
         </div>
 
-        <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8 mb-4">
-            <p>Ou se connecter manuellement</p>
+        <form @submit.prevent="submit" class="max-w-sm mx-auto bg-light dark:bg-dark rounded-lg p-4 mb-4">
+            <p class="text-center">Ou se connecter manuellement</p>
 
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
@@ -59,9 +59,9 @@
                 <InputError :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4 flex justify-between">
+            <div class="block mt-2 flex justify-between">
                 <div>
-                    <label class="flex items-center -mt-2" title="Nos cookies ont une durée de vie de 2 heures seulement.
+                    <label class="flex items-center" title="Nos cookies ont une durée de vie de 2 heures seulement.
 Inutile de vous surcharger de cookies 😉">
                         <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
                         <span class="text-sm text-gray-600 dark:text-gray-400">Rester connecté</span>
@@ -80,7 +80,7 @@ Inutile de vous surcharger de cookies 😉">
                     Se connecter
                 </PrimaryButton>
             </div>
-            <div class="my-10 text-center">
+            <div class="mt-8 mb-2 text-center">
                 <Link
                     :href="route('register')"
                     class="text-lg font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
@@ -146,6 +146,9 @@ defineProps({
     status: {
         type: String,
     },
+    showMonth: {
+        type: String,
+    }
 });
 
 const imageLoaded = ref(false)

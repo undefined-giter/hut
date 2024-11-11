@@ -21,8 +21,8 @@
             </button>
         </div>
 
-        <form @submit.prevent="submit" class="max-w-sm mx-auto my-12">
-            <p>Ou s'enregistrer manuellement</p>
+        <form @submit.prevent="submit" class="max-w-sm mx-auto bg-light dark:bg-dark rounded-lg p-4 mb-4">
+            <p class="text-center">Ou s'inscrire manuellement</p>
             <!-- <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
@@ -145,7 +145,6 @@
             </div> -->
             
             <div class="flex items-end justify-between mt-2">
-                
                     <Link
                         :href="route('login')"
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"

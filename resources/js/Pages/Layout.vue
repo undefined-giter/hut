@@ -153,9 +153,11 @@ const props = defineProps({
 
 const profilePicture = ref(`${baseUrl}/profiles/default_user.png`);
 const fetchProfilePicture = async () => {
-  const imageUrl = auth.user.picture?.startsWith('https')
-    ? auth.user.picture
-    : `${baseUrl}/profiles/${auth.user.picture || 'default_user.png'}`;
+  const imageUrl = auth.user?.picture
+    ? auth.user.picture.startsWith('https')
+      ? auth.user.picture
+      : `${baseUrl}/profiles/${auth.user.picture || 'default_user.png'}`
+    : `${baseUrl}/profiles/default_user.png`;
 
   try {
     const response = await fetch(imageUrl, { method: 'HEAD' });
@@ -165,7 +167,7 @@ const fetchProfilePicture = async () => {
       profilePicture.value = `${baseUrl}/profiles/default_user.png`;
     }
   } catch (error) {
-    //console.error("Erreur lors de la récupération de l'image :", error);
+    // console.error("Erreur lors de la récupération de l'image :", error);
     profilePicture.value = `${baseUrl}/profiles/default_user.png`;
   }
 };

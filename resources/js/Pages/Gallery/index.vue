@@ -15,7 +15,7 @@
             :src="`${baseUrl}/gallery/${image}`"
             loading="lazy"
             :alt="getImageName(image)"
-            :title="image.name"
+            :title="getImageName(image)"
             :style="getTransformOrigin(index)"
             class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-40 relative"
           >

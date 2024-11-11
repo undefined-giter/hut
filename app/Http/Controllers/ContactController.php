@@ -16,7 +16,13 @@ class ContactController extends Controller
 {
     public function index(): Response
     {
-        return inertia('Contact/index', ['user' => Auth::user()]);
+        $adminPhone = config('admin.phone');
+        
+        return inertia('Contact/index', [
+            'user' => Auth::user(),
+            'adminPhoneHref' => $adminPhone,
+            'adminPhone' => format_phone_number($adminPhone),
+        ]);
     }
 
     /**
