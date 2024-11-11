@@ -2,14 +2,14 @@
     <Head title="Bienvenue | Cabane" />
 
     <Layout>
-        <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec Jacuzzi</h1>
+        <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec&nbsp;Jacuzzi</h1>
         
         <div class="flex justify-between oleoScript font-bold">
 
             <p class="ml-3 -mt-1">Réservez directement au 
                 <span class="text-2xl text-orangeTheme">
                     <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">
-                        <span style="font-size:0.8em">📱</span> <span class="-ml-2">{{ adminPhone }}</span>
+                        <span style="font-size:0.8em">📱</span>&nbsp;<span class="-ml-2">{{ adminPhone }}</span>
                     </a>
                 </span>
             </p>
@@ -37,7 +37,7 @@
         <div class="relative w-full pb-[56.25%] mb-4">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d76894.95095827775!2d5.810677613083541!3d44.81160184397263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cb2c55c34b1d6d%3A0x439021acadf94417!2zQ29yZMOpYWMsIDM4NzEwIENow6J0ZWwtZW4tVHJpw6h2ZXM!5e1!3m2!1sen!2sfr!4v1729516566125!5m2!1sen!2sfr&amp;zoom=14&amp;controls=0"
                 class="absolute inset-0 w-full h-full rounded-2xl border-0"
-                allowfullscreen="" 
+                allowfullscreen="false" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
@@ -54,14 +54,14 @@
             <a :href="route('terms-of-service')">Conditions d'utilisation</a>
         </div>
 
-        <div v-if="isVisible" class="account-deleted-message">Votre compte ainsi que vos réservations ont bien été supprimés.<br>N'hésitez pas à recréer un compte,<br>à bientôt.</div>
+        <div v-if="isVisible" class="account-deleted-message z-50">Votre compte ainsi que vos réservations ont bien été supprimés.<br>N'hésitez pas à recréer un compte,<br>à bientôt.</div>
     </Layout>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
-import Layout from './../Layout.vue';
+import { ref, onMounted, onUnmounted } from "vue";
+import { Head, Link } from "@inertiajs/vue3";
+import Layout from "./../Layout.vue";
 
 const images = [
     `${baseUrl}/gallery/hut_front.jpg`,

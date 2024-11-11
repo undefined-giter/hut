@@ -9,7 +9,9 @@
 
         <meta name="description" content="Découvrez une cabane avec jacuzzi relaxant dans le Trièves. Un séjour unique avec vue panoramique.">
         <meta name="keywords" content="cabane, gîte, Trièves, cabane Trièves, gîte Trièves, jacuzzi, location, location cabane, hébergement, cabane en bois, vue panoramique, réservation, séjour nature, montagne, détente, relaxant, vacances Trièves">
-        <link rel="canonical" href="https://cabane.leorip.com/">
+        @if (request()->is('/'))
+            <link rel="canonical" href="https://cabane.leorip.com" />
+        @endif
         <meta name="robots" content="index, follow">
 
         <!-- Open Graph / Facebook -->
@@ -19,7 +21,7 @@
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="Image d'une cabane avec jacuzzi relaxant dans le Trièves pour séjour en nature">
-        <meta property="og:url" content="https://cabane.leorip.com/">
+        <meta property="og:url" content="https://cabane.leorip.com">
         <meta property="og:type" content="website">
 
         <meta name="theme-color" content="#141414">
@@ -37,7 +39,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="mask-icon" href="{{ asset('icons/favicon.ico') }}" color="#ad5205">
 
-        <title>Cabane avec Jacuzzi et Vue Panoramique - Nuit Insolite en Trièves</title>
+        <title>Cabane avec Jacuzzi & Vue Panoramique - Nuit Insolite en Trièves</title>
 
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
@@ -50,7 +52,7 @@
             "additionalType": "https://schema.org/LodgingBusiness",
             "image": "https://cabane.leorip.com/img/hut.png",
             "description": "Réservez une cabane avec jacuzzi et sa vue panoramique exceptionnelle dans le Trièves. Un séjour unique et confortable.",
-            "url": "https://cabane.leorip.com/",
+            "url": "https://cabane.leorip.com",
             "telephone": "+33-6-15-16-64-90",
             "address": {
                 "@type": "PostalAddress",
@@ -65,10 +67,10 @@
                 "longitude": "5.830722"
             },
             "priceRange": "€€",
-            <!-- "sameAs": [
+            "sameAs": [
                 "https://www.facebook.com/TODO",
                 "https://www.instagram.com/TODO"
-            ], -->
+            ],
             "openingHoursSpecification": [
                 {
                     "@type": "OpeningHoursSpecification",
