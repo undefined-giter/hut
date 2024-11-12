@@ -5,8 +5,14 @@
         <div>
             <a href="#english_use" class="bold text-orangeTheme underline px-12">**English below**</a><br><br>
 
+            <div class="w-full text-right mb-8">
+                <button type="button" @click="goBack();" class="btn py-2 ml-auto mr-12">
+                    Retour
+                </button>
+            </div>
+
             <pre class="p whitespace-pre-wrap px-12 text-justify">
-                <span class="mx-auto">CONDITIONS D'UTILISATION</span>
+    CONDITIONS D'UTILISATION
 
 
 APERÇU
@@ -219,7 +225,7 @@ En cas de non-respect de ces conditions, la direction se réserve le droit de de
 
         <div id="english_use">
             <pre class="p whitespace-pre-wrap px-12 text-justify">
-                <span class="mx-auto">TERMS OF USE</span>
+    TERMS OF USE
 
 OVERVIEW
 

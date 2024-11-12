@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-4">
                 <label for="price_per_night_for_2_and_more_nights">Prix par nuit pour 2 nuits et + :</label>
                 <input 
                     v-model="form.price_per_night_for_2_and_more_nights"
@@ -32,6 +32,23 @@
                 />
                 <div v-if="errors.price_per_night_for_2_and_more_nights" class="text-red-500">
                     {{ errors.price_per_night_for_2_and_more_nights }}
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label for="percent_reduced_week" 
+                    title="Les valeurs négatives augmentent le prix (des nuits de lundi à vendredi)"
+                >Pourcentage de réduction de lundi 14h à vendredi 12h :</label>
+                <input 
+                    v-model="form.percent_reduced_week"
+                    type="number"
+                    step="1"
+                    max="100"
+                    id="percent_reduced_week"
+                    class="w-full px-4 py-2"
+                />
+                <div v-if="errors.percent_reduced_week" class="text-red-500">
+                    {{ errors.percent_reduced_week }}
                 </div>
             </div>
 
@@ -49,10 +66,12 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Layout from './../Layout.vue';
 
-const props = defineProps(['errors', 'price_per_night', 'price_per_night_for_2_and_more_nights']);
+const props = defineProps(['errors', 'price_per_night', 'price_per_night_for_2_and_more_nights', 'percent_reduced_week']);
+
 const form = useForm({
     price_per_night: props.price_per_night,
     price_per_night_for_2_and_more_nights: props.price_per_night_for_2_and_more_nights,
+    percent_reduced_week: props.percent_reduced_week,
 });
 
 const updatePrices = () => {

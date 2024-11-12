@@ -64,6 +64,7 @@
                         <div v-else>
                             <em><span class="text-blue-600">Aucune option demandée</span></em>
                         </div>
+                        <div class="text-right mr-2 -mt-2">Total : {{ parseFloat(reservation.res_price) % 1 === 0 ? parseFloat(reservation.res_price).toFixed(0) : parseFloat(reservation.res_price).toFixed(2) }}€</div>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
@@ -137,6 +138,7 @@
                         <div v-else>
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
+                        <div class="text-right mr-2 -mt-2">Total : {{ parseFloat(reservation.res_price) % 1 === 0 ? parseFloat(reservation.res_price).toFixed(0) : parseFloat(reservation.res_price).toFixed(2) }}€</div>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
@@ -187,6 +189,7 @@
                         <div v-else>
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
+                        <div class="text-right mr-2 -mt-2">Total : {{ parseFloat(reservation.res_price) % 1 === 0 ? parseFloat(reservation.res_price).toFixed(0) : parseFloat(reservation.res_price).toFixed(2) }}€</div>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">

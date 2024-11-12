@@ -145,12 +145,15 @@ class ReservationController extends Controller
 
         $pricePerNight = DB::table('prices')->where('key', 'price_per_night')->value('value');
         $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
-        
+        $percent_reduced_week = DB::table('prices')->where('key', 'percent_reduced_week')->value('value');
+
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
             'PRICE_PER_NIGHT' => $pricePerNight,
             'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
+            'PERCENT_REDUCED_WEEK' => $percent_reduced_week,
+            
             'in_date' => $calendarColors['in_date'],
             'inner_date' => $calendarColors['inner_date'],
             'out_date' => $calendarColors['out_date'],
@@ -294,6 +297,7 @@ class ReservationController extends Controller
 
         $pricePerNight = DB::table('prices')->where('key', 'price_per_night')->value('value');
         $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
+        $percent_reduced_week = DB::table('prices')->where('key', 'percent_reduced_week')->value('value');
 
         $calendarColors = $this->getCalendarColors($reservations, $id);
 
@@ -311,6 +315,7 @@ class ReservationController extends Controller
             'showMonthEdit' => $showMonth,
             'PRICE_PER_NIGHT' => $pricePerNight,
             'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
+            'PERCENT_REDUCED_WEEK' => $percent_reduced_week,
         
             'in_date' => array_values($calendarColors['in_date']),
             'inner_date' => array_values($calendarColors['inner_date']),

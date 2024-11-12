@@ -6,10 +6,14 @@
         <div class="px-12">
             <a href="#english_policies" class="bold text-orangeTheme underline px-12">**English below**</a><br><br>
 
-            <pre class="p whitespace-pre-wrap px-12 text-justify">
-                <span class="mx-auto">Politique de Confidentialité</span>
+            <div class="w-full text-right px-12">
+                <button type="button" @click="goBack();" class="btn py-2">
+                    Retour
+                </button>
+            </div>
 
-Dernière mise à jour : 6 novembre 2024
+            <pre class="p whitespace-pre-wrap px-12 text-justify">
+    POLITIQUE DE CONFIDENTAILITE
 
 Cette Politique de Confidentialité décrit nos politiques et procédures concernant la collecte, l'utilisation et la divulgation de vos informations lorsque vous utilisez le Service et vous informe de vos droits en matière de confidentialité et de la manière dont la loi vous protège.
 
@@ -101,6 +105,8 @@ Notre Service peut contenir des liens vers d'autres sites Web qui ne sont pas ex
 Modifications de cette Politique de Confidentialité
 Nous pouvons mettre à jour notre Politique de Confidentialité de temps à autre.
 
+Dernière mise à jour : 12 novembre 2024
+
 Contactez-nous
 Si vous avez des questions concernant cette Politique de Confidentialité, vous pouvez nous contacter :
 Par email : leo.ripert@gmail.com
@@ -118,8 +124,7 @@ Par téléphone : 06 15 16 64 90
 
         <div id="english_policies"  class="px-12">
             <pre class="p whitespace-pre-wrap px-12 text-justify">
-                <span class="mx-auto">Privacy Policy</span>
-Last updated: November 06, 2024
+    Privacy Policy
 
 This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
 
@@ -304,6 +309,8 @@ We may update Our Privacy Policy from time to time. We will notify You of any ch
 We will let You know via email and/or a prominent notice on Our Service, prior to the change becoming effective and update the "Last updated" date at the top of this Privacy Policy.
 
 You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+
+Last updated: November 12, 2024
 
 Contact Us
 If you have any questions about this Privacy Policy, You can contact us:

@@ -4,7 +4,7 @@
     
     <h1>Réservez Votre Bonheur !</h1>
 
-    <TextRes :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" />
+    <TextRes :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" />
     
     <vue-cal
       locale="fr"
@@ -124,7 +124,7 @@
             {{ dateError }}
           </div>
         </div>
-        <button type="button" class="btn !bg-orangeTheme !shadow-none !px-2" @click="resetReservation">Réinitialiser</button>
+        <button type="button" :class="`${arrivalDate ? '' : 'btn-disabled'} btn text-sm bg-orangeTheme hover:text-orangeTheme !shadow-none !px-2 mr-0.5`" @click="resetReservation">Réinitialiser<br>les Dates</button>
       </div>
 
       <h3 v-if="options.length >= 1" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
@@ -171,15 +171,15 @@
           <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="resCommentPlaceholder" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
-        <div class="flex flex-col items-center">
-          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" />
+        <div class="flex flex-col items-center ml-auto">
+          <Price @price-updated="updateCalculatedPrice" :arrivalDate="arrivalDate" :departureDate="departureDate" :resNights="numberOfNights" :resOptions="selectedOptionsObjects" :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" />
           <button
             type="submit"
             form="reservationForm"
             :disabled="!isReservationValid || resCommentLength > 510"
             :class="[
               (!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 
-              'btn ml-auto block !p-12 !font-bold text-2xl'
+              'btn block !p-12 !font-bold text-2xl'
             ]">
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
@@ -234,7 +234,7 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS,
+const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
   edit_reservation_dates = []  } = usePage().props;
@@ -390,7 +390,9 @@ const resetReservation = () => {
   dateError.value = null;
   numberOfNights.value = 0;
   isReservationValid.value = false;
-  document.querySelector('.vuecal__cell--selected').classList.remove('vuecal__cell--selected')
+  if(document.querySelector('.vuecal__cell--selected')){
+    document.querySelector('.vuecal__cell--selected').classList.remove('vuecal__cell--selected')
+  }
 };
 
 const formatDate = (date) => {
