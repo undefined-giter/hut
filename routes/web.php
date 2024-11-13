@@ -8,6 +8,7 @@ use App\Http\Controllers\ReservationController;
 
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\PriceController;
+use App\Http\Controllers\Admin\SpecialDatePriceController;
 use App\Http\Controllers\Admin\AdminCommentController;
 
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,8 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 
     Route::get('/prix', [PriceController::class, 'getPrices'])->name('prices');
     Route::post('/prix', [PriceController::class, 'updatePrices'])->name('prices.update');
+
+    Route::resource('/specials-dates-prices', SpecialDatePriceController::class);    
 });
 
 require __DIR__.'/auth.php';
