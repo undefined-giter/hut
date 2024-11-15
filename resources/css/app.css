@@ -60,6 +60,13 @@
 
 main, table {@apply bg-light dark:bg-dark;}
 
+.img-transition {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+.img-transition[src] { opacity: 1; }
+
+  
 /* Layout */
 /* Progress bar entre les pages */
 #nprogress .bar {

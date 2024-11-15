@@ -1,5 +1,5 @@
-<template class="min-h-screen mx-auto max-w-6xl pb-8">
-    <div class="mx-0.5 flex-grow">
+<template class="min-h-screen pb-8">
+    <div class="mx-1 sm:mx-2 md:mx-4 lg:mx-2 xl:mx-0 pt-12 md:pt-16 pb-10">
         
         <header class="font-bold">
             <div v-if="$page.props.flash && $page.props.flash.success" class="fixed left-1/2 transform -translate-x-1/2 space-y-4 z-40 top-20">
@@ -14,7 +14,7 @@
                 </transition-group>
             </div>
             
-            <nav class="fixed top-0 left-7 right-4 1280px:px-0 max-w-6xl mx-auto mt-2 flex justify-between items-center z-50 bg-transparent">   
+            <nav class="fixed top-0 left-4 right-3 1280px:px-0 max-w-6xl mx-auto mt-2 flex justify-between z-50 bg-transparent">   
                 <div>
                     <div class="flex absolute -top-6 !bg-transparent z-30">
                         <ThemeSwitcher class="mt-4 md:mt-0.5" />
@@ -28,7 +28,7 @@
                                     :src="profilePicture"
                                     loading="lazy"
                                     alt="Photo de profil"
-                                    class="rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"
+                                    class="img-transition rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"
                                     draggable="false"
                                 />
                                 <p :class="[isActive('profile') ? 'custom-underline' : '', 'hidden md:flex kalniaGlaze text-lg px-2 max-w-xs overflow-x-auto whitespace-nowrap select-none']">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="hidden md:flex absolute full-nav left-1/2 transform -translate-x-1/2 space-x-1.5 items-center">
+                <div class="hidden md:flex absolute full-nav left-1/2 transform -translate-x-1/2 space-x-1.5">
                     <Link :href="route('homepage')" :class="[isActive('homepage') ? 'link-active' : '', commonClasses]">Accueil</Link>
                     <Link :href="route('gallery')" :class="[isActive('gallery') ? 'link-active' : '', commonClasses]">Galerie</Link>
                     <Link :href="route('book')" :class="[isActive('book') ? 'link-active' : '', commonClasses]">Réserver</Link>
@@ -53,7 +53,7 @@
                         :class="[isActive('admin.list') ? 'link-active' : '', commonClasses]">Utilisateurs</Link>
                 </div>
 
-                <div class="hidden md:flex full-nav items-center mr-0 lg:mr-4 xl:mr-3">
+                <div class="hidden md:flex full-nav">
                     <template v-if="!auth.user">
                         <Link :href="route('register')" :class="[isActive('register') ? 'link-active' : '', commonClasses]">Inscription</Link>
                         <Link :href="route('login')" :class="[isActive('login') ? 'link-active' : '', commonClasses, 'ml-1.5']">Connexion</Link>
@@ -92,11 +92,9 @@
             </nav>
         </header>
 
-        <div class="mx-1 sm:mx-2 md:mx-4 lg:mx-2 xl:mx-0 pt-12 md:pt-16 pb-10">
-            <main class="max-w-6xl mx-auto overflow-hidden p-2 mb-1 rounded-xl shadow-lg border border-orangeTheme transition-all duration-300">
-                <slot />
-            </main>
-        </div>
+        <main class="max-w-6xl mx-auto overflow-hidden p-2 mb-1 rounded-xl shadow-lg border border-orangeTheme transition-all duration-300">
+            <slot />
+        </main>
 
         <transition name="fade">
             <footer v-if="showFooter && allImagesDisplayed">
@@ -152,24 +150,24 @@ const props = defineProps({
 });
 
 const profilePicture = ref(`${baseUrl}/profiles/default_user.png`);
-const fetchProfilePicture = async () => {
-  const imageUrl = auth.user?.picture
-    ? auth.user.picture.startsWith('https')
-      ? auth.user.picture
-      : `${baseUrl}/profiles/${auth.user.picture || 'default_user.png'}`
+const fetchProfilePicture = () => {
+  const userPicture = auth.user?.picture;
+  const imageUrl = userPicture
+    ? userPicture.startsWith('https')
+      ? userPicture
+      : `${baseUrl}/profiles/${userPicture}`
     : `${baseUrl}/profiles/default_user.png`;
 
-  try {
-    const response = await fetch(imageUrl, { method: 'HEAD' });
-    if (response.ok) {
-      profilePicture.value = imageUrl;
-    } else {
-      profilePicture.value = `${baseUrl}/profiles/default_user.png`;
-    }
-  } catch (error) {
-    // console.error("Erreur lors de la récupération de l'image :", error);
+  const img = new Image();
+  img.src = imageUrl;
+
+  img.onload = () => {
+    profilePicture.value = imageUrl;
+  };
+
+  img.onerror = () => {
     profilePicture.value = `${baseUrl}/profiles/default_user.png`;
-  }
+  };
 };
 
 const observer = new MutationObserver(() => {

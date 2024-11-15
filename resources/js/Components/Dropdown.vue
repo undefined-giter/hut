@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const props = defineProps({
@@ -50,7 +50,6 @@ const open = ref(false);
             <slot name="trigger" />
         </div>
 
-        <!-- Full Screen Dropdown Overlay -->
         <div v-show="open" class="fixed inset-0 z-40" @click="open = false"></div>
 
         <Transition
@@ -74,4 +73,4 @@ const open = ref(false);
             </div>
         </Transition>
     </div>
-</template>
+</template> -->

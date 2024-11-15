@@ -69,7 +69,6 @@
                 </transition>
             </div>
         </form>
-
     </Layout>
 </template>
 

@@ -39,7 +39,7 @@ const { isUnrolled, toggleUnroll } = useUnroll();
 <template>
     <section class="mx-auto">
         <div @click="toggleUnroll(2)" class="flex justify-center">
-            <h2 class="text-lg">Votre Mot de Passe</h2>
+            <h2 class="text-lg cursor-pointer">Votre Mot de Passe</h2>
             <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(2) ? '🔼' : '🔽' }}</h2>
         </div>
 
