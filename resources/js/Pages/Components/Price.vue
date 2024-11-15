@@ -31,6 +31,10 @@ const props = defineProps({
     PERCENT_REDUCED_WEEK: {
         type: Number,
         default: 10,
+    },
+    specialDatesPricesArray: {
+        type: Array,
+        default: [],
     }
 });
 
@@ -40,6 +44,7 @@ const totalPrice = ref(0);
 const totalPriceDisplay = ref('');
 
 const calculateTotalPrice = () => {
+    console.log(props.specialDatesPricesArray);
     const night_price = props.resNights > 1 ? props.PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS : props.PRICE_PER_NIGHT;
     totalPrice.value = props.resNights * night_price;
 

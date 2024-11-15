@@ -172,7 +172,17 @@
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
         <div class="flex flex-col items-center ml-auto">
-          <Price @price-updated="updateCalculatedPrice" :arrivalDate="arrivalDate" :departureDate="departureDate" :resNights="numberOfNights" :resOptions="selectedOptionsObjects" :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" />
+          <Price
+            @price-updated="updateCalculatedPrice" 
+            :arrivalDate="arrivalDate" 
+            :departureDate="departureDate" 
+            :resNights="numberOfNights" 
+            :resOptions="selectedOptionsObjects" 
+            :PRICE_PER_NIGHT="PRICE_PER_NIGHT" 
+            :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" 
+            :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" 
+            :specialDatesPricesArray="specialDatesPricesArray"
+          />
           <button
             type="submit"
             form="reservationForm"
@@ -219,7 +229,6 @@
       </transition>
     </div>
   </Layout>
-
   <PhoneModal v-if="showPhoneModal" />
 </template>
 
@@ -234,7 +243,7 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK,
+const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
   edit_reservation_dates = []  } = usePage().props;

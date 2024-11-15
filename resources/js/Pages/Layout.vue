@@ -47,10 +47,10 @@
 
                     <Link v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')"
                         :href="route('admin.options.index')" 
-                        :class="[isActive('admin.options.index') ? 'link-active' : '', commonClasses, '!ml-6']">Options</Link>
+                        :class="[isActive('admin.options.*') || isActive('admin.prices') ? 'link-active' : '', commonClasses, '!ml-6']">Options</Link>
                     <Link v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')"
                         :href="route('admin.list')" 
-                        :class="[isActive('admin.list') ? 'link-active' : '', commonClasses]">Utilisateurs</Link>
+                        :class="[isActive('admin.list') || isActive('admin.details') ? 'link-active' : '', commonClasses]">Utilisateurs</Link>
                 </div>
 
                 <div class="hidden md:flex full-nav">
@@ -177,30 +177,24 @@ observer.observe(document.body, { childList: true, subtree: true, attributes: tr
 
 onMounted(() => {
     window.addEventListener('scroll', handleScroll);
-    
-    const pageProps = usePage().props;
-    
-    if (pageProps.flash && pageProps.flash.success) {
+
+    const { flash } = usePage().props;
+
+    const handleFlashMessages = (type, className) => {
+        if (flash && flash[type]) {
             setTimeout(() => {
-                document.querySelectorAll('.flash-success').forEach(el => {
+                document.querySelectorAll(`.${className}`).forEach(el => {
                     el.classList.add('fade-out');
                 });
                 setTimeout(() => {
-                    pageProps.flash.success = null;
-        }, 1000);
-    }, 8000);
-    }
+                    flash[type] = null;
+                }, 1000);
+            }, 8000);
+        }
+    };
 
-    if (pageProps.flash && pageProps.flash.error) {
-        setTimeout(() => {
-            document.querySelectorAll('.flash-error').forEach(el => {
-                el.classList.add('fade-out');
-            });
-            setTimeout(() => {
-                pageProps.flash.error = null;
-            }, 1000);
-        }, 8000);
-    }
+    handleFlashMessages('success', 'flash-success');
+    handleFlashMessages('error', 'flash-error');
 
     fetchProfilePicture();
     document.addEventListener('click', handleDocumentClick);

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
+
 
 class PriceController extends Controller
 {
@@ -24,6 +26,7 @@ class PriceController extends Controller
             'percent_reduced_week' => $percentReductionWeek,
         ]);
     }
+
 
     public function updatePrices(PriceRequest $request): RedirectResponse
     {
@@ -48,6 +51,6 @@ class PriceController extends Controller
             ['value' => $validated['percent_reduced_week']]
         );
     
-        return redirect()->route('admin.options.index')->with('success', ['Les prix ont été mis à jour']);
+        return redirect()->route('admin.prices')->with('success', ['Les prix ont été mis à jour']);
     }
 }

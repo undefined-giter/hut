@@ -3,7 +3,7 @@
         <transition name="fade">
             <div>
                 <p class="text-sm">Depuis le {{ sevenDaysAgo }}</p>
-                <table v-if="specialDatesPrices.length" border="1" class="mx-auto text-center">
+                <table v-if="specialDatesPricesArray.length" border="1" class="mx-auto text-center">
                     <thead>
                     <tr>
                         <th class="min-w-[110px]">Date</th>
@@ -12,7 +12,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="item in specialDatesPrices" :key="item.id">
+                    <tr v-for="item in specialDatesPricesArray" :key="item.id">
                         <td>
                         <input
                             v-if="item.isEditing"
@@ -87,7 +87,7 @@ import axios from 'axios';
 import { format, parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-const specialDatesPrices = ref([]);
+const specialDatesPricesArray = ref([]);
 const sevenDaysAgo = ref('');
 const message = ref('');
 const showAddForm = ref(false);
@@ -101,7 +101,7 @@ const edit = (item) => {
 const fetchSpecialDatesPrices = async () => {
     const response = await axios.get('/specials-dates-prices');
     
-    specialDatesPrices.value = response.data.specialDatesPrices.map(item => ({
+    specialDatesPricesArray.value = response.data.specialDatesPricesArray.map(item => ({
         ...item,
         editedDate: format(new Date(item.spe_date), 'dd-MM-yyyy', { locale: fr }),
         editedPrice: item.spe_price,

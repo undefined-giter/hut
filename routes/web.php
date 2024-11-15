@@ -74,3 +74,6 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+// chemins pour fake_admin
+// afficher les dates spéciales à gauche des nuits déjà réservées
+// double prix dans réservations de Votre profil (si commentaires)

@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 
+
 class ReservationController extends Controller
 {
     public function getCalendarColors($reservations, $resId = null): array
@@ -147,12 +148,19 @@ class ReservationController extends Controller
         $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
         $percent_reduced_week = DB::table('prices')->where('key', 'percent_reduced_week')->value('value');
 
+        $specialDatesPricesArray = DB::table('specials_dates_prices')->where('spe_date', '>=', Carbon::now())
+            ->select('spe_date', 'spe_price')
+            ->orderBy('spe_date', 'asc')
+            ->get();
+
+
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
             'PRICE_PER_NIGHT' => $pricePerNight,
             'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
             'PERCENT_REDUCED_WEEK' => $percent_reduced_week,
+            'specialDatesPricesArray' => $specialDatesPricesArray,
             
             'in_date' => $calendarColors['in_date'],
             'inner_date' => $calendarColors['inner_date'],

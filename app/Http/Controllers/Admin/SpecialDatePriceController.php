@@ -12,13 +12,14 @@ class SpecialDatePriceController extends Controller
     public function index()
     {
         $sevenDaysAgo = Carbon::now()->subDays(7);
-    
-        $specialDatesPrices = SpecialDatePrice::where('spe_date', '>=', $sevenDaysAgo)
+
+        $specialDatesPricesArray = SpecialDatePrice::where('spe_date', '>=', $sevenDaysAgo)
+            ->select('spe_date', 'spe_price')
             ->orderBy('spe_date', 'asc')
             ->get();
     
         return response()->json([
-            'specialDatesPrices' => $specialDatesPrices,
+            'specialDatesPricesArray' => $specialDatesPricesArray,
             'sevenDaysAgo' => $sevenDaysAgo->format('d/m/Y'),
         ]);
     }
