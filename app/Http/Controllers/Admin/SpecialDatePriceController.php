@@ -14,7 +14,7 @@ class SpecialDatePriceController extends Controller
         $sevenDaysAgo = Carbon::now()->subDays(7);
 
         $specialDatesPricesArray = SpecialDatePrice::where('spe_date', '>=', $sevenDaysAgo)
-            ->select('spe_date', 'spe_price')
+            ->select('id', 'spe_date', 'spe_price')
             ->orderBy('spe_date', 'asc')
             ->get();
     
@@ -26,8 +26,16 @@ class SpecialDatePriceController extends Controller
 
     public function store(SpecialDatePriceRequest $request)
     {
+        $existingSpecialDate = SpecialDatePrice::where('spe_date', $request->spe_date)->first();
+    
+        if ($existingSpecialDate) {
+            $existingSpecialDate->update(['spe_price' => $request->spe_price]);
+            return response()->json(null, 204);
+        }
+    
         $specialDatePrice = SpecialDatePrice::create($request->all());
-        return response()->json($specialDatePrice, 201);
+    
+        return response()->json(null, 204);
     }
 
     public function show($id)

@@ -43,9 +43,41 @@ const emit = defineEmits(['price-updated']);
 const totalPrice = ref(0);
 const totalPriceDisplay = ref('');
 
+let specialDate = []
+for (let i = 0; i < props.specialDatesPricesArray.length; i++) {
+    specialDate.push(props.specialDatesPricesArray[i].spe_date)
+}
+
+
+const generateSelectedDates = (arrivalDate, departureDate) => {
+
+    const dateArray = [];
+    const startDate = new Date(arrivalDate);
+    const endDate = new Date(departureDate);
+
+    while (startDate < endDate) {
+        dateArray.push(startDate.toISOString().split('T')[0]);
+        
+        startDate.setDate(startDate.getDate() + 1);
+    }
+
+    return dateArray
+};
+
+
 const calculateTotalPrice = () => {
-    console.log(props.specialDatesPricesArray);
-    const night_price = props.resNights > 1 ? props.PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS : props.PRICE_PER_NIGHT;
+
+    const dateArray = generateSelectedDates(props.arrivalDate, props.departureDate);
+
+    let nbNightOnSpecialPrice = 0;
+    for (let i = 0; i < props.specialDatesPricesArray.length; i++){
+        if (dateArray.includes(props.specialDatesPricesArray[i].spe_date)){
+            console.log(props.specialDatesPricesArray[i].spe_date, props.specialDatesPricesArray[i].spe_price);
+            nbNightOnSpecialPrice++
+        }
+    }
+
+    const night_price = (props.resNights + nbNightOnSpecialPrice) > 1 ? props.PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS : props.PRICE_PER_NIGHT;
     totalPrice.value = props.resNights * night_price;
 
     const dayIndexReserved = [];
