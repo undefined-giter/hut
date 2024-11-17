@@ -118,7 +118,7 @@ class ProfileController extends Controller
         $userEmail = $user->email;
         
         if ($currentUser->role === 'fake_admin'){
-            return redirect()->route('profile')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris {$userEmail}.']); 
+            return redirect()->route('profile')->with('error', ["En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris {$userEmail}."]); 
         }
 
         if ($currentUser->role !== 'admin') {
@@ -149,7 +149,7 @@ class ProfileController extends Controller
         $this->sendAccountDeletionMail($user);
 
         $user->delete();
-        return redirect()->route('admin.list')->with('success', ['Le compte de l\'utilisateur {$userEmail} a bien été supprimé.']);
+        return redirect()->route('admin.list')->with('success', ["Le compte de l'utilisateur {$userEmail} a bien été supprimé."]);
     }
 
     private function sendAccountDeletionMail(User $user)

@@ -66,6 +66,26 @@ main, table {@apply bg-light dark:bg-dark;}
 }
 .img-transition[src] { opacity: 1; }
 
+.triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid;
+    margin-left: 6px;
+    display: inline-block;
+    transform: translateY(5.5px);
+}
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid;
+    margin-left: 6px;
+    display: inline-block;
+    transform: translateY(5.5px);
+}
   
 /* Layout */
 /* Progress bar entre les pages */

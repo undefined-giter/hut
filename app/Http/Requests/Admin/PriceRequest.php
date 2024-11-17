@@ -11,7 +11,8 @@ class PriceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $user = Auth::user();
+        return $user && in_array($user->role, ['admin', 'fake_admin']);
     }
 
     /**

@@ -2,7 +2,7 @@
     <div>
         <transition name="fade">
             <div>
-                <p class="text-sm">Depuis le {{ sevenDaysAgo }}</p>
+                <p class="text-sm">Depuis le {{ sinceDate }}</p>
                 <table v-if="specialDatesPricesArray.length" border="1" class="mx-auto text-center">
                     <thead>
                     <tr>
@@ -88,8 +88,7 @@ import { format, parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 const specialDatesPricesArray = ref([]);
-const sevenDaysAgo = ref('');
-const message = ref('');
+const sinceDate = ref('');
 const showAddForm = ref(false);
 const newRecord = ref({ date: '', price: '' });
 const priceError = ref(false);
@@ -99,7 +98,8 @@ const edit = (item) => {
 };
 
 const fetchSpecialDatesPrices = async () => {
-    const response = await axios.get('/specials-dates-prices');
+    const sinceDays = 7;
+    const response = await axios.get(`/specials-dates-prices?sincedays=${sinceDays}`);
     
     specialDatesPricesArray.value = response.data.specialDatesPricesArray.map(item => ({
         ...item,
@@ -107,8 +107,7 @@ const fetchSpecialDatesPrices = async () => {
         editedPrice: item.spe_price,
         isEditing: false
     }));
-    sevenDaysAgo.value = response.data.sevenDaysAgo;
-    message.value = response.data.message;
+    sinceDate.value = response.data.sinceDate;
 };
 
 

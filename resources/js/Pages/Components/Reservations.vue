@@ -64,14 +64,14 @@
                         <div v-else>
                             <em><span class="text-blue-600">Aucune option demandée</span></em>
                         </div>
-                        <div class="text-right mr-2 -mt-2">Total : {{ parseFloat(reservation.res_price) % 1 === 0 ? parseFloat(reservation.res_price).toFixed(0) : parseFloat(reservation.res_price).toFixed(2) }}€</div>
+                        <p v-if="!reservation.res_comment" class="!text-green-400 text-right mr-1 -mt-3.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
                                 <em><button @click="toggleComment(reservation.id)" class="text-orange-500 underline">
                                     {{ visibleComments[reservation.id] ? 'Masquer' : 'Afficher' }} {{ reservation.user_id == connected_user_id  ? 'votre' : 'son' }} commentaire
                                 </button></em>
-                                <p class="!text-green-400 mr-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                                <p class="!text-green-400 mr-1 -mt-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                             </div>
                             <p v-if="visibleComments[reservation.id]" class="whitespace-pre-wrap break-words">{{ reservation.res_comment }}</p>
                         </div>
@@ -138,14 +138,14 @@
                         <div v-else>
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
-                        <div class="text-right mr-2 -mt-2">Total : {{ parseFloat(reservation.res_price) % 1 === 0 ? parseFloat(reservation.res_price).toFixed(0) : parseFloat(reservation.res_price).toFixed(2) }}€</div>
-
+                        <p v-if="!reservation.res_comment" class="!text-green-400 text-right mr-1 -mt-3.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                        
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
                                 <em><button @click="toggleComment(reservation.id)" class="text-orange-500 underline">
                                     {{ visibleComments[reservation.id] ? 'Masquer' : 'Afficher' }} {{ reservation.user_id == connected_user_id  ? 'votre' : 'son' }} commentaire
                                 </button></em>
-                                <p class="!text-green-400 mr-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                                <p class="!text-green-400 mr-1 -mt-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                             </div>
                             <p v-if="visibleComments[reservation.id]" class="whitespace-pre-wrap break-words">{{ reservation.res_comment }}</p>
                         </div>
@@ -189,18 +189,17 @@
                         <div v-else>
                             <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
                         </div>
-                        <div class="text-right mr-2 -mt-2">Total : {{ parseFloat(reservation.res_price) % 1 === 0 ? parseFloat(reservation.res_price).toFixed(0) : parseFloat(reservation.res_price).toFixed(2) }}€</div>
+                        <p v-if="!reservation.res_comment" class="!text-green-400 text-right mr-1 -mt-3.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
                                 <em><button @click="toggleComment(reservation.id)" class="text-orange-500 underline">
                                     {{ visibleComments[reservation.id] ? 'Masquer' : 'Afficher' }} {{ reservation.user_id == connected_user_id  ? 'votre' : 'son' }} commentaire
                                 </button></em>
-                                <p class="!text-green-400mr-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
+                                <p class="!text-green-400 mr-1 -mt-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                             </div>
                             <p v-if="visibleComments[reservation.id]" class="whitespace-pre-wrap break-words">{{ reservation.res_comment }}</p>
                         </div>
-
                     </li>
                 </ul>
             </div>

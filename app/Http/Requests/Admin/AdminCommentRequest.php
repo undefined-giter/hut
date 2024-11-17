@@ -8,7 +8,8 @@ class AdminCommentRequest extends FormRequest
 {
     public function authorize()
     {
-        return auth()->check() && auth()->user()->role === 'admin';
+        $user = Auth::user();
+        return $user && in_array($user->role, ['admin', 'fake_admin']);
     }
 
     public function rules()

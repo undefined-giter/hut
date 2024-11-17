@@ -3,26 +3,29 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\SpecialDatePrice;
 use App\Http\Requests\Admin\SpecialDatePriceRequest;
 
 class SpecialDatePriceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sevenDaysAgo = Carbon::now()->subDays(7);
+        $sinceDays = $request->get('sincedays', 0);
+        $sincedate = Carbon::now()->subDays($sinceDays);
 
-        $specialDatesPricesArray = SpecialDatePrice::where('spe_date', '>=', $sevenDaysAgo)
+        $specialDatesPricesArray = SpecialDatePrice::where('spe_date', '>=', $sincedate)
             ->select('id', 'spe_date', 'spe_price')
             ->orderBy('spe_date', 'asc')
             ->get();
     
         return response()->json([
             'specialDatesPricesArray' => $specialDatesPricesArray,
-            'sevenDaysAgo' => $sevenDaysAgo->format('d/m/Y'),
+            'sinceDate' => $sincedate->format('d/m/Y'),
         ]);
     }
+    
 
     public function store(SpecialDatePriceRequest $request)
     {

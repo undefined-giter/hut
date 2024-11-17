@@ -110,11 +110,11 @@ const calculateTotalPrice = () => {
 
 watch(
     [
-        () => props.resNights,
-        () => props.resOptions,
-        () => props.arrivalDate,
-        () => props.departureDate,
-        () => props.specialDatesPricesArray,
+      () => props.resNights,
+      () => props.resOptions,
+      () => props.arrivalDate,
+      () => props.departureDate,
+      () => props.specialDatesPricesArray,
     ],
     calculateTotalPrice
 );

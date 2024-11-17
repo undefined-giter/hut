@@ -138,7 +138,7 @@
               <div :title="option.name.length >= 25 ? option.name : ''"
               class="oleoScript text-xl whitespace-nowrap overflow-hidden text-ellipsis">{{ option.name }}</div>
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">
-                 {{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small> €</small>
+                 {{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small>&nbsp;€</small>
               </div>
               <div v-if="option.price === '0.00'">Inclu</div>
             </div>
@@ -200,45 +200,47 @@
       </div>
     </form>
     
-    <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
-      <div @click="toggleUnroll(0)" class="flex inline cursor-pointer">
-        <h3 class="underline text-red-600 text-xl md:-mb-2">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées</h3>
-        <span class="text-2xl -mt-0.5">{{ isUnrolled(0) ? '🔺' : '🔻' }}</span>
+    
+    <div class="mt-8">
+      <div class="hidden md:block">
+        <div class="flex justify-around">
+          <h3 @click="toggleUnroll(6)" class="underline text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
+          <h3 @click="toggleUnroll(0)" class="underline text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
+        </div>
+        
+        <div class="flex">
+          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[10%]']" />
+          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300 mx-auto" />
+        </div>
       </div>
 
-      <transition name="fade-slide" v-show="isUnrolled(0)" style="max-height: 350px; overflow-y: auto; padding-left:2px;">
-        <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
-          <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
-          <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's ' : ' ')"></span>
-          <span v-if="auth && auth.user && auth.user.id === reservation.user_id">
-            <Link :href="route('profile', reservation.user_id)" class="text-blue-600">
-              <span class="text-sm">🟢</span><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
-            </Link>
-          </span>
-          <span v-if="auth && auth.user && auth.user.role === 'admin'">
-            => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
-                <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
-                <input type="hidden" name="_method" value="DELETE" />
-                <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
-            </form>
-            <span class="text-zinc-800 text-sm"> | </span> 
-            <Link :href="route('admin.details', reservation.user_id)"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
-            <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ Math.floor(reservation.res_price) }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
-          </span>
-        </li></p>
-      </transition>
+      <div class="flex flex-col md:hidden">
+        <div class="mx-auto">
+          <h3 @click="toggleUnroll(6)" class="underline text-center text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
+          <ListSpecials v-show="isUnrolled(6)" class="transition-all duration-300" />
+        </div>
+
+        <div class="mt-4">
+          <h3 @click="toggleUnroll(0)" class="underline text-center text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
+          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300" />
+        </div>
+      </div>
     </div>
+
   </Layout>
+
   <PhoneModal v-if="showPhoneModal" />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
-import { Head, usePage, Link } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
+import { useUnroll } from '../../shared/utils';
 import PhoneModal from './../Components/PhoneModal.vue';
-import { useUnroll } from './../../shared/utils';
 import Price from './../Components/Price.vue';
 import TextRes from './TextRes.vue';
+import ListsRes from './ListsRes.vue';
+import ListSpecials from './ListSpecials.vue';
 import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
@@ -265,8 +267,8 @@ const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
 const isSubmitting = ref(false);
 const previousAuthUser = ref(null);
-const { isUnrolled, toggleUnroll } = useUnroll();
 
+const { isUnrolled, toggleUnroll } = useUnroll();
 
 onMounted(() => {
   if (Array.isArray(options)) {
@@ -411,18 +413,6 @@ const formatDate = (date) => {
     day: 'numeric',
   }) + ` <span class="text-xs">${date.getFullYear()}</span>`;
 };
-
-const formatDateShort = (date) => {
-  return date.toLocaleDateString('fr-FR', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
-  });
-};
-
-const sortedReservations = computed(() => {
-  return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
-});
 
 const showPhoneModal = ref(false);
 const displayPhoneModalAfterDelay = () => {
