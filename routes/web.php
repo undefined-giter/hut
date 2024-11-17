@@ -49,6 +49,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update-picture');
     
     Route::delete('/profile/{id}', [ProfileController::class, 'destroy'])->name('user.delete');
+
+    Route::get('/specials-dates-prices', [SpecialDatePriceController::class, 'index'])->name('specials-dates-prices.index');
 });
 
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
@@ -70,9 +72,10 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::get('/prix', [PriceController::class, 'getPrices'])->name('prices');
     Route::post('/prix', [PriceController::class, 'updatePrices'])->name('prices.update');
 
-    Route::resource('/specials-dates-prices', SpecialDatePriceController::class);    
+    Route::resource('/specials-dates-prices', SpecialDatePriceController::class)->except(['index']);    
 });
 
 require __DIR__.'/auth.php';
+// Ajouter dropdow des pages admins (options : prix res et add option)
 // refaire calculs prix res en backend
 // ajouter payement - ne pas mettre en prod 

@@ -456,11 +456,6 @@ const handleSubmit = async () => {
   }
 };
 
-const confirmDelete = (event) => {
-  if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
-    event.target.submit();
-  }
-};
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateGridClass);

@@ -52,4 +52,10 @@ const formatDateShort = (date) => {
 const sortedReservations = computed(() => {
   return props.reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 });
+
+const confirmDelete = (event) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
+        event.target.submit();
+    }
+};
 </script>
