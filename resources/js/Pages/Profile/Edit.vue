@@ -20,7 +20,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <Head :title="user.name ? `Profil de ${user.name} | Cabane` : 'Profil | Cabane'" />
+    <Head :title="user.name ? `Votre Profil ${user.name} | Cabane` : 'Votre Profil | Cabane'" />
 
     <Layout>
         <h1>Votre Profil</h1>

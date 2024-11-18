@@ -39,7 +39,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="mask-icon" href="{{ asset('icons/favicon.ico') }}" color="#ad5205">
 
-        <title>Cabane avec Jacuzzi & Vue Panoramique - Nuit Insolite en Trièves</title>
+        <title inertia>{{ config('app.name', 'Cabane avec Jacuzzi & Vue Panoramique - Nuit Insolite en Trièves') }}</title>
 
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

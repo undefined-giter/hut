@@ -1,5 +1,5 @@
 <template>
-    <Head title="Contact | Cabane" />
+    <Head title="Contactez-Nous | Cabane" />
 
     <Layout>
         <h1>Contact</h1>

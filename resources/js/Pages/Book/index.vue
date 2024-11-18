@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <Head title="Réserver | Cabane" />
+    <Head title="Réservez Votre Bonheur | Cabane" />
     
     <h1>Réservez Votre Bonheur !</h1>
 

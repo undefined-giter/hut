@@ -1,5 +1,5 @@
 <template>
-  <Head title="Gallerie | Cabane" />
+  <Head title="Gallerie du Voyage | Cabane" />
 
   <Layout :allImagesDisplayed="allImagesDisplayed">
       <h1>Votre Voyage</h1>

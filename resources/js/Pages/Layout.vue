@@ -45,12 +45,19 @@
                     <Link :href="route('book')" :class="[isActive('book') ? 'link-active' : '', commonClasses]">Réserver</Link>
                     <Link :href="route('contact')" :class="[isActive('contact') ? 'link-active' : '', commonClasses]">Contact</Link>
 
-                    <Link v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')"
-                        :href="route('admin.options.index')" 
-                        :class="[isActive('admin.options.*') || isActive('admin.prices') ? 'link-active' : '', commonClasses, '!ml-6']">Options</Link>
+                    <div v-if="auth?.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')" class="mt-2 relative group inline-block">
+                        <Link :href="route('admin.options.index')" :class="[isActive('admin.options.*') || isActive('admin.prices') ? 'link-active' : '', commonClasses, 'ml-6 group-hover:rounded-b-none']">Options</Link>
+                        <div class="absolute hidden group-hover:block">
+                        <div class="block mt-4 -ml-6">
+                            <Link :href="route('admin.options.create')" :class="[isActive('admin.options.create') ? 'link-active' : '', 'btn rounded-tl-md rounded-bl-md']">+Options</Link>
+                            <Link :href="route('admin.prices')" :class="[isActive('admin.prices') ? 'link-active' : '', 'btn rounded-tr-md rounded-br-md']">Prix</Link>
+                        </div>
+                        </div>
+                    </div>
                     <Link v-if="auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')"
                         :href="route('admin.list')" 
-                        :class="[isActive('admin.list') || isActive('admin.details') ? 'link-active' : '', commonClasses]">Utilisateurs</Link>
+                        :class="[isActive('admin.list') || isActive('admin.details') ? 'link-active' : '', commonClasses]">Profils
+                    </Link>
                 </div>
 
                 <div class="hidden md:flex full-nav">

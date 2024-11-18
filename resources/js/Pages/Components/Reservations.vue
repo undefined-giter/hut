@@ -5,7 +5,7 @@
             <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(4) ? '🔼' : '🔽' }}</h2>
         </div>
 
-        <transition name="fade-slide" v-show="isUnrolled(4)" class="max-w-sm mx-auto pb-6 mb-6 px-2 md:px-0">
+        <transition name="fade-slide" v-show="isUnrolled(4)" class="max-w-sm mx-auto mb-4 px-2 md:px-0">
             <div style="max-height: 350px; overflow-y: auto;">
                 <h3 class="text-center dark:text-orangeTheme" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
                 <ul v-if="currentReservations.length > 0" class="mb-6">
@@ -19,33 +19,22 @@
                             </div>
                         
                             <div class="flex text-sm mt-1">
-                                <Link :href="route('book.edit', reservation.id)">
-                                    <span class="text-xs">✏️</span><span class="dark:text-blue-700">Modifier</span>
-                                </Link>
+                                <Link :href="route('book.edit', reservation.id)"><span class="text-xs">✏️</span><span class="dark:text-blue-700">Modifier</span></Link>
                                 <span class="text-zinc-800 mx-1">|</span>
                                 <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
                                     <input type="hidden" name="_token" :value="csrfToken" />
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="text-red-600 mr-1">
-                                        <span class="text-xs">❌</span>Annuler
-                                    </button>
+                                    <button type="submit" class="text-red-600 mr-1"><span class="text-xs">❌</span>Annuler</button>
                                 </form>
                             </div>
                         </div>
 
-                        <div>
-                            Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }}
-                        </div>
+                        <div>Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }}</div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <em><span class="dark:text-blue-600">Options demandées :</span></em>
+                            <div class="dark:text-blue-600 mt-1">Options demandées :</div>
                             <ul class="list-disc ml-6">
-                                <li
-                                    v-for="option in reservation.options"
-                                    :key="option.id"
-                                    class="dark:text-blue-400"
-                                    style="white-space: normal; word-wrap: break-word;"
-                                >
+                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -53,24 +42,21 @@
                                             <span v-if="option.pivot.by_day">
                                                 {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
                                             </span>
-                                            <span v-else>
-                                                {{ formatPrice(option.price) }}€ - 1 pour le séjour
-                                            </span>
+                                            <span v-else>{{ formatPrice(option.price) }}€ - 1 pour le séjour</span>
                                         </span>
                                     </small>
                                 </li>
                             </ul>
                         </div>
-                        <div v-else>
-                            <em><span class="text-blue-600">Aucune option demandée</span></em>
-                        </div>
+                        <div v-else class="text-blue-600 italic">Aucune option demandée</div>
+
                         <p v-if="!reservation.res_comment" class="!text-green-400 text-right mr-1 -mt-3.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
-                                <em><button @click="toggleComment(reservation.id)" class="text-orange-500 underline">
+                                <button @click="toggleComment(reservation.id)" class="text-orange-500 underline italic">
                                     {{ visibleComments[reservation.id] ? 'Masquer' : 'Afficher' }} {{ reservation.user_id == connected_user_id  ? 'votre' : 'son' }} commentaire
-                                </button></em>
+                                </button>
                                 <p class="!text-green-400 mr-1 -mt-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                             </div>
                             <p v-if="visibleComments[reservation.id]" class="whitespace-pre-wrap break-words">{{ reservation.res_comment }}</p>
@@ -78,13 +64,9 @@
                     </li>
                 </ul>
         
-                <h3 class="text-center text-orangeTheme" v-if="upcomingReservations.length > 0">
-                    {{ upcomingReservations.length === 1 ? 'Réservation à venir :' : 'Réservations à venir :' }}
-                </h3>
+                <h3 class="text-center text-orangeTheme" v-if="upcomingReservations.length > 0">{{ upcomingReservations.length === 1 ? 'Réservation à venir :' : 'Réservations à venir :' }}</h3>
                 <ul v-if="upcomingReservations.length > 0" :class="{ 'mb-6': !isLastList }">
-                    <li v-for="(reservation, index) in upcomingReservations" 
-                        :key="reservation.id" 
-                        :class="{ 'mb-6': index !== upcomingReservations.length - 1 }" class="dark:text-blue-400 hover:dark:bg-zinc-900">
+                    <li v-for="(reservation, index) in upcomingReservations" :key="reservation.id" :class="{ 'mb-6': index !== upcomingReservations.length - 1 }" class="dark:text-blue-400 hover:dark:bg-zinc-900">
                         <div class="flex justify-between">
                             <div>
                                 {{ formatDateShort(new Date(reservation.start_date)) }} - 
@@ -100,26 +82,17 @@
                                 <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
                                     <input type="hidden" name="_token" :value="csrfToken" />
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="text-red-600 mr-1">
-                                        <span class="text-xs">❌</span>Annuler
-                                    </button>
+                                    <button type="submit" class="text-red-600 mr-1"><span class="text-xs">❌</span>Annuler</button>
                                 </form>
                             </div>
                         </div>
                         
-                        <div>
-                            Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }}
-                        </div>
+                        <div>Du {{ formatDate(new Date(reservation.start_date)) }} à partir de 14h,<br>Au {{ formatDate(new Date(reservation.end_date)) }} jusqu'à 12h.</div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <em><span class="dark:text-blue-600">Options demandées :</span></em>
+                            <div class="dark:text-blue-600 mt-1"><em>Options demandées :</em></div>
                             <ul class="list-disc ml-6">
-                                <li
-                                    v-for="option in reservation.options"
-                                    :key="option.id"
-                                    class="dark:text-blue-400"
-                                    style="white-space: normal; word-wrap: break-word;"
-                                >
+                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -135,16 +108,15 @@
                                 </li>
                             </ul>
                         </div>
-                        <div v-else>
-                            <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
-                        </div>
+                        <div v-else class="dark:text-blue-600 italic">Aucune option demandée</div>
+                        
                         <p v-if="!reservation.res_comment" class="!text-green-400 text-right mr-1 -mt-3.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                         
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
-                                <em><button @click="toggleComment(reservation.id)" class="text-orange-500 underline">
+                                <button @click="toggleComment(reservation.id)" class="text-orange-500 underline italic">
                                     {{ visibleComments[reservation.id] ? 'Masquer' : 'Afficher' }} {{ reservation.user_id == connected_user_id  ? 'votre' : 'son' }} commentaire
-                                </button></em>
+                                </button>
                                 <p class="!text-green-400 mr-1 -mt-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                             </div>
                             <p v-if="visibleComments[reservation.id]" class="whitespace-pre-wrap break-words">{{ reservation.res_comment }}</p>
@@ -152,25 +124,16 @@
                     </li>
                 </ul>
 
-                <h3 class="text-center dark:text-orangeTheme" v-if="pastReservations.length > 0">
-                    {{ pastReservations.length === 1 ? 'Réservation passée :' : 'Réservations passées :' }}
-                </h3>
+                <h3 class="text-center dark:text-orangeTheme" v-if="pastReservations.length > 0">{{ pastReservations.length === 1 ? 'Réservation passée :' : 'Réservations passées :' }}</h3>
                 <ul v-if="pastReservations.length > 0">
-                    <li v-for="(reservation, index) in pastReservations" 
-                        :key="reservation.id" 
-                        :class="{ 'mb-3': index !== pastReservations.length - 1 }" class="dark:text-blue-400">
+                    <li v-for="(reservation, index) in pastReservations" :key="reservation.id" :class="{ 'mb-6': index !== pastReservations.length - 1 }" class="dark:text-blue-400">
                     {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }} <br>
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
                     
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <em><span class="text-blue-600">Options demandées :</span></em>
+                            <div class="text-blue-600">Options demandées :</div>
                             <ul class="list-disc ml-6">
-                                <li
-                                    v-for="option in reservation.options"
-                                    :key="option.id"
-                                    class="dark:text-blue-400"
-                                    style="white-space: normal; word-wrap: break-word;"
-                                >
+                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -178,24 +141,21 @@
                                             <span v-if="option.pivot.by_day">
                                                 {{ formatPrice(option.price) }}€/nuit soit {{ formatPrice(option.price * reservation.nights) }}€
                                             </span>
-                                            <span v-else>
-                                                {{ formatPrice(option.price) }}€ - 1 pour le séjour
-                                            </span>
+                                            <span v-else>{{ formatPrice(option.price) }}€ - 1 pour le séjour</span>
                                         </span>
                                     </small>
                                 </li>
                             </ul>
                         </div>
-                        <div v-else>
-                            <em><span class="dark:text-blue-600">Aucune option demandée</span></em>
-                        </div>
+                        <div v-else class="dark:text-blue-600 italic">Aucune option demandée</div>
+
                         <p v-if="!reservation.res_comment" class="!text-green-400 text-right mr-1 -mt-3.5">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
 
                         <div v-if="reservation.res_comment">
                             <div class="flex justify-between">
-                                <em><button @click="toggleComment(reservation.id)" class="text-orange-500 underline">
+                                <button @click="toggleComment(reservation.id)" class="text-orange-500 underline italic">
                                     {{ visibleComments[reservation.id] ? 'Masquer' : 'Afficher' }} {{ reservation.user_id == connected_user_id  ? 'votre' : 'son' }} commentaire
-                                </button></em>
+                                </button>
                                 <p class="!text-green-400 mr-1 -mt-1">Total : {{ reservation.res_price }}<span class="text-sm">€</span></p>
                             </div>
                             <p v-if="visibleComments[reservation.id]" class="whitespace-pre-wrap break-words">{{ reservation.res_comment }}</p>

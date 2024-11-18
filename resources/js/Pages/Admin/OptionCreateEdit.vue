@@ -1,5 +1,5 @@
 <template>
-    <Head :title="(option ? 'Modifier Option' : 'Créer Option') + ' | Admin'" />
+    <Head :title="(option ? 'Modifier Option' : 'Ajouter une Option') + ' | Admin'" />
     <Layout>
         <h1>{{ option ? 'Modifier l\'Option' : 'Créer une Nouvelle Option' }}</h1>
 

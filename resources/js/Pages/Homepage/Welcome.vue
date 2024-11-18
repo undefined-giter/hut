@@ -1,5 +1,5 @@
 <template>
-    <Head title="Bienvenue | Cabane" />
+    <Head title="Bienvenue dans Votre Cabane" />
 
     <Layout>
         <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec&nbsp;Jacuzzi</h1>

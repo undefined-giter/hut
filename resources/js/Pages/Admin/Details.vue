@@ -1,5 +1,5 @@
 <template>
-    <Head :title="`Détails de ${user.name} | Admin`" />
+    <Head :title="`Détails de ${user.name ? user.name : 'l\'utilisateur'} | Admin`" />
     <Layout>
         <h1 style="overflow-wrap: break-word;">À propos de {{ user.name }}</h1>
 

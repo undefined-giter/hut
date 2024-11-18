@@ -76,6 +76,6 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// Ajouter dropdow des pages admins (options : prix res et add option)
 // refaire calculs prix res en backend
-// ajouter payement - ne pas mettre en prod 
+// ajouter payement - ne pas mettre en prod
+// Layout importé de base, et le régénérer en cas de déconnexion et connection
