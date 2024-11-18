@@ -37,6 +37,7 @@
                             </Link>
                         </template>
                     </div>
+                    <AccountRoad v-show="showAccountRoad" />
                 </div>
 
                 <div class="hidden md:flex absolute full-nav left-1/2 transform -translate-x-1/2 space-x-1.5">
@@ -123,8 +124,9 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import ThemeSwitcher from './Components/DarkMode.vue';
 import GoogleTranslate from './Components/GoogleTranslate.vue';
 import { handleScroll, showFooter } from './../shared/utils';
+import AccountRoad from './Components/AccountRoad.vue';
 
-const { baseUrl, auth } = usePage().props;
+const { baseUrl, auth, showAccountRoad = false } = usePage().props;
 
 const menuOpen = ref(false);
 const menuRef = ref(null);

@@ -60,6 +60,8 @@ class GoogleController extends Controller
                     'last_login' => now(),
                 ]);
             } else {
+                $userIsNew = true;
+
                 $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
@@ -74,7 +76,10 @@ class GoogleController extends Controller
             
             Auth::login($user);
 
-            return redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre séjour de bonheur']);
+            $redirect = redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre séjour de bonheur']);
+            if ($userIsNew === true) { $redirect->with('showAccountRoad', true); }
+            return $redirect;
+            
         } catch (\Exception $e) {
             \Log::error('Erreur de connexion avec Google : '.$e->getMessage());
             return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);

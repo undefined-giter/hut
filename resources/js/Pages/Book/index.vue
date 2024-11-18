@@ -138,7 +138,7 @@
               <div :title="option.name.length >= 25 ? option.name : ''"
               class="oleoScript text-xl whitespace-nowrap overflow-hidden text-ellipsis">{{ option.name }}</div>
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">
-                 {{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small>&nbsp;€</small>
+                &nbsp;{{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small>&nbsp;€</small>
               </div>
               <div v-if="option.price === '0.00'">Inclu</div>
             </div>
@@ -183,14 +183,9 @@
             :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" 
             :specialDatesPricesArray="specialDatesPricesArray"
           />
-          <button
-            type="submit"
-            form="reservationForm"
+          <button type="submit" form="reservationForm"
             :disabled="!isReservationValid || resCommentLength > 510"
-            :class="[
-              (!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 
-              'btn block !p-12 !font-bold text-2xl'
-            ]">
+            :class="[(!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 'btn block !p-12 !font-bold text-2xl']">
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
         </div>
