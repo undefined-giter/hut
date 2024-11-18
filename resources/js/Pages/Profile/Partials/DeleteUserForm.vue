@@ -100,7 +100,7 @@ const closeModal = () => {
 
                     <DangerButton
                         :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
+                        :disabled="form.processing || usePage().props.auth.user.role === 'admin'"
                         @click="confirmDeletion"
                     >
                         Supprimer Compte

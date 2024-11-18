@@ -59,9 +59,8 @@ class GoogleController extends Controller
                     'email_verified_at' => $user->email_verified_at ?? now(),
                     'last_login' => now(),
                 ]);
+                $userIsNew = false;
             } else {
-                $userIsNew = true;
-
                 $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
@@ -72,12 +71,13 @@ class GoogleController extends Controller
                     'password' => Hash::make(str()->random(24)),
                     //'last_login' => now(),
                 ]);
+                $userIsNew = true;
             }
             
             Auth::login($user);
 
             $redirect = redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre séjour de bonheur']);
-            if ($userIsNew === true) { $redirect->with('showAccountRoad', true); }
+            if ($userIsNew) { $redirect->with('showAccountRoad', true); }
             return $redirect;
             
         } catch (\Exception $e) {

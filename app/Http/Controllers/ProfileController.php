@@ -103,7 +103,7 @@ class ProfileController extends Controller
         $user->phone = $request->phone;
         $user->save();
     
-        return response()->json(['message' => ['Numéro de téléphone mis à jour']]);
+        return response()->json(['success' => ['Numéro de téléphone mis à jour']]);
     }
 
 

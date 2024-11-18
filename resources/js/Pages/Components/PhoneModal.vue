@@ -127,20 +127,16 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 800;
-  height: 25vh;
+  z-index: 250;
+  height: 220px;
   @apply bg-orangeTheme bg-opacity-75;
-  
-  @screen md {
-    height: 28vh;
-  }
 }
 
 .modal-content {
   padding: 18px;
-  border-radius: 8px;
+  border-radius: 1em;
   width: 400px;
-  height: 23vh;
+  height: 210px;
   @apply bg-light dark:bg-dark rounded-lg bg-opacity-100 dark:bg-opacity-100;
 }
 
@@ -154,17 +150,17 @@ onUnmounted(() => {
 
 .confirmation-message, .reminder-message {
   position: fixed;
-  top: 20px;
+  top: 64px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;
   background-color: #4caf50;
-  color: white;
-  border-radius: 5px;
   font-weight: bold;
   opacity: 1;
-  transition: opacity 0.5s ease-in-out;
-  z-index : 750;
+  transition: opacity 0.3s ease-in-out;
+  z-index : 150;
+  color: #ccc;
+  border-radius: 1em;
 }
 
 .confirmation-message.fade-out, .fade-enter-from, .fade-leave-to, .modal-enter-from, .modal-leave-to { opacity: 0; }

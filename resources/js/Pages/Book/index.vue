@@ -198,13 +198,13 @@
     
     <div class="mt-8">
       <div class="hidden md:block">
-        <div class="flex justify-around">
+        <div class="flex justify-evenly">
           <h3 @click="toggleUnroll(6)" class="underline text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
           <h3 @click="toggleUnroll(0)" class="underline text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
         </div>
         
         <div class="flex">
-          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[10%]']" />
+          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[14%]']" />
           <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300 mx-auto" />
         </div>
       </div>

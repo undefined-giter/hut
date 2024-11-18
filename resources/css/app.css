@@ -167,17 +167,9 @@ h3{
     color: #ccc;
 }
 
-.parallax {
-    background: url('/img/hut.png');
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
+.bg_img {
+    background: url('/img/hut.png') fixed center no-repeat;
     background-size: cover;
-}
-@media screen and (max-width: 768px) {
-    .parallax-section {
-        background-attachment: scroll;
-    }
 }
 
 .open-menu {

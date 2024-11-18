@@ -24,13 +24,13 @@
       <h2 class="text-xl font-bold text-center">Activités à Faire aux Alentours</h2>
       <div class="w-full flex justify-center">
         <ul class="list-disc list-inside grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-          <li class="p">Détente au lac à 10 minutes <span class="md:hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
-          <li class="p">Randonnée en montagne</li>
-          <li class="p">Aller aux champignons</li>
+          <li class="p">Détente au lac à 10 minutes<span class="md:hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+          <li class="p">Randonnées en montagne</li>
+          <li class="p">Cueillir des champignons</li>
           <li class="p">Villages pittoresques</li>
+          <li class="p">Faune & flore locale</li>
           <li class="p">Restaurants locaux</li>
           <li class="p">Balade en vélo</li>
-          <li class="p">Faune locale</li>
         </ul>
       </div>
     </div>

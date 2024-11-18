@@ -57,8 +57,8 @@ class RegisteredUserController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        // Auth::login($user); Do not register the new user since we ask the user to confirm his email address now
+        Auth::login($user);
 
-        return redirect()->route('login')->with('success', ['Veuillez vérifier vos mails pour confirmer votre inscription svp.']);
+        return redirect()->route('gallery')->with('success', ['Veuillez vérifier vos mails pour confirmer votre inscription svp.']);
     }
 }

@@ -39,6 +39,8 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="mask-icon" href="{{ asset('icons/favicon.ico') }}" color="#ad5205">
 
+        <link rel="preload" as="image" href="/img/hut.png" type="image/png">
+        
         <title inertia>{{ config('app.name', 'Cabane avec Jacuzzi & Vue Panoramique - Nuit Insolite en Trièves') }}</title>
 
         @routes
@@ -107,7 +109,7 @@
             window.baseUrl = "{{ asset('storage/') }}";
         </script>
     </head>
-    <body class="parallax font-sans antialiased">
+    <body class="bg_img">
         @inertia
     </body>
 </html>
