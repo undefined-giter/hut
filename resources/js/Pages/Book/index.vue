@@ -97,10 +97,10 @@
       <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
-      <input type="hidden" name="nights" :value="numberOfNights" />
+      <!-- <input type="hidden" name="nights" :value="numberOfNights" /> -->
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
-      <input type="hidden" name="res_price" :value="calculatedPrice" />
+      <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">

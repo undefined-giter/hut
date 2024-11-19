@@ -40,32 +40,32 @@ const generateSelectedDates = (arrivalDate, departureDate) => {
 
 const calculateSpecialPrices = (dateArray) => {
   let totalSpecialPrice = 0;
+  let remainingDateArray = [...dateArray];
 
   props.specialDatesPricesArray.forEach(({ spe_date, spe_price }) => {
-    const index = dateArray.indexOf(spe_date);
+    const index = remainingDateArray.indexOf(spe_date);
     if (index !== -1) {
-      totalSpecialPrice += spe_price;
-      dateArray.splice(index, 1);
+      totalSpecialPrice += parseFloat(spe_price);
+      remainingDateArray.splice(index, 1);
     }
   });
 
-  return { totalSpecialPrice, dateArray };
+  return { totalSpecialPrice, remainingDateArray };
 };
 
 
-const calculateRegularNightPrices = (regularDateArray) => {
+const calculateRegularNightPrices = (regularDateArray, dateArray) => {
   let totalRegularPrice = 0;
 
   regularDateArray.forEach((date) => {
     const dayOfWeek = new Date(date).getDay();
     const isWeekend = [5, 6, 0].includes(dayOfWeek);
 
-    if (regularDateArray.length === 1) {
-      if (!isWeekend) {
-        totalRegularPrice +=
-          props.PRICE_PER_NIGHT - (props.PRICE_PER_NIGHT * props.PERCENT_REDUCED_WEEK) / 100;
-      } else {
+    if (dateArray.length === 1) {
+      if (isWeekend) {
         totalRegularPrice += props.PRICE_PER_NIGHT;
+      } else {
+        totalRegularPrice += props.PRICE_PER_NIGHT - (props.PRICE_PER_NIGHT * props.PERCENT_REDUCED_WEEK) / 100;
       }
     } else {
       totalRegularPrice += isWeekend
@@ -93,13 +93,14 @@ const calculateTotalPrice = () => {
   if (props.arrivalDate && props.departureDate) {
     let dateArray = generateSelectedDates(props.arrivalDate, props.departureDate);
 
-    const { totalSpecialPrice, dateArray: remainingDatesArray } = calculateSpecialPrices(dateArray);
+    const { totalSpecialPrice, remainingDateArray } = calculateSpecialPrices(dateArray);
 
-    basePrice = totalSpecialPrice + calculateRegularNightPrices(remainingDatesArray);
+    basePrice = totalSpecialPrice + calculateRegularNightPrices(remainingDateArray, dateArray);
   }
 
   const optionsPrice = calculateOptionsPrice();
-  totalPrice.value = basePrice + optionsPrice;
+
+  totalPrice.value = parseFloat(basePrice + optionsPrice);
 
   totalPriceDisplay.value =
     totalPrice.value % 1 === 0 ? totalPrice.value.toFixed(0) : totalPrice.value.toFixed(2);

@@ -76,5 +76,4 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// refaire calculs prix res en backend
 // ajouter payement - ne pas mettre en prod
