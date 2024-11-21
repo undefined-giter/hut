@@ -190,11 +190,11 @@
           </button>
         </div>
       </div>
-      <div v-if="isSubmitting" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-orangeTheme"></div>
-      </div>
     </form>
     
+    <div v-if="isSubmitting" class="fixed inset-0 flex items-center justify-center z-50">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-orangeTheme"></div>
+    </div>
     
     <div class="mt-8">
       <div class="hidden md:block">
@@ -456,15 +456,3 @@ onUnmounted(() => {
   window.removeEventListener('resize', updateGridClass);
 });
 </script>
-
-<style scoped>
-.hide-scrollbar::-webkit-scrollbar {display: none;}
-.hide-scrollbar {scrollbar-width: none;}
-.hide-scrollbar {-ms-overflow-style: none;}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-.animate-spin {animation: spin 1s linear infinite;}
-</style>
