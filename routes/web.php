@@ -8,6 +8,7 @@ use App\Http\Controllers\ReservationController;
 
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\PriceController;
+use App\Http\Controllers\Admin\SpecialDatePriceController;
 use App\Http\Controllers\Admin\AdminCommentController;
 
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ Route::get('/', function () {
     return Inertia::render('Homepage/Welcome', [
         'adminPhoneHref' => $adminPhone,
         'adminPhone' => format_phone_number($adminPhone),
+        'accountDeleted' => request()->query('account_deleted') === 'true',
     ]);
 })->name('homepage');
 
@@ -40,10 +42,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('/get-phone', [ProfileController::class, 'fetchPhone']);
+    Route::patch('/update-phone', [ProfileController::class, 'updatePhone']);
+
     Route::get('/profile/edit-picture', [ProfileController::class, 'editPicture'])->name('profile.edit-picture');
     Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update-picture');
     
     Route::delete('/profile/{id}', [ProfileController::class, 'destroy'])->name('user.delete');
+
+    Route::get('/specials-dates-prices', [SpecialDatePriceController::class, 'index'])->name('specials-dates-prices.index');
 });
 
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
@@ -64,6 +71,8 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 
     Route::get('/prix', [PriceController::class, 'getPrices'])->name('prices');
     Route::post('/prix', [PriceController::class, 'updatePrices'])->name('prices.update');
+
+    Route::resource('/specials-dates-prices', SpecialDatePriceController::class)->except(['index']);    
 });
 
 require __DIR__.'/auth.php';

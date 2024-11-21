@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountDeletionMail;
+
 
 class ProfileController extends Controller
 {
@@ -29,7 +34,7 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
             'reservations' => $reservations,
-            'user' => $user->only(['id', 'name', 'name2', 'email', 'phone']),
+            'user' => $user->only(['id', 'name', 'name2', 'email', 'phone', 'google_id']),
             'connected_user_id' => $connected_user_id,
         ]);
     }
@@ -44,7 +49,7 @@ class ProfileController extends Controller
         $user->name = $request->name ?: null;
         $user->name2 = $request->name2 ?: null;
         $user->email = $request->email;
-        $user->phone = $request->phone ?: $user->phone;
+        $user->phone = $request->phone ?: null;
 
         $user->save();
 
@@ -82,30 +87,78 @@ class ProfileController extends Controller
         return redirect()->route('profile')->with('success', ['Photo mise à jour 👍']);
     }
 
+
+    public function fetchPhone(Request $request)
+    {
+        return response()->json(['phone' => Auth::user()->phone]);
+    }
+
+    public function updatePhone(Request $request): JsonResponse
+    {
+        $request->validate([
+            'phone' => 'required|regex:/^0[1-9][0-9]{8}$/',
+        ]);
+    
+        $user = Auth::user();
+        $user->phone = $request->phone;
+        $user->save();
+    
+        return response()->json(['success' => ['Numéro de téléphone mis à jour']]);
+    }
+
+
     /**
      * Delete the user's account.
      */
     public function destroy(Request $request, $id): RedirectResponse
     {
+        $user = User::findOrFail($id);
         $currentUser = auth()->user();
+
+        $userEmail = $user->email;
         
         if ($currentUser->role === 'fake_admin'){
-            return redirect()->route('profile')->with('error', ['En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris fake_admin.']); 
+            return redirect()->route('profile')->with('error', ["En tant que fake_admin, vous n\'êtes autorisé à supprimer aucun compte, y compris {$userEmail}."]); 
         }
-
-        $user = User::findOrFail($id);
 
         if ($currentUser->role !== 'admin') {
             if ($currentUser->id !== $user->id) {
                 return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à supprimer ce compte.']);
             }
 
+            if ($currentUser->google_id && $currentUser->id === $user->id) {
+                $this->sendAccountDeletionMail($user);
+
+                $user->delete();
+                Auth::logout();
+            
+                return redirect()->route('homepage', ['account_deleted' => 'true']);
+            }
+
             if (!Hash::check($request->password, $currentUser->password)) {
                 return redirect()->route('profile')->with('error', ['Mot de passe incorrect.']);
+            }else{
+                $this->sendAccountDeletionMail($user);
+
+                $user->delete();
+                Auth::logout();
+                return redirect()->route('homepage', ['account_deleted' => 'true']);
             }
         }
 
+        $this->sendAccountDeletionMail($user);
+
         $user->delete();
-        return redirect()->route('admin.list')->with('success', ['Le compte a été supprimé.']);
+        return redirect()->route('admin.list')->with('success', ["Le compte de l'utilisateur {$userEmail} a bien été supprimé."]);
+    }
+
+    private function sendAccountDeletionMail(User $user)
+    {
+        $reservations = $user->reservations()->where('end_date', '>', Carbon::today())->get();
+
+        $adminComments = $user->adminComments()->get();
+
+        Mail::to($user->email)->send(new AccountDeletionMail($user, $reservations, $adminComments, false));
+        Mail::to(config('admin.email'))->send(new AccountDeletionMail($user, $reservations, $adminComments, true));
     }
 }

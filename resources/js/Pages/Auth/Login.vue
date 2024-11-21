@@ -2,8 +2,28 @@
     <Head title="Se Connecter | Cabane" />
     <Layout>
         <h1>Se Connecter</h1>
-        
-        <form @submit.prevent="submit" class="max-w-sm mx-auto mt-8 mb-4">
+
+        <div class="flex justify-center my-12">
+            <button class="text-center btn w-[384px] border-2 border-orangeTheme">
+                <a :href="route('google.redirect')">
+                    Inscription & connexion
+                    
+                    <img 
+                        v-show="imageLoaded" 
+                        @load="imageLoaded = true"
+                        src="/img/google_logo.png" 
+                        alt="Logo de Google" 
+                        class="-mt-6"
+                    />
+                    
+                    <div v-show="!imageLoaded" class="h-[90px] w-auto pt-8">Chargement...</div>
+                </a>
+            </button>
+        </div>
+
+        <form @submit.prevent="submit" class="max-w-sm mx-auto bg-light dark:bg-dark rounded-lg p-4 mb-4">
+            <p class="text-center">Ou se connecter manuellement</p>
+
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
                     <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
@@ -16,7 +36,6 @@
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
-                    autofocus
                     autocomplete="username"
                 />
 
@@ -40,9 +59,9 @@
                 <InputError :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4 flex justify-between">
+            <div class="block mt-2 flex justify-between">
                 <div>
-                    <label class="flex items-center -mt-2" title="Nos cookies ont une durée de vie de 2 heures seulement.
+                    <label class="flex items-center" title="Nos cookies ont une durée de vie de 2 heures seulement.
 Inutile de vous surcharger de cookies 😉">
                         <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
                         <span class="text-sm text-gray-600 dark:text-gray-400">Rester connecté</span>
@@ -61,10 +80,10 @@ Inutile de vous surcharger de cookies 😉">
                     Se connecter
                 </PrimaryButton>
             </div>
-            <div class="mt-4 mb-10 text-center">
+            <div class="mt-8 mb-2 text-center">
                 <Link
                     :href="route('register')"
-                    class="underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
+                    class="text-lg font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>
@@ -119,6 +138,7 @@ import Layout from './../Layout.vue';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
+
 defineProps({
     canResetPassword: {
         type: Boolean,
@@ -126,7 +146,12 @@ defineProps({
     status: {
         type: String,
     },
+    showMonth: {
+        type: String,
+    }
 });
+
+const imageLoaded = ref(false)
 
 const form = useForm({
     email: '',

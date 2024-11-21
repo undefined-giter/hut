@@ -29,9 +29,14 @@ class User extends Authenticatable implements MustVerifyEmail
             $emailParts = explode('@', $user->email);
             $domainParts = explode('.', $emailParts[1]);
 
-            $newEmail = $emailParts[0] . '@' . $domainParts[0] . '.' . $domainParts[1] . '_soft_deleted_' . str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+            $newEmail = $emailParts[0] . '@' . $domainParts[0] . '.' . $domainParts[1] . '_soft_deleted_' . str_pad(mt_rand(0, 99999), 4, '0', STR_PAD_LEFT);
 
             $user->email = $newEmail;
+
+            if ($user->google_id) {
+                $user->google_id = $user->google_id  . '_soft_deleted_' . str_pad(mt_rand(0, 99999), 4, '0', STR_PAD_LEFT);
+            }
+
             $user->saveQuietly();
         });
     }
@@ -52,8 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'phone',
         'password',
+        'email_verified_at',
         'picture',
         'last_login',
+        'remember_token',
+        'google_id',
     ];
 
     /**

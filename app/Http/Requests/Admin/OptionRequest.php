@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OptionRequest extends FormRequest
@@ -11,7 +12,8 @@ class OptionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $user = Auth::user();
+        return $user && in_array($user->role, ['admin', 'fake_admin']);
     }
 
     /**

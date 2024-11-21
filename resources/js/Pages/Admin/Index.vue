@@ -15,11 +15,19 @@
             <tbody class="border-x border-orangeTheme">
                 <tr v-for="user in users.data" :key="user.id">
                     <td class="hidden sm:table-cell px-4 py-1 border-b border-orangeTheme table-cell text-center w-[100px]">
-                        <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
+                        <img 
+                            :src="
+                            user.picture ? 
+                            user.picture.startsWith('https') ?
+                            user.picture 
+                            :
+                            `${baseUrl}/profiles/` + user.picture 
+                            : `${baseUrl}/profiles/default_user.png`"
+                            loading="lazy" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
                     <td class="border-b border-orangeTheme max-w-[90px]" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">
-                            {{ user.name }}
+                            {{ user.name ? user.name : 'Non renseigné' }}
                         </div>
                     </td>
 
@@ -42,16 +50,18 @@
             </tbody>
         </table>
 
-        <div class="flex justify-between">
+        <div v-if="users.total > paginateLength" class="flex justify-between">
             <button
-                class="py-2 disabled:opacity-50 btn rounded-t-none"
+                class="py-2 btn rounded-t-none"
+                :class="{'btn-disabled': !users.prev_page_url}"
                 :disabled="!users.prev_page_url"
                 @click="goTo(users.prev_page_url)"
             >
                 Précédent
             </button>
             <button
-                class="py-2 disabled:opacity-50 btn rounded-t-none"
+                class="py-2 btn rounded-t-none"
+                :class="{'btn-disabled': !users.next_page_url}"
                 :disabled="!users.next_page_url"
                 @click="goTo(users.next_page_url)"
             >
@@ -100,6 +110,7 @@ defineProps({
     averageOptionBasket: [Number, String],
     averageDaysReserved: [Number, String],
     averageReservationsPerMonth: [Number, String],
+    paginateLength: [Number, String],
 });
 
 const goTo = (url) => {

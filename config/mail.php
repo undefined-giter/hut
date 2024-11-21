@@ -114,7 +114,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', env('ADMIN_EMAIL', 'default@example.com')),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@leorip.com'),
         'name' => env('MAIL_FROM_NAME', 'Cabane'),
     ],
 

@@ -36,6 +36,8 @@ class AuthenticatedSessionController extends Controller
             'in_date' => $calendarColors['in_date'],
             'inner_date' => $calendarColors['inner_date'],
             'out_date' => $calendarColors['out_date'],
+
+            'showMonth' => now()->startOfMonth()->toDateString(),
         ]);
     }
 

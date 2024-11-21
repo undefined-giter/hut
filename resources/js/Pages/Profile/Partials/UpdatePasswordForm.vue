@@ -2,6 +2,7 @@
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { useUnroll } from './../../../shared/utils';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -31,72 +32,77 @@ const updatePassword = () => {
         },
     });
 };
+
+const { isUnrolled, toggleUnroll } = useUnroll();
 </script>
 
 <template>
     <section class="mx-auto">
-        <header>
-            <h2 class="text-lg">Modifier Votre Mot de Passe</h2>
-        </header>
+        <div @click="toggleUnroll(2)" class="flex justify-center">
+            <h2 class="text-lg cursor-pointer">Votre Mot de Passe</h2>
+            <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(2) ? '🔼' : '🔽' }}</h2>
+        </div>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6 max-w-sm mx-auto">
-            <div>
-                <InputLabel for="current_password" value="Mot de Passe Actuel" />
+        <transition name="fade-slide" v-show="isUnrolled(2)">
+            <form @submit.prevent="updatePassword" class="mt-6 space-y-6 max-w-sm mx-auto">
+                <div>
+                    <InputLabel for="current_password" value="Mot de Passe Actuel" />
 
-                <TextInput
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="current-password"
-                />
+                    <TextInput
+                        id="current_password"
+                        ref="currentPasswordInput"
+                        v-model="form.current_password"
+                        type="password"
+                        class="mt-1 block w-full"
+                        autocomplete="current-password"
+                    />
 
-                <InputError :message="form.errors.current_password" />
-            </div>
+                    <InputError :message="form.errors.current_password" />
+                </div>
 
-            <div>
-                <InputLabel for="password" value="Nouveau Mot de Passe" />
+                <div>
+                    <InputLabel for="password" value="Nouveau Mot de Passe" />
 
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
+                    <TextInput
+                        id="password"
+                        ref="passwordInput"
+                        v-model="form.password"
+                        type="password"
+                        class="mt-1 block w-full"
+                        autocomplete="new-password"
+                    />
 
-                <InputError :message="form.errors.password" />
-            </div>
+                    <InputError :message="form.errors.password" />
+                </div>
 
-            <div>
-                <InputLabel for="password_confirmation" value="Confirmez Votre Nouveau Mot de Passe" />
+                <div>
+                    <InputLabel for="password_confirmation" value="Confirmez Votre Nouveau Mot de Passe" />
 
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
+                    <TextInput
+                        id="password_confirmation"
+                        v-model="form.password_confirmation"
+                        type="password"
+                        class="mt-1 block w-full"
+                        autocomplete="new-password"
+                    />
 
-                <InputError :message="form.errors.password_confirmation" />
-            </div>
+                    <InputError :message="form.errors.password_confirmation" />
+                </div>
 
-            <div class="flex items-center justify-end">
-                <Transition
-                    enter-active-class="transition ease-in-out"
-                    enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
-                    leave-to-class="opacity-0"
-                    class="ml-2"
-                >
-                    <p v-if="form.recentlySuccessful" class="text-xs text-gray-600 dark:text-gray-400">Sauvegardé. </p>
-                </Transition>
-                
-                <PrimaryButton :disabled="form.processing" class="-mt-3">Sauvegarder</PrimaryButton>
-            </div>
-        </form>
+                <div class="flex items-center justify-end">
+                    <Transition
+                        enter-active-class="transition ease-in-out"
+                        enter-from-class="opacity-0"
+                        leave-active-class="transition ease-in-out"
+                        leave-to-class="opacity-0"
+                        class="ml-2"
+                    >
+                        <p v-if="form.recentlySuccessful" class="text-xs text-gray-600 dark:text-gray-400">Sauvegardé. </p>
+                    </Transition>
+                    
+                    <PrimaryButton :disabled="form.processing" class="-mt-3">Sauvegarder</PrimaryButton>
+                </div>
+            </form>
+        </transition>
     </section>
 </template>

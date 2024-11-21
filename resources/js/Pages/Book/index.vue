@@ -1,10 +1,10 @@
 <template>
   <Layout>
-    <Head title="Réserver | Cabane" />
+    <Head title="Réservez Votre Bonheur | Cabane" />
     
     <h1>Réservez Votre Bonheur !</h1>
 
-    <TextRes :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" />
+    <TextRes :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" />
     
     <vue-cal
       locale="fr"
@@ -97,10 +97,10 @@
       <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
-      <input type="hidden" name="nights" :value="numberOfNights" />
+      <!-- <input type="hidden" name="nights" :value="numberOfNights" /> -->
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
-      <input type="hidden" name="res_price" :value="calculatedPrice" />
+      <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -124,7 +124,7 @@
             {{ dateError }}
           </div>
         </div>
-        <button type="button" class="!bg-orange-600 btn !px-2" @click="resetReservation">Réinitialiser</button>
+        <button type="button" :class="`${arrivalDate ? '' : 'btn-disabled'} btn text-sm bg-orangeTheme hover:text-orangeTheme !shadow-none !px-2 mr-0.5`" @click="resetReservation">Réinitialiser<br>les Dates</button>
       </div>
 
       <h3 v-if="options.length >= 1" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
@@ -138,7 +138,7 @@
               <div :title="option.name.length >= 25 ? option.name : ''"
               class="oleoScript text-xl whitespace-nowrap overflow-hidden text-ellipsis">{{ option.name }}</div>
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">
-                 {{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small> €</small>
+                &nbsp;{{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small>&nbsp;€</small>
               </div>
               <div v-if="option.price === '0.00'">Inclu</div>
             </div>
@@ -165,22 +165,27 @@
         </label>
       </div>
 
-      <div class="flex">
-        <div class="flex-1 mr-4 relative max-w-[230px] sm:max-w-[840px]">
+      <div class="flex mx-1">
+        <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
-          <textarea id="res_comment" v-model="res_comment" maxlength="510" cols="2" :placeholder="resCommentPlaceholder" class="w-full -mt-0.5 no-scrollbar"></textarea>
+          <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="resCommentPlaceholder" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
-        <div class="ml-auto mt-auto mb-1">
-          <Price @price-updated="updateCalculatedPrice"  :resNights="numberOfNights" :resOptions="selectedOptionsObjects" :PRICE_PER_NIGHT="PRICE_PER_NIGHT" :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" class="mb-3" />
-          <button
-            type="submit"
-            form="reservationForm"
+        <div class="flex flex-col items-center ml-auto">
+          <Price
+            @price-updated="updateCalculatedPrice" 
+            :arrivalDate="arrivalDate" 
+            :departureDate="departureDate" 
+            :resNights="numberOfNights" 
+            :resOptions="selectedOptionsObjects" 
+            :PRICE_PER_NIGHT="PRICE_PER_NIGHT" 
+            :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" 
+            :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" 
+            :specialDatesPricesArray="specialDatesPricesArray"
+          />
+          <button type="submit" form="reservationForm"
             :disabled="!isReservationValid || resCommentLength > 510"
-            :class="[
-              (!isReservationValid || resCommentLength > 510) ? '!bg-gray-600 hover:text-gray-400 opacity-75 cursor-not-allowed' : '', 
-              'btn ml-auto block'
-            ]">
+            :class="[(!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 'btn block !p-12 !font-bold text-2xl']">
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
         </div>
@@ -190,43 +195,52 @@
       </div>
     </form>
     
-    <div v-if="sortedReservations.length > 0" class="mt-4 shadow-sm">
-      <h3 class="underline text-red-600 text-xl md:-mb-2">Nuits déjà réservées :</h3>
-      <div style="max-height: 350px; overflow-y: auto; padding-left:2px;">
-        <p><li v-for="(reservation, index) in sortedReservations" :key="index" :class="{'dark:text-gray-200 my-2': index % 2 === 0, '!text-blue-500': index % 2 !== 0}">
-          <span v-html="formatDateShort(new Date(reservation.start_date)) + ' - ' + formatDateShort(new Date(reservation.end_date))"></span> :
-          <span v-html="'Du ' + formatDate(new Date(reservation.start_date)) + ' au ' + formatDate(new Date(reservation.end_date)) + ' pour ' + reservation.nights + ' nuit' + (reservation.nights > 1 ? 's ' : ' ')"></span>
-          <span v-if="auth && auth.user && auth.user.id === reservation.user_id">
-            <Link :href="route('profile', reservation.user_id)" class="text-blue-600">
-              <span class="text-sm">🟢</span><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
-            </Link>
-          </span>
-          <span v-if="auth && auth.user && auth.user.role === 'admin'">
-            => <form method="POST" :action="route('book.delete', reservation.id)" style="display:inline;" @submit.prevent="confirmDelete">
-                <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
-                <input type="hidden" name="_method" value="DELETE" />
-                <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
-            </form>
-            <span class="text-zinc-800 text-sm"> | </span> 
-            <Link :href="route('admin.details', reservation.user_id)"><span class="text-xs">➡️</span><span class="text-blue-700">Profil</span></Link>
-            <p class="!text-green-400 text-right mr-1.5 -mt-8">{{ Math.floor(reservation.res_price) }}<span v-if="reservation.res_price" class="text-sm -mt-7">€</span><span v-else> </span></p>
-          </span>
-        </li></p>
+    
+    <div class="mt-8">
+      <div class="hidden md:block">
+        <div class="flex justify-evenly">
+          <h3 @click="toggleUnroll(6)" class="underline text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
+          <h3 @click="toggleUnroll(0)" class="underline text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
+        </div>
+        
+        <div class="flex">
+          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[14%]']" />
+          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300 mx-auto" />
+        </div>
+      </div>
+
+      <div class="flex flex-col md:hidden">
+        <div class="mx-auto">
+          <h3 @click="toggleUnroll(6)" class="underline text-center text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
+          <ListSpecials v-show="isUnrolled(6)" class="transition-all duration-300" />
+        </div>
+
+        <div class="mt-4">
+          <h3 @click="toggleUnroll(0)" class="underline text-center text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
+          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300" />
+        </div>
       </div>
     </div>
+
   </Layout>
+
+  <PhoneModal v-if="showPhoneModal" />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
-import { Head, usePage, Link } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
+import { useUnroll } from '../../shared/utils';
+import PhoneModal from './../Components/PhoneModal.vue';
 import Price from './../Components/Price.vue';
 import TextRes from './TextRes.vue';
+import ListsRes from './ListsRes.vue';
+import ListSpecials from './ListSpecials.vue';
 import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS,
+const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
   edit_reservation_dates = []  } = usePage().props;
@@ -237,7 +251,7 @@ const showMonth = ref(showMonthEdit ?? null);
 const dateError = ref(null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
-const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour\nComme votre heure d'arrivée envisagée, etc.";
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, etc.";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();
@@ -249,6 +263,7 @@ const isScrollbarVisible = ref(false);
 const isSubmitting = ref(false);
 const previousAuthUser = ref(null);
 
+const { isUnrolled, toggleUnroll } = useUnroll();
 
 onMounted(() => {
   if (Array.isArray(options)) {
@@ -283,8 +298,10 @@ onMounted(() => {
 
   csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   previousAuthUser.value = auth.user;
+
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
+  displayPhoneModalAfterDelay();
 });
 
 
@@ -379,7 +396,9 @@ const resetReservation = () => {
   dateError.value = null;
   numberOfNights.value = 0;
   isReservationValid.value = false;
-  document.querySelector('.vuecal__cell--selected').classList.remove('vuecal__cell--selected')
+  if(document.querySelector('.vuecal__cell--selected')){
+    document.querySelector('.vuecal__cell--selected').classList.remove('vuecal__cell--selected')
+  }
 };
 
 const formatDate = (date) => {
@@ -390,18 +409,12 @@ const formatDate = (date) => {
   }) + ` <span class="text-xs">${date.getFullYear()}</span>`;
 };
 
-const formatDateShort = (date) => {
-  return date.toLocaleDateString('fr-FR', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
-  });
+const showPhoneModal = ref(false);
+const displayPhoneModalAfterDelay = () => {
+  setTimeout(() => {
+    showPhoneModal.value = true;
+  }, 6000);
 };
-
-const sortedReservations = computed(() => {
-  return reservations.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
-});
-
 
 const updateGridClass = () => {
   const windowWidth = window.innerWidth;
@@ -438,11 +451,6 @@ const handleSubmit = async () => {
   }
 };
 
-const confirmDelete = (event) => {
-  if (confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')) {
-    event.target.submit();
-  }
-};
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateGridClass);

@@ -1,7 +1,7 @@
 <template>
-  <Head title="Gallerie | Cabane" />
+  <Head title="Gallerie du Voyage | Cabane" />
 
-  <Layout :allImagesDisplayed="allImagesDisplayed">
+  <Layout>
       <h1>Votre Voyage</h1>
 
       <div class="gallery grid grid-cols-1 md:grid-cols-2 gap-2 px-0 xs:px-2.5 md:px-0">
@@ -15,7 +15,7 @@
             :src="`${baseUrl}/gallery/${image}`"
             loading="lazy"
             :alt="getImageName(image)"
-            :title="image.name"
+            :title="getImageName(image)"
             :style="getTransformOrigin(index)"
             class="w-full h-64 object-cover rounded-lg mb-1 shadow-md transition-transform transform hover:scale-110 hover:z-40 relative"
           >
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, provide, nextTick } from 'vue';
 import Layout from './../Layout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 
@@ -41,6 +41,8 @@ const imagesLoaded = ref(0);
 const windowWidth = ref(window.innerWidth);
 const loading = ref(false);
 const allImagesDisplayed = ref(false);
+
+provide('allImagesDisplayed', allImagesDisplayed);
 
 const loadImages = (initial = false) => {
   if (loading.value || imagesLoaded.value >= props.images.length) return;

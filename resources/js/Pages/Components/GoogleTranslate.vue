@@ -30,7 +30,6 @@ const openDropdown = () => {
             if (!googleTradWaiter.contains(googleTranslateElement)) {
                 googleTradWaiter.appendChild(googleTranslateElement);
             }
-
             googleTranslateElement.style.display = 'block';
         }
     } else {
@@ -66,14 +65,30 @@ const openDropdown = () => {
         googleTranslateElementDiv.style.height = '0';
     }
 
-    setInterval(() => {
-        const targetElement = document.querySelector("#\\:2\\.container");
-        if (targetElement) {
-            targetElement.style.display = 'none';
-        }
-    }, 1500);
-};
+    const observer = new MutationObserver((mutationsList) => {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                const targetElement = document.querySelector("#\\:2\\.container");
+                if (targetElement) {
+                    targetElement.style.display = 'none';
+                    observer.disconnect();
+                }
+            }
+            const element = document.getElementById('goog-gt-vt');
+            if (element) element.remove();
 
+            const element1 = document.getElementById('goog-gt-votingHiddenPane');
+            if (element1) element1.remove();
+
+            const elementsByClass = document.querySelectorAll('.VIpgJd-yAWNEb-hvhgNd');
+            elementsByClass.forEach((element) => {
+                element.classList.remove('VIpgJd-yAWNEb-hvhgNd');
+            });
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+};
 
 onMounted(() => {
     const googleTranslateScript = document.createElement('script');
@@ -85,7 +100,7 @@ onMounted(() => {
         if (window.google && window.google.translate) {
             new window.google.translate.TranslateElement({
                 pageLanguage: 'fr',
-                includedLanguages: 'en,fr,frp,fr-CA,fr-CH,oc,ru,co,eu,de,it,es,pt-PT,nl,pl,sv,da,no,fi,et,lv,lt,sk,sl,hu,el,bg,ro,hr,sr,sq,mk,mt,ga,gl,ca',
+                includedLanguages: 'en,fr,frp,fr-CH,oc,co,eu,ru,de,it,es,pt-PT,nl,pl,sv,da,no,fi,et,lv,lt,sk,sl,hu,el,bg,ro,hr,sr,sq,mk,mt,ga,gl,ca',
                 layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
             }, 'google_translate_element');

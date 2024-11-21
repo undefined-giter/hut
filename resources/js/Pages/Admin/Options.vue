@@ -85,7 +85,7 @@ Si l'utilisateur sélectionne l'option, le réglage par défault est qu'elle ser
                                     Modifier
                                 </button>
                                 <button @click="deleteOption(option.id)" 
-                                    class="hidden md:block btn text-sm !bg-red-700 hover:text-orange-500">
+                                    class="hidden md:block btn text-sm !bg-red-700 red-shadow hover:text-orange-500">
                                     Supprimer
                                 </button>
                             </div>

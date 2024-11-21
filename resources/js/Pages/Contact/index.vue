@@ -1,10 +1,11 @@
 <template>
-    <Head title="Contact | Cabane" />
+    <Head title="Contactez-Nous | Cabane" />
 
     <Layout>
         <h1>Contact</h1>
         
-        <form @submit.prevent="submit" class="max-w-sm mx-auto m-8">
+        <form @submit.prevent="submit" class="max-w-sm mx-auto p-4 mb-4 bg-light dark:bg-dark rounded-lg">
+            <p class="text-center">Demande d'information</p>
             <div title="Merci de renseigner vos nom et prénom">
                 <div class="flex">
                     <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
@@ -77,7 +78,13 @@
                 ></textarea>
                 <InputError :message="form.errors.message" />
             </div>
-            <div class="ml-auto mt-2 flex justify-end">
+            <div class="ml-auto mt-2 flex justify-between">
+                <span class="text-lg mt-3.5 text-orangeTheme oleoScript font-bold">
+                    <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">
+                        📱&nbsp;{{ adminPhone }}
+                    </a>
+                </span>
+
                 <PrimaryButton 
                     :class="[
                         '!btn', 
@@ -106,7 +113,14 @@ import TextInput from '@/Components/TextInput.vue';
 const props = defineProps({
     user: {
         type: Object,
-        default: null
+        required: false,
+        default: null,
+    },
+    adminPhoneHref: {
+        type: String,
+    },
+    adminPhone: {
+        type: String,
     },
 });
 

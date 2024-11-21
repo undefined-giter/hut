@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 
+
 class ReservationController extends Controller
 {
     public function getCalendarColors($reservations, $resId = null): array
@@ -145,12 +146,22 @@ class ReservationController extends Controller
 
         $pricePerNight = DB::table('prices')->where('key', 'price_per_night')->value('value');
         $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
-        
+        $percentReducedWeek = DB::table('prices')->where('key', 'percent_reduced_week')->value('value');
+
+        $specialDatesPricesArray = DB::table('specials_dates_prices')->where('spe_date', '>=', Carbon::now())
+            ->select('spe_date', 'spe_price')
+            ->orderBy('spe_date', 'asc')
+            ->get();
+
+
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
             'options' => $options,
             'PRICE_PER_NIGHT' => $pricePerNight,
             'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
+            'PERCENT_REDUCED_WEEK' => $percentReducedWeek,
+            'specialDatesPricesArray' => $specialDatesPricesArray,
+            
             'in_date' => $calendarColors['in_date'],
             'inner_date' => $calendarColors['inner_date'],
             'out_date' => $calendarColors['out_date'],
@@ -165,6 +176,80 @@ class ReservationController extends Controller
     }
 
 
+    private function calculatePrice(string $startDate, string $endDate, array $selectedOptions): array
+    {
+        $prices = DB::table('prices')
+        ->whereIn('key', ['price_per_night', 'price_per_night_for_2_and_more_nights', 'percent_reduced_week'])
+        ->pluck('value', 'key');
+
+        $pricePerNight = $prices['price_per_night'];
+        $pricePerNightFor2AndMoreNights = $prices['price_per_night_for_2_and_more_nights'];
+        $percentReducedWeek = $prices['percent_reduced_week'];
+
+        $specialDatesPricesArray = DB::table('specials_dates_prices')
+            ->where('spe_date', '>=', Carbon::now())
+            ->select('spe_date', 'spe_price')
+            ->orderBy('spe_date', 'asc')
+            ->get();
+        
+        $startDateTime = new \DateTime($startDate);
+        $endDateTime = new \DateTime($endDate);
+        $nbOfNights = $startDateTime->diff($endDateTime)->days;
+        
+        $dateArray = [];
+        while ($startDateTime < $endDateTime) {
+            $dateArray[] = $startDateTime->format('Y-m-d');
+            $startDateTime->modify('+1 day');
+        }
+   
+        $totalSpecialPrice = 0;
+        $specialDates = $specialDatesPricesArray->pluck('spe_date')->toArray();
+        
+        foreach ($specialDatesPricesArray as $specialDate) {
+            if (in_array($specialDate->spe_date, $dateArray)) {
+                $totalSpecialPrice += (float) $specialDate->spe_price;
+            }
+        }
+    
+        $totalRegularPrice = 0;
+        foreach ($dateArray as $date) {
+            $dayOfWeek = (new \DateTime($date))->format('N');
+            $isWeekend = in_array($dayOfWeek, [5, 6, 7]);
+    
+            if (!in_array($date, $specialDates)) {
+                if ($nbOfNights > 1) {
+                    $totalRegularPrice += $isWeekend
+                        ? $pricePerNightFor2AndMoreNights
+                        : $pricePerNightFor2AndMoreNights * (1 - $percentReducedWeek / 100);
+                } else {
+                    $totalRegularPrice += $isWeekend
+                        ? $pricePerNight
+                        : $pricePerNight * (1 - $percentReducedWeek / 100);
+                }
+            }
+        }
+
+        $optionsPrice = 0;
+        foreach ($selectedOptions as $option) {
+            
+            $optionPrice = (float)($option['price']);
+            $isByDay = $option['by_day'] ?? false;
+        
+            if ($isByDay) {
+                $optionsPrice += $optionPrice * max($nbOfNights, 1);
+            } else {
+                $optionsPrice += $optionPrice;
+            }
+        }
+        
+        $res_price = $totalSpecialPrice + $totalRegularPrice + $optionsPrice;
+
+        return [ 
+            'res_price' => $res_price,
+            'nb_of_nights' => $nbOfNights,
+        ];
+    }
+
     public function store(ReservationRequest $requestFrom, $reservationId = null): RedirectResponse
     {
         $user = Auth::user();
@@ -174,12 +259,6 @@ class ReservationController extends Controller
         }
     
         $validatedData = $requestFrom->validated();
-        $optionIds = collect($validatedData['options'])->pluck('id')->toArray();
-        $selectedOptions = Option::whereIn('id', $optionIds)->get();
-        $optionsWithByDay = $selectedOptions->mapWithKeys(function ($option) use ($validatedData) {
-            $byDay = collect($validatedData['options'])->firstWhere('id', $option->id)['by_day'] ?? false;
-            return [$option->id => ['by_day' => $byDay]];
-        });
     
         if ($reservationId == null) {
             $existingReservation = Reservation::where('user_id', $user->id)
@@ -188,7 +267,7 @@ class ReservationController extends Controller
                 ->first();
     
             if ($existingReservation) {
-                return redirect()->route('profile')->with('error', ['Vous avez déjà une réservation durant cette période.']);
+                return redirect()->route('profile')->with('error', ['Vous avez déjà une réservation durant cette période.<br>Vous pouvez la modifiée en le retrouvant sur cette page.']);
             }
         }
     
@@ -201,7 +280,23 @@ class ReservationController extends Controller
         if ($conflictingReservations) {
             return back()->with('error', ["Il y a déjà une réservation durant cette période."]);
         }
+
+        $optionIds = collect($validatedData['options'])->pluck('id')->toArray();
+        $validatedOptions = collect($validatedData['options']);
+        $selectedOptions = Option::whereIn('id', $optionIds)->get()->map(function ($option) use ($validatedOptions) {
+            $option->by_day = $validatedOptions->firstWhere('id', $option->id)['by_day'] ?? false;
+            return $option;
+        });
+        
+        $calculatedPrice = $this->calculatePrice($validatedData['start_date'], $validatedData['end_date'], $selectedOptions->toArray());
+        $res_price = $calculatedPrice['res_price'];
+        $nbOfNights = $calculatedPrice['nb_of_nights'];
+
+        $optionsForSync = $selectedOptions->mapWithKeys(function ($option) {
+            return [ $option->id => [ 'by_day' => $option->by_day ] ];
+        })->toArray();
     
+
         if ($reservationId) {
             $existingReservation = Reservation::findOrFail($reservationId);
     
@@ -211,14 +306,12 @@ class ReservationController extends Controller
                 $existingReservation->update([
                     'start_date' => $validatedData['start_date'],
                     'end_date' => $validatedData['end_date'],
-                    'nights' => $validatedData['nights'],
+                    'nights' => $nbOfNights,
                     'res_comment' => $validatedData['res_comment'],
-                    'res_price' => $validatedData['res_price'],
+                    'res_price' => $res_price,
                 ]);
     
-                if (!empty($optionsWithByDay)) {
-                    $existingReservation->options()->sync($optionsWithByDay);
-                }
+                $existingReservation->options()->sync($optionsForSync);
     
                 $selectedOptions = $existingReservation->options()->get();
     
@@ -226,36 +319,33 @@ class ReservationController extends Controller
     
                 $this->sendReservationEmails($existingReservation, $user, $selectedOptions, $action);
     
-                if ($isDateChange) {
-                    $message = 'Les dates et options de la réservation ont bien été mises à jour';
-                } else {
-                    $message = 'Les options de la réservation ont bien été mises à jour';
-                }
+                $message = $isDateChange
+                    ? 'Les dates et options de la réservation ont bien été mises à jour'
+                    : 'Les options de la réservation ont bien été mises à jour';
     
                 return $user->role === 'admin'
                     ? redirect()->route('admin.list')->with('success', [$message])
                     : redirect()->route('profile')->with('success', [$message]);
             }
         }
-    
+        
         $reservation = Reservation::create([
             'user_id' => $user->id,
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
-            'nights' => $validatedData['nights'],
+            'nights' => $nbOfNights,
             'res_comment' => $validatedData['res_comment'],
-            'res_price' => $validatedData['res_price'],
+            'res_price' => $res_price,
             'status' => 'pending',
         ]);
     
-        $reservation->options()->sync($optionsWithByDay);
-        $selectedOptions = $reservation->options()->get();
-    
-        $this->sendReservationEmails($reservation, $user, $selectedOptions, 'created');
+        $reservation->options()->sync($optionsForSync);
+
+        $this->sendReservationEmails($reservation, $user, $reservation->options()->get(), 'created');
     
         return redirect()->route('profile')->with('success', ['Réservation effectuée ! À très vite 🌞']);
     }
-    
+
     /**
      * Send res mail // only for create and update (store method), not for destroy method
      */
@@ -294,6 +384,7 @@ class ReservationController extends Controller
 
         $pricePerNight = DB::table('prices')->where('key', 'price_per_night')->value('value');
         $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
+        $percent_reduced_week = DB::table('prices')->where('key', 'percent_reduced_week')->value('value');
 
         $calendarColors = $this->getCalendarColors($reservations, $id);
 
@@ -311,6 +402,7 @@ class ReservationController extends Controller
             'showMonthEdit' => $showMonth,
             'PRICE_PER_NIGHT' => $pricePerNight,
             'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
+            'PERCENT_REDUCED_WEEK' => $percent_reduced_week,
         
             'in_date' => array_values($calendarColors['in_date']),
             'inner_date' => array_values($calendarColors['inner_date']),

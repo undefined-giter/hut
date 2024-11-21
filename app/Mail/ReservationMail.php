@@ -71,7 +71,7 @@ class ReservationMail extends Mailable
         }
 
         return new Envelope(
-            subject: 'Demande de réservation ' . 
+            subject: 'Cabane - Demande de réservation ' . 
                 ($this->action === 'created' ? 'réalisée' : 
                 ($this->action === 'updated_options' ? 'options mises à jour' : 'date et options mises à jour')),
                 to: [$emailTo],

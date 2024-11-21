@@ -60,6 +60,33 @@
 
 main, table {@apply bg-light dark:bg-dark;}
 
+.img-transition {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+.img-transition[src] { opacity: 1; }
+
+.triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid;
+    margin-left: 6px;
+    display: inline-block;
+    transform: translateY(5.5px);
+}
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid;
+    margin-left: 6px;
+    display: inline-block;
+    transform: translateY(5.5px);
+}
+  
 /* Layout */
 /* Progress bar entre les pages */
 #nprogress .bar {
@@ -140,17 +167,9 @@ h3{
     color: #ccc;
 }
 
-.parallax {
-    background: url('/img/hut.png');
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
+.bg_img {
+    background: url('/img/hut.png') fixed center no-repeat;
     background-size: cover;
-}
-@media screen and (max-width: 768px) {
-    .parallax-section {
-        background-attachment: scroll;
-    }
 }
 
 .open-menu {
@@ -184,25 +203,28 @@ a:hover {z-index: 50;}
     padding: 10px 16px;
     cursor: pointer;
     transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    box-shadow: inset 0px 0px 6px 3px rgba(0, 0, 255, 0.9);
 }
 
 .btn:hover {
-    color: rgb(50, 255, 0);
+    color: #98FF98;
     background-color: #0032e4;
-    box-shadow: 0 2px 4px -1px rgba(244, 155, 0, 0.756);
+    box-shadow: inset 0px 0px 6px 3px rgba(255, 255, 255, 0.4);
 }
 
 .btn-disabled {
-    cursor: not-allowed;
+    cursor: default;
     opacity: 0.75;
     background-color: #4b5563;
     color: #9ca3af;
+    box-shadow: inset 0px 0px 6px 3px rgba(31, 31, 31, 0.9);
 }
 .btn-disabled:hover {
     color: #9ca3af !important;
-    background: #595959 !important;
+    background: #2c2c2c !important;
     box-shadow: none !important;
 }
+.red-shadow{box-shadow: inset 0px 0px 6px 3px rgba(96, 0, 0, 0.9);}
 
 .full-nav{ font-size: 1.15em; }
 
@@ -211,6 +233,7 @@ a:hover {z-index: 50;}
     color: black;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     border-radius: 0.5rem;
+    box-shadow: inset 0px 0px 6px 3px rgba(52, 0, 71, 0.9);
 }
 .deconnection:hover{
     background-color: #3c0040;
@@ -218,7 +241,10 @@ a:hover {z-index: 50;}
     @apply text-orangeTheme;
 }
 
-.link-active { @apply bg-orange-500 dark:bg-orange-600 !important; }
+.link-active { 
+    @apply bg-orange-500 dark:bg-orange-600 !important;
+    box-shadow: inset 0px 0px 6px 3px rgba(255, 153, 0, 0.9);
+}
 
 .link-active:hover { @apply hover:bg-orange-400 dark:bg-orange-500 !important; }
 
@@ -228,10 +254,6 @@ a:hover {z-index: 50;}
     user-select: none;
     -webkit-user-drag: none; /* Désactiver le drag pour Safari/Chrome */
     user-drag: none;
-}
-
-.pink{
-    color: red !important;
 }
 
 label { @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important; }
@@ -329,6 +351,22 @@ footer {
 
 /* Welcome */
 .transition-opacity { opacity: 0; }
+
+/* account deleted */
+.account-deleted-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+.account-deleted-message[style*="display: none"] { opacity: 0; }
 
 /* eyes */
 .eyes-container {
@@ -467,3 +505,20 @@ footer {
 /* .vuecal__cell--disabled {;} */
 
 /* fin Book */
+
+
+/* transition */
+.fade-slide-enter-active, .fade-slide-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fade-slide-enter-from, .fade-slide-enter, .fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.fade-slide-enter-to, .fade-slide-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-slide-enter-active, .fade-slide-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
