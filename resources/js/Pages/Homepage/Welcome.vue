@@ -1,8 +1,8 @@
 <template>
-    <Head title="Bienvenue dans Votre Cabane" />
+    <Head title="Cabane avec Jacuzzi - Trièves Location" />
 
     <Layout>
-        <h1 class="text-5xl">Bienvenue dans Votre Cabane Relaxante avec&nbsp;Jacuzzi</h1>
+        <h1 class="text-5xl">Bienvenue dans Votre Cabane avec&nbsp;Jacuzzi</h1>
         
         <div class="flex justify-between oleoScript font-bold">
 
@@ -34,7 +34,7 @@
             </div>
         </div>
         
-        <div class="relative w-full pb-[56.25%] mb-4">
+        <div class="relative w-full pb-[56.25%]">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d76894.95095827775!2d5.810677613083541!3d44.81160184397263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cb2c55c34b1d6d%3A0x439021acadf94417!2zQ29yZMOpYWMsIDM4NzEwIENow6J0ZWwtZW4tVHJpw6h2ZXM!5e1!3m2!1sen!2sfr!4v1729516566125!5m2!1sen!2sfr&amp;zoom=14&amp;controls=0"
                 class="absolute inset-0 w-full h-full rounded-2xl border-0"
                 allowfullscreen="false" 
@@ -42,6 +42,8 @@
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </div>
+
+        <p class="text-center">Nos valeurs : vous offrir sérénité et satisfaction, pour un séjour inoubliable.</p>
 
         <h2 class="mt-6">Ce que Disent nos Hôtes</h2>
         <div class="text-center">

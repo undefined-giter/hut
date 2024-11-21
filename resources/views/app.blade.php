@@ -7,7 +7,7 @@
 
         <link rel="icon" href="{{ asset('icons/favicon.ico') }}" type="image/x-icon">
 
-        <meta name="description" content="Découvrez une cabane avec jacuzzi relaxant dans le Trièves. Un séjour unique avec vue panoramique.">
+        <meta name="description" content="Profitez d'un séjour unique dans une cabane relaxante avec jacuzzi, nichée au cœur du Trièves avec vue panoramique sur les montagnes environnantes.">
         <meta name="keywords" content="cabane, gîte, Trièves, cabane Trièves, gîte Trièves, jacuzzi, location, location cabane, hébergement, cabane en bois, vue panoramique, réservation, séjour nature, montagne, détente, relaxant, vacances Trièves">
         @if (request()->is('/'))
             <link rel="canonical" href="https://cabane.leorip.com" />
@@ -15,12 +15,12 @@
         <meta name="robots" content="index, follow">
 
         <!-- Open Graph / Facebook -->
-        <meta property="og:title" content="Nuit Insolite en Cabane avec Jacuzzi Relaxant - Trièves" />
-        <meta property="og:description" content="Profitez d'un séjour unique dans une cabane relaxante avec jacuzzi, nichée au cœur du Trièves avec vue sur les montagnes." />
+        <meta property="og:title" content="Cabane avec Jacuzzi - Trièves Location" />
+        <meta property="og:description" content="Profitez d'un séjour unique dans une cabane relaxante avec jacuzzi, nichée au cœur du Trièves avec sa vue panoramique sur les montagnes environnantes." />
         <meta property="og:image" content="https://cabane.leorip.com/img/hut.png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="Image d'une cabane avec jacuzzi relaxant dans le Trièves pour séjour en nature">
+        <meta property="og:image:alt" content="Image d'une cabane avec jacuzzi dans le Trièves pour séjour en nature">
         <meta property="og:url" content="https://cabane.leorip.com">
         <meta property="og:type" content="website">
 
@@ -28,8 +28,8 @@
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Nuit Insolite en Cabane avec Jacuzzi Relaxant - Trièves">
-        <meta name="twitter:description" content="Découvrez un hébergement unique avec jacuzzi et vue panoramique dans le Trièves. Réservez votre escapade en nature dès maintenant.">
+        <meta name="twitter:title" content="Cabane avec Jacuzzi - Trièves Location">
+        <meta name="twitter:description" content="Profitez d'un séjour unique dans une cabane relaxante avec jacuzzi, nichée au cœur du Trièves avec sa vue panoramique sur les montagnes environnantes.">
         <meta name="twitter:image" content="https://cabane.leorip.com/img/hut.png">
 
         <link rel="manifest" href="{{ asset('/site.webmanifest') }}">
@@ -41,7 +41,7 @@
 
         <link rel="preload" as="image" href="/img/hut.png" type="image/png">
         
-        <title inertia>{{ config('app.name', 'Cabane avec Jacuzzi & Vue Panoramique - Nuit Insolite en Trièves') }}</title>
+        <title inertia>Cabane avec Jacuzzi - Trièves Location</title>
 
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
@@ -53,7 +53,7 @@
             "name": "Cabane Jacuzzi Trièves",
             "additionalType": "https://schema.org/LodgingBusiness",
             "image": "https://cabane.leorip.com/img/hut.png",
-            "description": "Réservez une cabane avec jacuzzi et sa vue panoramique exceptionnelle dans le Trièves. Un séjour unique et confortable.",
+            "description": "Profitez d'un séjour unique dans une cabane relaxante avec jacuzzi, nichée au cœur du Trièves avec sa vue panoramique sur les montagnes environnantes.",
             "url": "https://cabane.leorip.com",
             "telephone": "+33-6-15-16-64-90",
             "address": {
@@ -96,10 +96,16 @@
             "review": [
                 {
                     "@type": "Review",
-                    "author": "Mickaël",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Mickaël"
+                    },
                     "datePublished": "2024-10-10",
-                    "reviewBody": "Séjour fantastique dans cette cabane, les hôtes sont au top et le jacuzzi offre un panorama qu'on ne voit pas tous les jours !",
-                    "reviewRating": {"@type": "Rating", "ratingValue": "5"}
+                    "reviewBody": "Séjour fantastique dans une cabane avec vue panoramique. Jacuzzi au top!",
+                    "reviewRating": {
+                        "@type": "Rating",
+                        "ratingValue": "5"
+                    }
                 }
             ]
         }

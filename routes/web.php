@@ -76,4 +76,3 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-// ajouter payement - ne pas mettre en prod
