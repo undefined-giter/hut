@@ -15,7 +15,6 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                danfo: ['Danfo', ...defaultTheme.fontFamily.sans],
                 kalnia: ['KalniaGlaze', ...defaultTheme.fontFamily.sans],
                 mirza: ['Mirza', ...defaultTheme.fontFamily.sans],
                 oleo: ['OleoScript', ...defaultTheme.fontFamily.sans],

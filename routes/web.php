@@ -33,6 +33,8 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reserver', [ReservationController::class, 'index'])->name('book');
     Route::post('/book', [ReservationController::class, 'store']);
+
+    Route::post('/payement-avec-stripe', [StripeController::class, 'createSession'])->name('payment');
     
     Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
     Route::post('/book/{id}/update', [ReservationController::class, 'store'])->name('book.update');

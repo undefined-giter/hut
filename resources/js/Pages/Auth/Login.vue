@@ -64,7 +64,7 @@
                     <label class="flex items-center" title="Nos cookies ont une durée de vie de 2 heures seulement.
 Inutile de vous surcharger de cookies 😉">
                         <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
-                        <span class="text-sm text-gray-600 dark:text-gray-400">Rester connecté</span>
+                        <span class="text-sm pt-1 md:pt-0 text-gray-600 dark:text-gray-400">Rester connecté</span>
                     </label>
                     <div class="mt-2">
                         <Link
@@ -83,7 +83,7 @@ Inutile de vous surcharger de cookies 😉">
             <div class="mt-8 mb-2 text-center">
                 <Link
                     :href="route('register')"
-                    class="text-lg font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
+                    class="font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>

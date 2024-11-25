@@ -93,7 +93,7 @@
       </template>
     </vue-cal>
 
-    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'"  @submit.prevent="handleSubmit">
+    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
       <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
@@ -101,6 +101,7 @@
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
       <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
+      <input type="hidden" id="payed" name="payed" :value="false" />
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -183,17 +184,29 @@
             :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" 
             :specialDatesPricesArray="specialDatesPricesArray"
           />
-          <button type="submit" form="reservationForm"
+          <button
+            type="button"
             :disabled="!isReservationValid || resCommentLength > 510"
-            :class="[(!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 'btn block !p-12 !font-bold text-2xl']">
+            :class="[(!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 'btn block !p-12 !font-bold text-2xl']"
+            @click="openPayementChoiceModal = true"
+          >
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
+
+          <PaymentChoiceModal v-if="openPayementChoiceModal" 
+            @close="openPayementChoiceModal = false; openStripePaymentModal = false" 
+            @payNow="openPayement" 
+            @payLater="handleSubmit" />
+
+          <StripePaymentModal v-if="openStripePaymentModal" 
+            @close="openStripeModal = false; openPayementChoiceModal = false" />
+
         </div>
       </div>
     </form>
-    
+
     <div v-if="isSubmitting" class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-orangeTheme"></div>
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-green-600"></div>
     </div>
     
     <div class="mt-8">
@@ -232,6 +245,8 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { useUnroll } from '../../shared/utils';
 import PhoneModal from './../Components/PhoneModal.vue';
+import PaymentChoiceModal from './PaymentChoiceModal.vue';
+import StripePaymentModal from './StripePaymentModal.vue';
 import Price from './../Components/Price.vue';
 import TextRes from './TextRes.vue';
 import ListsRes from './ListsRes.vue';
@@ -262,6 +277,8 @@ const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
 const isSubmitting = ref(false);
 const previousAuthUser = ref(null);
+const openPayementChoiceModal = ref(false);
+const openStripePaymentModal = ref(false);
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 
@@ -439,9 +456,14 @@ const updateCalculatedPrice = (price) => {
   calculatedPrice.value = price;
 };
 
+
+const openPayement = () => {
+  openPayementChoiceModal.value = false;
+  openStripePaymentModal.value = true;
+}
+
 const handleSubmit = async () => {
   isSubmitting.value = true;
-
   try {
     await new Promise((resolve) => setTimeout(resolve, 4000));
     document.getElementById('reservationForm').submit();
@@ -450,7 +472,6 @@ const handleSubmit = async () => {
   } finally {
   }
 };
-
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateGridClass);

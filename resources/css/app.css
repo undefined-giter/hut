@@ -3,12 +3,6 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Danfo';
-    src: url('../fonts/Danfo/Danfo-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
     font-family: 'Kalnia Glaze';
     src: url('../fonts/Kalnia_Glaze/KalniaGlaze-Regular.ttf') format('truetype');
     font-weight: normal;
@@ -50,12 +44,8 @@
     font-weight: bold;
     font-style: normal;
 }
-.danfo {font-family: 'Danfo', sans-serif;}
-
 .kalniaGlaze {font-family: 'Kalnia Glaze', sans-serif;}
-
 .mirza {font-family: 'Mirza', sans-serif;}
-
 .oleoScript {font-family: 'Oleo Script', sans-serif;}
 
 main, table {@apply bg-light dark:bg-dark;}

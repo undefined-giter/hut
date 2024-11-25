@@ -250,7 +250,7 @@ class ReservationController extends Controller
         ];
     }
 
-    public function store(ReservationRequest $requestFrom, $reservationId = null): RedirectResponse
+    public function store(ReservationRequest $request, $reservationId = null): RedirectResponse
     {
         $user = Auth::user();
     
@@ -258,7 +258,7 @@ class ReservationController extends Controller
             return redirect()->route('profile')->with('error', ['Vous n\'êtes pas autorisé à effectuer de réservation en tant que fake_admin, ni à la modifier, ni à modifier celles des autres.']);
         }
     
-        $validatedData = $requestFrom->validated();
+        $validatedData = $request->validated();
     
         if ($reservationId == null) {
             $existingReservation = Reservation::where('user_id', $user->id)
