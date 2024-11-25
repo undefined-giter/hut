@@ -99,7 +99,7 @@ Inutile de vous surcharger de cookies 😉">
         :disable-views="['years', 'year', 'week', 'day']"
         :dblclick-to-navigate="false"
         style="height:400px; cursor: default !important"
-        :min-date="today"
+        :read-only="true"
         :selected-date="showMonth"
         >
             <template #cell-content="{ cell }">
@@ -189,15 +189,18 @@ const submit = () => {
     });
 };
 
-const today = new Date();
+const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
 const isReservedDate = (cellDate) => {
   const in_date = usePage().props.in_date || [];
   const inner_date = usePage().props.inner_date || [];
   const out_date = usePage().props.out_date || [];
 
+  
+
   const formattedCellDate = new Date(cellDate);
 
-  if (formattedCellDate < today) {
+  if (formattedCellDate < yesterday) {
     return 'inner';
   }
 
