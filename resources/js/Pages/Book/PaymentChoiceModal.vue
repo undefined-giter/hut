@@ -7,9 +7,9 @@
 
             <p class="text-sm mb-6 font-kalnia !text-black">Réservez en toute simplicité avec le choix qui vous convient le mieux :</p>
 
-            <button @click="payLater" class="btn w-full mb-4">Payer à l'arrivée, en liquide uniquement</button>
+            <button @click.prevent="payLater" class="btn w-full mb-4">Payer à l'arrivée, en liquide uniquement</button>
             
-            <button @click="payNow" class="btn w-full">Payer Maintenant</button>
+            <button @click.prevent="payNow" class="btn w-full">Payer Maintenant</button>
             
             <button @click="closeModal" class="absolute top-1 right-2 text-white text-2xl font-bold hover:text-gray-300">&times;</button>
         </div>
@@ -19,15 +19,15 @@
 <script setup>
 const emit = defineEmits(['close', 'payNow', 'payLater']);
 
-const closeModal = () => {
-    emit('close');
+const payLater = () => {
+    emit('payLater');
 };
 
 const payNow = () => {
     emit('payNow');
 };
 
-const payLater = () => {
-    emit('payLater');
+const closeModal = () => {
+    emit('close');
 };
 </script>

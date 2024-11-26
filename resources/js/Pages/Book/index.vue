@@ -93,15 +93,16 @@
       </template>
     </vue-cal>
 
-    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'">
-      <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
+    <form method="POST" id="reservationForm" :action="formAction">
+      <input type="hidden" name="_token" :value="csrfToken" />
+      <!-- <input type="hidden" name="_token" :value="usePage().props.csrf_token" /> -->
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
       <!-- <input type="hidden" name="nights" :value="numberOfNights" /> -->
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
       <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
-      <input type="hidden" id="payed" name="payed" :value="false" />
+      <input type="hidden" name="paymentMethod" :value="paymentMethod" />
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -194,12 +195,10 @@
           </button>
 
           <PaymentChoiceModal v-if="openPayementChoiceModal" 
-            @close="openPayementChoiceModal = false; openStripePaymentModal = false" 
-            @payNow="openPayement" 
-            @payLater="handleSubmit" />
-
-          <StripePaymentModal v-if="openStripePaymentModal" 
-            @close="openStripeModal = false; openPayementChoiceModal = false" />
+            @payLater="submitPayLater"
+            @payNow="submitPayNow"
+            @close="openPayementChoiceModal = false" 
+          />
 
         </div>
       </div>
@@ -234,7 +233,6 @@
         </div>
       </div>
     </div>
-
   </Layout>
 
   <PhoneModal v-if="showPhoneModal" />
@@ -246,7 +244,6 @@ import { Head, usePage } from '@inertiajs/vue3';
 import { useUnroll } from '../../shared/utils';
 import PhoneModal from './../Components/PhoneModal.vue';
 import PaymentChoiceModal from './PaymentChoiceModal.vue';
-import StripePaymentModal from './StripePaymentModal.vue';
 import Price from './../Components/Price.vue';
 import TextRes from './TextRes.vue';
 import ListsRes from './ListsRes.vue';
@@ -255,10 +252,10 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
+const { auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
-  edit_reservation_dates = []  } = usePage().props;
+  edit_reservation_dates = [], reservationEdit = false } = usePage().props;
 
 const arrivalDate = ref(null);
 const departureDate = ref(null);
@@ -278,7 +275,9 @@ const isScrollbarVisible = ref(false);
 const isSubmitting = ref(false);
 const previousAuthUser = ref(null);
 const openPayementChoiceModal = ref(false);
-const openStripePaymentModal = ref(false);
+const paymentMethod = ref('');
+const formAction = ref(null);
+
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 
@@ -457,21 +456,28 @@ const updateCalculatedPrice = (price) => {
 };
 
 
-const openPayement = () => {
-  openPayementChoiceModal.value = false;
-  openStripePaymentModal.value = true;
+const submitPayLater = () => {  
+    paymentMethod.value = 'cash';
+    formAction.value = reservationEdit.value 
+        ? route('book.update', { id: reservationEdit.value.id })
+        : route('book.store');    
+
+    setTimeout(() => {
+      document.getElementById('reservationForm').submit();
+    }, 25);
+};
+
+const submitPayNow = () => {
+    paymentMethod.value = 'stripe';
+    formAction.value = reservationEdit.value 
+        ? route('payment.prepare', { id: reservationEdit.value.id })
+        : route('payment.prepare');
+
+    setTimeout(() => {
+      document.getElementById('reservationForm').submit();
+    }, 25);
 }
 
-const handleSubmit = async () => {
-  isSubmitting.value = true;
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 4000));
-    document.getElementById('reservationForm').submit();
-  } catch (error) {
-    console.error('Erreur lors de la soumission du formulaire', error);
-  } finally {
-  }
-};
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateGridClass);

@@ -46,6 +46,7 @@ class ReservationRequest extends FormRequest
             'options' => 'nullable|array',
             'options.*.id' => 'nullable|exists:options,id',
             'options.*.by_day' => 'nullable|boolean',
+            'paymentMethod' => 'required|string|in:cash,stripe',
         ];
     }
 }
