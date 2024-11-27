@@ -103,6 +103,7 @@
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
       <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
       <input type="hidden" name="paymentMethod" :value="paymentMethod" />
+      <input type="hidden" name="keep_original_data" :value="keepOriginalData" />
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -198,15 +199,12 @@
             @payLater="submitPayLater"
             @payNow="submitPayNow"
             @close="openPayementChoiceModal = false" 
+            :calculatedPrice="calculatedPrice"
           />
 
         </div>
       </div>
     </form>
-
-    <div v-if="isSubmitting" class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-green-600"></div>
-    </div>
     
     <div class="mt-8">
       <div class="hidden md:block">
@@ -272,11 +270,11 @@ const selectedOptionsIds = ref([]);
 const calculatedPrice = ref(0);
 const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
-const isSubmitting = ref(false);
 const previousAuthUser = ref(null);
 const openPayementChoiceModal = ref(false);
 const paymentMethod = ref('');
 const formAction = ref(null);
+const keepOriginalData = ref(false);
 
 
 const { isUnrolled, toggleUnroll } = useUnroll();
@@ -469,6 +467,7 @@ const submitPayLater = () => {
 
 const submitPayNow = () => {
     paymentMethod.value = 'stripe';
+    keepOriginalData.value = true;
     formAction.value = reservationEdit.value 
         ? route('payment.prepare', { id: reservationEdit.value.id })
         : route('payment.prepare');

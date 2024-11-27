@@ -204,7 +204,7 @@ class ReservationController extends Controller
             ->exists();
     
         if ($conflictingReservations) {
-            return back()->with('error', ["Il y a déjà une réservation durant cette période."]);
+            return redirect()->route('book')->with('error', ["Il y a déjà une réservation durant cette période."]);
         }
 
         $optionIds = collect($validatedData['options'])->pluck('id')->toArray();
@@ -220,6 +220,8 @@ class ReservationController extends Controller
 
         $priceCalculator = new PriceCalculatorService();
         $calculatedPrice = $priceCalculator->calculatePrice($validatedData['start_date'], $validatedData['end_date'], $selectedOptions->toArray());
+        #$nightsPrice = $calculatedPrice['nights_price'];
+        #$optionsPrice = $calculatedPrice['options_price'];
         $res_price = $calculatedPrice['res_price'];
         $nbOfNights = $calculatedPrice['nb_of_nights'];
     

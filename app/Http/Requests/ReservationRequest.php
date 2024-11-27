@@ -19,13 +19,18 @@ class ReservationRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        if($this->input('keep_original_data')){
+            session()->put('original_reservation_data', $this->all());
+        }
         $optionsJson = $this->input('options');
         $optionsData = json_decode($optionsJson, true) ?? [];
         if (!is_array($optionsData)) {
             $optionsData = [];
         }
-
+        
+        
         $this->merge([
+            'keep_original_data' => filter_var($this->input('keep_original_data'), FILTER_VALIDATE_BOOLEAN),
             'options' => $optionsData,
         ]);
     }
@@ -47,6 +52,7 @@ class ReservationRequest extends FormRequest
             'options.*.id' => 'nullable|exists:options,id',
             'options.*.by_day' => 'nullable|boolean',
             'paymentMethod' => 'required|string|in:cash,stripe',
+            'keep_original_data' => 'nullable|boolean',
         ];
     }
 }

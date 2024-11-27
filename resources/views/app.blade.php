@@ -111,9 +111,9 @@
         }
         </script>  
 
-        <script>
-            window.baseUrl = "{{ asset('storage/') }}";
-        </script>
+        <script>window.baseUrl = "{{ asset('storage/') }}";</script>
+
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body class="bg_img">
         @inertia

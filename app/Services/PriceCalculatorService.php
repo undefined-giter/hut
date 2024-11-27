@@ -61,6 +61,7 @@ class PriceCalculatorService
             }
         }
 
+        
         $optionsPrice = 0;
         foreach ($selectedOptions as $option) {
             
@@ -77,6 +78,8 @@ class PriceCalculatorService
         $res_price = $totalSpecialPrice + $totalRegularPrice + $optionsPrice;
 
         return [ 
+            'nights_price' => $totalSpecialPrice + $totalRegularPrice,
+            'options_price' => $optionsPrice,
             'res_price' => $res_price,
             'nb_of_nights' => $nbOfNights,
         ];
