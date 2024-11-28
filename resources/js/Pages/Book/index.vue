@@ -102,8 +102,7 @@
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
       <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
-      <input type="hidden" name="paymentMethod" :value="paymentMethod" />
-      <input type="hidden" name="keep_original_data" :value="keepOriginalData" />
+      <input type="hidden" name="payment_method" :value="paymentMethod" />
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -274,7 +273,6 @@ const previousAuthUser = ref(null);
 const openPayementChoiceModal = ref(false);
 const paymentMethod = ref('');
 const formAction = ref(null);
-const keepOriginalData = ref(false);
 
 
 const { isUnrolled, toggleUnroll } = useUnroll();
@@ -467,7 +465,6 @@ const submitPayLater = () => {
 
 const submitPayNow = () => {
     paymentMethod.value = 'stripe';
-    keepOriginalData.value = true;
     formAction.value = reservationEdit.value 
         ? route('payment.prepare', { id: reservationEdit.value.id })
         : route('payment.prepare');

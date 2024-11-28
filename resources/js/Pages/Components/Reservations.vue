@@ -211,7 +211,7 @@ const formatDate = (date) => {
 const formatPrice = (price) => {
     const numericPrice = parseFloat(price);
     if (isNaN(numericPrice)) {
-        return 'à déterminer';
+        return 'à déterminer en ';
     }
     return numericPrice % 1 === 0 ? numericPrice.toFixed(0).replace('.', ',') : numericPrice.toFixed(2).replace('.', ',');
 };
