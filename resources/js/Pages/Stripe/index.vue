@@ -117,23 +117,23 @@ const submitPayment = async () => {
     isSubmitting.value = true;
 
     try {
-        const { error, paymentIntent } = await stripe.confirmPayment({
+        const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/processPayment?paymentIntentId=${paymentIntent.id}`,
+                return_url: `${window.location.origin}/process-stripe`,
             },
         });
 
         if (error) {
-            console.error(error.message);
+            stripeError.value = error.message;
+            console.error("Erreur de paiement :", error.message);
             return;
         }
 
-        if (paymentIntent.status === 'succeeded') {
-            console.log('Paiement réussi, traitement dans processPayment');
-        }
+        console.log("Paiement initié avec succès, redirection en cours...");
     } catch (err) {
-        console.error('Payment failed: ', err.message);
+        console.error("Payment failed: ", err.message);
+        stripeError.value = err.message;
     } finally {
         isSubmitting.value = false;
     }

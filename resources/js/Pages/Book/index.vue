@@ -121,10 +121,6 @@
             <br>
             <p class="my-1 text-sm">Nombre de nuit{{ numberOfNights > 1 ? 's' : '' }} : <b>{{ numberOfNights }}</b></p>
           </div>
-
-          <div v-if="dateError" class="text-red-600">
-            {{ dateError }}
-          </div>
         </div>
         <button type="button" :class="`${arrivalDate ? '' : 'btn-disabled'} btn text-sm bg-orangeTheme hover:text-orangeTheme !shadow-none !px-2 mr-0.5`" @click="resetReservation">Réinitialiser<br>les Dates</button>
       </div>
@@ -257,7 +253,6 @@ const { auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_N
 const arrivalDate = ref(null);
 const departureDate = ref(null);
 const showMonth = ref(showMonthEdit ?? null);
-const dateError = ref(null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
 const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, etc.";
@@ -379,21 +374,19 @@ const handleDateClick = (cell) => {
   const selectedDate = new Date(cell);
   selectedDate.setHours(23, 59, 59, 999);
 
-  if (selectedDate < today) {
-    dateError.value = "La date d'arrivée ne peut pas être inférieure à la date actuelle.";
-    resetReservation();
-    return;
-  }
-
   if (!arrivalDate.value) {
     arrivalDate.value = selectedDate;
     departureDate.value = null;
-    dateError.value = null;
     numberOfNights.value = 0;
     isReservationValid.value = false;
   } else if (selectedDate <= arrivalDate.value) {
-    dateError.value = "La date de départ doit être après la date d'arrivée.";
-    resetReservation();
+    if(selectedDate <= today){
+      resetReservation();
+    }else{
+      arrivalDate.value = selectedDate;
+      const timeDiff = departureDate.value.getTime() - arrivalDate.value.getTime();
+      numberOfNights.value = Math.floor(timeDiff / (1000 * 3600 * 24));
+    }
   } else {
     departureDate.value = selectedDate;
     const timeDiff = departureDate.value.getTime() - arrivalDate.value.getTime();
@@ -405,7 +398,6 @@ const handleDateClick = (cell) => {
 const resetReservation = () => {
   arrivalDate.value = null;
   departureDate.value = null;
-  dateError.value = null;
   numberOfNights.value = 0;
   isReservationValid.value = false;
   if(document.querySelector('.vuecal__cell--selected')){
@@ -466,8 +458,8 @@ const submitPayLater = () => {
 const submitPayNow = () => {
     paymentMethod.value = 'stripe';
     formAction.value = reservationEdit.value 
-        ? route('payment.prepare', { id: reservationEdit.value.id })
-        : route('payment.prepare');
+        ? route('payment.show', { id: reservationEdit.value.id })
+        : route('payment.show');
 
     setTimeout(() => {
       document.getElementById('reservationForm').submit();

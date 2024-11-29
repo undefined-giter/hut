@@ -113,7 +113,7 @@
 
         <script>window.baseUrl = "{{ asset('storage/') }}";</script>
 
-        @if (request()->routeIs('payment.show') || request()->routeIs('payment.prepare') || request()->routeIs('payment.process'))
+        @if (request()->routeIs('payment.show') || request()->routeIs('payment.process'))
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
             <script src="https://js.stripe.com/v3/"></script>
         @endif

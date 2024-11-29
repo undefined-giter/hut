@@ -36,9 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reserver', [ReservationController::class, 'index'])->name('book');
     Route::post('/book', [ReservationController::class, 'store'])->name('book.store');
 
-    Route::post('/prepayment', [StripeController::class, 'preparePayment'])->name('payment.prepare');
-    Route::get('/paiement-avec-stripe', [StripeController::class, 'showPaymentPage'])->name('payment.show');
-    Route::post('/paiement-avec-stripe', [StripeController::class, 'processPayment'])->name('payment.process');
+    Route::post('/paiement-avec-stripe', [StripeController::class, 'showPaymentPage'])->name('payment.show');
+    Route::match(['get', 'post'], [StripeController::class, 'processPayment'])->name('payment.process');
     
     Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
     Route::post('/book/{id}/update', [ReservationController::class, 'store'])->name('book.update');
