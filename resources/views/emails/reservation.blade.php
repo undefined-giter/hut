@@ -52,7 +52,9 @@
                 @if($reservation->res_comment)
                     <li><span class="label"><strong style="text-decoration:underline">Commentaire :</strong></span> {!! nl2br(e($reservation->res_comment)) !!}</li>
                 @endif
-                <li><span class="label"><strong>Prix total :</strong></span> <b>{{ number_format($reservation->res_price, $reservation->res_price == (int) $reservation->res_price ? 0 : 2, ',', ' ') }}</b> €</li>
+                <li><span class="label"><strong>{{ $reservation->nights == 1 ? 'Nuit' : 'Nuits' }} & Options :</strong></span> {{ number_format($reservation->res_price, $reservation->res_price == (int) $reservation->res_price ? 0 : 2, ',', ' ') }} €</li>
+                <li><span class="label"><strong>Frais de carte :</strong></span> {{ number_format($reservation->card_fees, $reservation->card_fees == (int) $reservation->card_fees ? 0 : 2, ',', ' ') }} €</li>
+                <li><span class="label"><strong>Prix total :</strong></span> <span class="green"><b>{{ number_format(($reservation->res_price + ($reservation->card_fees ?? 0)), ($reservation->res_price + ($reservation->card_fees ?? 0)) == (int) ($reservation->res_price + ($reservation->card_fees ?? 0)) ? 0 : 2, ',', ' ') }}</b> €</span></li>
             </ul>
         </div>
 
@@ -62,8 +64,8 @@
                 @if($options && count($options))
                     @foreach($options as $option)
                         <li>
-                            <span class="label">Option :</span> <span class="green">{{ $option->name }}</span><br>
-                            <span class="label" style="white-space: nowrap;">Description :</span> {{ $option->description }}<br>
+                            <span class="label"></span> <span class="green">{{ $option->name }}</span><br>
+                            <span class="label" style="white-space: nowrap;"></span> {{ $option->description }}<br>
                             <span class="label">Prix unitaire :</span> {{ $option->price !== null ? $option->price : 'à déterminer' }} €
                             <span class="label">{{ $option->pivot->by_day ?? false ? 'par nuit réservée' : 'pour le séjour' }}</span><br>
                             soit <span class="bolder">{{ $option->price !== null ? $option->price == 0.00 ? 'Inclu' : ($option->pivot->by_day ?? false ? $option->price * $reservation->nights . ' €' : $option->price . ' €') : 'à déterminer' }}</span>

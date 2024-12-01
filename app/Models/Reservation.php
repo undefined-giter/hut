@@ -18,6 +18,8 @@ class Reservation extends Model
         'end_date',
         'nights',
         'res_price',
+        'payed',
+        'card_fees',
         'status',
         'res_comment',
     ];

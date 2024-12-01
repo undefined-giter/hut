@@ -102,7 +102,6 @@
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
       <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
-      <input type="hidden" name="payment_method" :value="paymentMethod" />
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -166,7 +165,7 @@
       <div class="flex mx-1">
         <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
-          <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="resCommentPlaceholder" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
+          <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="animatedText" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
           <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
         <div class="flex flex-col items-center ml-auto">
@@ -255,7 +254,8 @@ const departureDate = ref(null);
 const showMonth = ref(showMonthEdit ?? null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
-const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, etc.";
+const animatedText = ref('');
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, ou autres informations.";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = ref(null);
 const today = new Date();
@@ -266,7 +266,6 @@ const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
 const previousAuthUser = ref(null);
 const openPayementChoiceModal = ref(false);
-const paymentMethod = ref('');
 const formAction = ref(null);
 
 
@@ -309,6 +308,7 @@ onMounted(() => {
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
   displayPhoneModalAfterDelay();
+  animateText(resCommentPlaceholder, 50);
 });
 
 
@@ -420,6 +420,20 @@ const displayPhoneModalAfterDelay = () => {
   }, 6000);
 };
 
+const animateText = (text, delay = 50) => {
+  animatedText.value = '';
+  let index = 0;
+
+  const interval = setInterval(() => {
+    if (index < text.length) {
+      animatedText.value += text[index];
+      index++;
+    } else {
+      clearInterval(interval);
+    }
+  }, delay);
+};
+
 const updateGridClass = () => {
   const windowWidth = window.innerWidth;
   
@@ -444,8 +458,7 @@ const updateCalculatedPrice = (price) => {
 };
 
 
-const submitPayLater = () => {  
-    paymentMethod.value = 'cash';
+const submitPayLater = () => {
     formAction.value = reservationEdit.value 
         ? route('book.update', { id: reservationEdit.value.id })
         : route('book.store');    
@@ -456,7 +469,6 @@ const submitPayLater = () => {
 };
 
 const submitPayNow = () => {
-    paymentMethod.value = 'stripe';
     formAction.value = reservationEdit.value 
         ? route('payment.show', { id: reservationEdit.value.id })
         : route('payment.show');

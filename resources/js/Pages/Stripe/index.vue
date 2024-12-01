@@ -66,10 +66,10 @@ const {
     clientSecret,
     start_date,
     end_date,
-    options,
     original_options,
     res_comment,
     total,
+    stripeTax,
 } = defineProps({
     clientSecret: String,
     csrf_token: String,
@@ -117,27 +117,45 @@ const submitPayment = async () => {
     isSubmitting.value = true;
 
     try {
-        const { error } = await stripe.confirmPayment({
+        const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/process-stripe`,
+                payment_method_data: {},
             },
+            redirect: "if_required",
         });
 
         if (error) {
             stripeError.value = error.message;
-            console.error("Erreur de paiement :", error.message);
             return;
         }
 
-        console.log("Paiement initié avec succès, redirection en cours...");
+        if (paymentIntent && paymentIntent.status === 'succeeded') {
+            Inertia.post('/process-stripe', {
+                paymentIntentId: paymentIntent.id,
+                paymentIntentId: paymentIntent.id,
+                start_date,
+                end_date,
+                res_comment,
+                options: original_options,
+                total,
+                stripeTax,
+            }, {
+                onSuccess: () => {},
+                onError: (errors) => {
+                    stripeError.value = "Erreur lors de la confirmation du paiement.";
+                },
+            });
+        } else {
+            stripeError.value = "Erreur : le paiement n'a pas été confirmé.";
+        }
     } catch (err) {
-        console.error("Payment failed: ", err.message);
         stripeError.value = err.message;
     } finally {
         isSubmitting.value = false;
     }
 };
+
 
 const formatDateShort = (dateString) => {
     const date = new Date(dateString);
@@ -152,11 +170,10 @@ const reserve = () => {
     isSubmitting.value = true;
 
     Inertia.post(route('book.store'), {
-        start_date: start_date,
-        end_date: end_date,
-        res_comment: res_comment,
+        start_date,
+        end_date,
+        res_comment,
         options: original_options,
-        payment_method: 'cash',
     });
 };
 </script>

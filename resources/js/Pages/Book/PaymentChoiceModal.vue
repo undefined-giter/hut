@@ -41,6 +41,7 @@ const payLater = () => {
 };
 
 const payNow = () => {
+    isSubmitting.value = true
     emit('payNow');
 };
 

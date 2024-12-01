@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Services\PriceCalculatorService;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Reservation;
 use App\Models\Admin\Option;
@@ -86,19 +87,36 @@ class StripeController extends Controller
     public function processPayment(Request $request)
     {
         $paymentIntentId = $request->input('paymentIntentId');
-        if (!$paymentIntentId || !$paymentIntent->client_secret) { return redirect()->route('book')->with('error', ['Erreur lors du prcessus du paiement.']); }
-
+    
+        if (!$paymentIntentId) {
+            return redirect()->route('book')->with('error', ['Payment Intent ID is missing.']);
+        }
+    
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     
         try {
             $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
-            if ($paymentIntent->status === 'succeeded') {
-                return redirect()->route('profile')->with('success', ['Paiement réussi et réservation confirmée!']);
-            } else {
-                return redirect()->route('payment.show')->with('error', ['Paiement non validé.']);
+    
+            if ($paymentIntent->status !== 'succeeded') {
+                throw new \Exception(['Le paiement n\'est pas terminé.']);
             }
+            
+            $reservationData = $request->only(['start_date', 'end_date', 'res_comment', 'options']);
+            $reservationData['payed'] = $request->input('total');
+            $reservationData['card_fees'] = $request->input('stripeTax');
+    
+            $reservationRequest = ReservationRequest::createFromBase(new Request($reservationData));
+    
+            $reservationRequest->setContainer(app());
+            $reservationRequest->setRedirector(app('redirect'));
+    
+            $reservationRequest->validateResolved();
+    
+            $reservationController = new ReservationController();
+            return $reservationController->store($reservationRequest);
+    
         } catch (\Exception $e) {
-            return redirect()->route('book')->with('error', ['Erreur lors de la finalisation du paiement : ' . $e->getMessage()]);
+            return redirect()->route('book')->with('error', [$e->getMessage()]);
         }
-    }
+    }   
 }

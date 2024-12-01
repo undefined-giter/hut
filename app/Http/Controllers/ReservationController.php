@@ -185,7 +185,7 @@ class ReservationController extends Controller
         }
     
         $validatedData = $request->validated();
-    
+        
         if ($reservationId == null) {
             $existingReservation = Reservation::where('user_id', $user->id)
                 ->where('start_date', '<', $validatedData['end_date'])
@@ -257,7 +257,7 @@ class ReservationController extends Controller
                     : redirect()->route('profile')->with('success', [$message]);
             }
         }
-        
+
         $reservation = Reservation::create([
             'user_id' => $user->id,
             'start_date' => $validatedData['start_date'],
@@ -265,6 +265,8 @@ class ReservationController extends Controller
             'nights' => $nbOfNights,
             'res_comment' => $validatedData['res_comment'],
             'res_price' => $res_price,
+            'card_fees' => $validatedData['card_fees'] ?? null,
+            'payed' => $validatedData['payed'] ?? 0,
             'status' => 'pending',
         ]);
     
