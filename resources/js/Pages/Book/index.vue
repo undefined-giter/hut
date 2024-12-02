@@ -164,9 +164,11 @@
 
       <div class="flex mx-1">
         <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
-          <label for="res_comment">Demande spéciale</label>
+          <div class="flex justify-between -mb-0.5">
+            <label for="res_comment">Demande spéciale</label>
+            <p v-if="res_comment" :class="['mr-4', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
+          </div>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="animatedText" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
-          <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
         </div>
         <div class="flex flex-col items-center ml-auto">
           <Price
@@ -236,7 +238,7 @@ import { Head, usePage } from '@inertiajs/vue3';
 import { useUnroll } from '../../shared/utils';
 import PhoneModal from './../Components/PhoneModal.vue';
 import PaymentChoiceModal from './PaymentChoiceModal.vue';
-import Price from './../Components/Price.vue';
+import Price from './Price.vue';
 import TextRes from './TextRes.vue';
 import ListsRes from './ListsRes.vue';
 import ListSpecials from './ListSpecials.vue';
@@ -294,7 +296,9 @@ onMounted(() => {
 
     if (reservationEdit) {
       arrivalDate.value = new Date(reservationEdit.start_date);
+      arrivalDate.value.setHours(23, 59, 59, 999);
       departureDate.value = new Date(reservationEdit.end_date);
+      departureDate.value.setHours(23, 59, 59, 999);
       numberOfNights.value = reservationEdit.nights;
       if (reservationEdit.res_comment) {
         res_comment.value = reservationEdit.res_comment;
@@ -308,7 +312,7 @@ onMounted(() => {
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
   displayPhoneModalAfterDelay();
-  animateText(resCommentPlaceholder, 50);
+  animateText(resCommentPlaceholder, 50);  
 });
 
 
@@ -459,8 +463,8 @@ const updateCalculatedPrice = (price) => {
 
 
 const submitPayLater = () => {
-    formAction.value = reservationEdit.value 
-        ? route('book.update', { id: reservationEdit.value.id })
+    formAction.value = reservationEdit 
+        ? route('book.update', { id: reservationEdit.id })
         : route('book.store');    
 
     setTimeout(() => {
@@ -469,8 +473,8 @@ const submitPayLater = () => {
 };
 
 const submitPayNow = () => {
-    formAction.value = reservationEdit.value 
-        ? route('payment.show', { id: reservationEdit.value.id })
+    formAction.value = reservationEdit 
+        ? route('payment.show', { id: reservationEdit.id })
         : route('payment.show');
 
     setTimeout(() => {

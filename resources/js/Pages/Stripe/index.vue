@@ -69,7 +69,10 @@ const {
     original_options,
     res_comment,
     total,
+    payed,
     stripeTax,
+    csrf_token,
+    reservation_id,
 } = defineProps({
     clientSecret: String,
     csrf_token: String,
@@ -77,13 +80,14 @@ const {
     optionsPrice: Number,
     stripeTax: Number,
     total: Number,
+    payed: Number,
     nights: Number,
     start_date: String,
     end_date: String,
     options: Array | null,
     original_options: Array | null,
-    csrf_token: String,
     res_comment: String | null,
+    reservation_id: Number | null,
 });
 
 
@@ -132,6 +136,7 @@ const submitPayment = async () => {
 
         if (paymentIntent && paymentIntent.status === 'succeeded') {
             Inertia.post('/process-stripe', {
+                _token: csrf_token,
                 paymentIntentId: paymentIntent.id,
                 paymentIntentId: paymentIntent.id,
                 start_date,
@@ -139,7 +144,9 @@ const submitPayment = async () => {
                 res_comment,
                 options: original_options,
                 total,
+                payed,
                 stripeTax,
+                reservation_id,
             }, {
                 onSuccess: () => {},
                 onError: (errors) => {

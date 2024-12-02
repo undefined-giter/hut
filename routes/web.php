@@ -36,10 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reserver', [ReservationController::class, 'index'])->name('book');
     Route::post('/book', [ReservationController::class, 'store'])->name('book.store');
 
-    Route::post('/paiement-avec-stripe', [StripeController::class, 'showPaymentPage'])->name('payment.show');
+    Route::post('/paiement-avec-stripe/{id?}', [StripeController::class, 'showPaymentPage'])->name('payment.show');
     Route::post('/process-stripe', [StripeController::class, 'processPayment'])->name('payment.process');
     
-    Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
+    Route::get('/reserver/{id}/modifier', [ReservationController::class, 'edit'])->name('book.edit');
     Route::post('/book/{id}/update', [ReservationController::class, 'store'])->name('book.update');
 
     Route::delete('/book/{id}', [ReservationController::class, 'destroy'])->name('book.delete');
@@ -81,4 +81,3 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-//lignes services offerts et activités à afficher dynamiquement

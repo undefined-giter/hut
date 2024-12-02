@@ -239,6 +239,13 @@ class ReservationController extends Controller
                     'res_comment' => $validatedData['res_comment'],
                     'res_price' => $res_price,
                 ]);
+
+                if (isset($validatedData['payed'])) {
+                    $existingReservation->update(['payed' => $validatedData['payed']]);
+                }
+                if (isset($validatedData['card_fees'])) {
+                    $existingReservation->update(['card_fees' => $validatedData['card_fees']]);
+                }
     
                 $existingReservation->options()->sync($optionsForSync);
     
@@ -265,8 +272,8 @@ class ReservationController extends Controller
             'nights' => $nbOfNights,
             'res_comment' => $validatedData['res_comment'],
             'res_price' => $res_price,
-            'card_fees' => $validatedData['card_fees'] ?? null,
             'payed' => $validatedData['payed'] ?? 0,
+            'card_fees' => $validatedData['card_fees'] ?? null,
             'status' => 'pending',
         ]);
     
@@ -317,6 +324,11 @@ class ReservationController extends Controller
         $pricePerNightFor2AndMoreNights = DB::table('prices')->where('key', 'price_per_night_for_2_and_more_nights')->value('value');
         $percent_reduced_week = DB::table('prices')->where('key', 'percent_reduced_week')->value('value');
 
+        $specialDatesPricesArray = DB::table('specials_dates_prices')->where('spe_date', '>=', Carbon::now())
+        ->select('spe_date', 'spe_price')
+        ->orderBy('spe_date', 'asc')
+        ->get();
+
         $calendarColors = $this->getCalendarColors($reservations, $id);
 
         $reservationEdit = Reservation::with(['options' => function ($query) {
@@ -334,6 +346,7 @@ class ReservationController extends Controller
             'PRICE_PER_NIGHT' => $pricePerNight,
             'PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS' => $pricePerNightFor2AndMoreNights,
             'PERCENT_REDUCED_WEEK' => $percent_reduced_week,
+            'specialDatesPricesArray' => $specialDatesPricesArray,
         
             'in_date' => array_values($calendarColors['in_date']),
             'inner_date' => array_values($calendarColors['inner_date']),

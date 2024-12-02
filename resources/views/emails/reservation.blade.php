@@ -54,7 +54,9 @@
                 @endif
                 <li><span class="label"><strong>{{ $reservation->nights == 1 ? 'Nuit' : 'Nuits' }} & Options :</strong></span> {{ number_format($reservation->res_price, $reservation->res_price == (int) $reservation->res_price ? 0 : 2, ',', ' ') }} €</li>
                 <li><span class="label"><strong>Frais de carte :</strong></span> {{ number_format($reservation->card_fees, $reservation->card_fees == (int) $reservation->card_fees ? 0 : 2, ',', ' ') }} €</li>
-                <li><span class="label"><strong>Prix total :</strong></span> <span class="green"><b>{{ number_format(($reservation->res_price + ($reservation->card_fees ?? 0)), ($reservation->res_price + ($reservation->card_fees ?? 0)) == (int) ($reservation->res_price + ($reservation->card_fees ?? 0)) ? 0 : 2, ',', ' ') }}</b> €</span></li>
+                <li><span class="label"><strong>Prix total :</strong></span> {{ number_format(($reservation->res_price + ($reservation->card_fees ?? 0)), ($reservation->res_price + ($reservation->card_fees ?? 0)) == (int) ($reservation->res_price + ($reservation->card_fees ?? 0)) ? 0 : 2, ',', ' ') }} €</span></li>
+                <li><span class="label"><strong>Payés par carte :</strong></span> {{ $reservation->payed }} €</li>
+                <li><span class="label bolder"><strong>Reste à payer en liquide à l'arrivée :</strong></span> <span class="green"><b>{{ ($reservation->res_price + ($reservation->card_fees ?? 0)) - ceil($reservation->payed) }}</b> €</span></li>
             </ul>
         </div>
 
