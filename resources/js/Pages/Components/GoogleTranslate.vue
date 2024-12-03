@@ -109,8 +109,6 @@ onMounted(() => {
             if (googleTranslateElement) {
                 googleTranslateElement.style.display = 'none';
             }
-        } else {
-            console.error('Google Translate API failed to load.');
         }
     };
 });

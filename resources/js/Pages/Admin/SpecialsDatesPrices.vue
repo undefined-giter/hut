@@ -153,9 +153,7 @@ const saveRecord = async (item = null) => {
         }
 
         await fetchSpecialDatesPrices();
-    } catch (error) {
-        //console.error("Erreur lors de la sauvegarde de l'enregistrement : ", error);
-    }
+    } catch (error) {}
 };
 
 const cancelEdit = (item) => {

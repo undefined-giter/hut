@@ -50,13 +50,15 @@ class StripeController extends Controller
         );
 
         $payed = 0;
-        $card_fees = 0;
+        $previous_card_fees = 0;
+        $res_payed = 0;
         if ($id && $existingReservation){
             $payed = $existingReservation->payed;
-            $card_fees = $existingReservation->card_fees;
+            $previous_card_fees = $existingReservation->card_fees;
+            $res_payed = $existingReservation->res_payed;
         }
     
-        $restResToPay = $calculatedPrice['res_price'] - ($payed - $card_fees);
+        $restResToPay = $calculatedPrice['res_price'] - $res_payed;
 
         if($restResToPay < 0){
             return back()->with('error', ["Veuillez choisir le paiement en liquide pour être remboursés des $restResToPay € à votre arrivée, ou contactez-nous."]);
@@ -81,9 +83,12 @@ class StripeController extends Controller
                 'csrf_token' => csrf_token(),
                 'nightsPrice' => $calculatedPrice['nights_price'],
                 'optionsPrice' => $calculatedPrice['options_price'],
+                'previous_card_fees' => $previous_card_fees,
                 'stripeTax' => $stripeTax,
                 'total' => $total / 100,
                 'payed' => $payed,
+                'restResToPay' => $restResToPay,
+                'res_payed' => $res_payed,
                 'nights' => $calculatedPrice['nb_of_nights'],
                 'start_date' => $validatedData['start_date'],
                 'end_date' => $validatedData['end_date'],
@@ -118,7 +123,8 @@ class StripeController extends Controller
             $reservationId = $request->input('reservation_id');
             $reservationData = $request->only(['start_date', 'end_date', 'res_comment', 'options']);
             $reservationData['payed'] = $request->input('total') + $request->input('payed');
-            $reservationData['card_fees'] = $request->input('stripeTax');
+            $reservationData['card_fees'] = $request->input('stripeTax') + $request->input('previous_card_fees');
+            $reservationData['res_payed'] = $request->input('res_payed') + $request->input('restResToPay');
     
             $reservationRequest = ReservationRequest::createFromBase(new Request($reservationData));
             $reservationRequest->merge(['reservation_id' => $reservationId]);

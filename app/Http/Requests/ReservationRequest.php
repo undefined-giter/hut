@@ -50,6 +50,7 @@ class ReservationRequest extends FormRequest
             'options.*.id' => 'nullable|exists:options,id',
             'options.*.by_day' => 'nullable|boolean',
             'payed' => 'nullable|numeric',
+            'res_payed' => 'nullable|numeric',
             'card_fees' => 'nullable|numeric',
         ];
     }

@@ -172,6 +172,8 @@ class ReservationController extends Controller
             'user_switch_date' => $calendarColors['user_switch_date'],
             'user_switch_to_other' => $calendarColors['user_switch_to_other'],
             'other_switch_to_user' => $calendarColors['other_switch_to_user'],
+
+            'showAccountRoad' => session('showAccountRoad', false),
         ]);
     }
 
@@ -240,12 +242,14 @@ class ReservationController extends Controller
                     'res_price' => $res_price,
                 ]);
 
-                if (isset($validatedData['payed'])) {
-                    $existingReservation->update(['payed' => $validatedData['payed']]);
-                }
-                if (isset($validatedData['card_fees'])) {
-                    $existingReservation->update(['card_fees' => $validatedData['card_fees']]);
-                }
+                $updateData = [];
+                if (isset($validatedData['payed'])) { $updateData['payed'] = $validatedData['payed']; }
+
+                if (isset($validatedData['card_fees'])) { $updateData['card_fees'] = $validatedData['card_fees']; }
+
+                if (isset($validatedData['res_payed'])) { $updateData['res_payed'] = $validatedData['res_payed']; }
+
+                if (!empty($updateData)) { $existingReservation->update($updateData); }
     
                 $existingReservation->options()->sync($optionsForSync);
     
@@ -273,6 +277,7 @@ class ReservationController extends Controller
             'res_comment' => $validatedData['res_comment'],
             'res_price' => $res_price,
             'payed' => $validatedData['payed'] ?? 0,
+            'res_payed' => $validatedData['res_payed'] ?? 0,
             'card_fees' => $validatedData['card_fees'] ?? null,
             'status' => 'pending',
         ]);
