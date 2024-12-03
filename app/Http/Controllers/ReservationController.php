@@ -221,7 +221,7 @@ class ReservationController extends Controller
         })->toArray();
 
         $priceCalculator = new PriceCalculatorService();
-        $calculatedPrice = $priceCalculator->calculatePrice($validatedData['start_date'], $validatedData['end_date'], $selectedOptions->toArray());
+        $calculatedPrice = $priceCalculator->calculatePrice($validatedData['start_date'], $validatedData['end_date'], $selectedOptions->toArray(), $reservationId ?? null);
         #$nightsPrice = $calculatedPrice['nights_price'];
         #$optionsPrice = $calculatedPrice['options_price'];
         $res_price = $calculatedPrice['res_price'];
@@ -339,7 +339,7 @@ class ReservationController extends Controller
         $reservationEdit = Reservation::with(['options' => function ($query) {
             $query->select('options.*', 'option_reservation.by_day');
         }])->findOrFail($id);
-
+        
         $arrivalDate = $reservationEdit->start_date;
         $showMonth = date('Y-m-01', strtotime($arrivalDate));
         

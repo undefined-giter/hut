@@ -8,7 +8,7 @@
             <p class="text-sm mb-6 font-kalnia !text-black">Réservez en toute simplicité avec le choix qui vous convient le mieux</p>
 
             <p class="text-left ml-2 !text-black">Réserver Immédiatement :</p>
-            <button @click.prevent="payLater" class="btn w-full mb-4">Payer à l'arrivée, <b>en liquide</b> les {{ calculatedPrice }} €</button>
+            <button @click.prevent="payLater" class="btn w-full mb-4">Payer à l'arrivée, <b>en liquide</b> les {{ calculatedPrice.toFixed(2).replace(/\.00$/, '') }} €</button>
             
             <p class="text-left ml-2 !text-black">Passer au Payement avec Stripe :</p>
             <button @click.prevent="payNow" class="btn w-full">Payer par Carte</button>

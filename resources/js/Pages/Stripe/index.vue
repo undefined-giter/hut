@@ -24,6 +24,10 @@
                             <p class="table-cell leading-tight">Taxe de paiement par carte :</p>
                             <p class="table-cell leading-tight">{{ stripeTax % 1 === 0 ? stripeTax : stripeTax.toFixed(2) }} €</p>
                         </div>
+                        <div v-if="res_payed" class="table-row">
+                            <p class="table-cell leading-tight">Déjà réglé :</p>
+                            <p class="table-cell leading-tight">{{ res_payed }} €</p>
+                        </div>
                         <div class="table-row">
                             <p class="table-cell font-bold leading-tight">Total :</p>
                             <p class="table-cell leading-tight !text-green-600 text-2xl font-semibold">{{ total % 1 === 0 ? total : total.toFixed(2) }} €</p>
@@ -86,7 +90,7 @@ const {
     total: Number,
     payed: Number,
     restResToPay: Number,
-    res_payed: Number,
+    res_payed: Number | null,
     nights: Number,
     start_date: String,
     end_date: String,
@@ -103,8 +107,8 @@ onMounted(() => {
         return;
     }
 
-    //stripe = Stripe('pk_live_51QNaybAwfZnHthsid8zbHUhQ8l3AZWfG4IIAATeYog4oPFJONbBT8CJav0IbNwj0UCEKLsNib7g2Ta2hcDLR8NGY000hi3ptPp');
-    stripe = Stripe('pk_test_51QNaybAwfZnHthsiorwzaGxsMW73Ba0E9yGqzzpIBtfmtKdMpesgZ9d9BGUNG1gkVDDUd29Idqbdu8OXlDSniWUm00eqc9MpAR');
+    stripe = Stripe('pk_live_51QNaybAwfZnHthsid8zbHUhQ8l3AZWfG4IIAATeYog4oPFJONbBT8CJav0IbNwj0UCEKLsNib7g2Ta2hcDLR8NGY000hi3ptPp');
+    //stripe = Stripe('pk_test_51QNaybAwfZnHthsiorwzaGxsMW73Ba0E9yGqzzpIBtfmtKdMpesgZ9d9BGUNG1gkVDDUd29Idqbdu8OXlDSniWUm00eqc9MpAR');
     elements = stripe.elements({ clientSecret });
 
     const appearance = {

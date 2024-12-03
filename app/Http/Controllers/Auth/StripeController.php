@@ -46,7 +46,8 @@ class StripeController extends Controller
         $calculatedPrice = $priceCalculator->calculatePrice(
             $validatedData['start_date'],
             $validatedData['end_date'],
-            $selectedOptions->toArray()
+            $selectedOptions->toArray(),
+            $id ?? null
         );
 
         $payed = 0;
@@ -64,7 +65,7 @@ class StripeController extends Controller
             return back()->with('error', ["Veuillez choisir le paiement en liquide pour être remboursés des $restResToPay € à votre arrivée, ou contactez-nous."]);
         }
         $stripeTax = ceil($restResToPay * 1.5 / 100);
-        $total = intval(round((($restResToPay + $stripeTax) * 100), 2));
+        $total = ($restResToPay + $stripeTax) * 100;
     
         try {
             $paymentIntent = \Stripe\PaymentIntent::create([
@@ -98,7 +99,11 @@ class StripeController extends Controller
                 'reservation_id' => $id ?? null,
             ]);
         } catch (\Exception $e) {
-            return redirect()->route('book')->with('error', ['Passez à un paiement sur place svp.<br>Erreur : ' . $e->getMessage()]);
+            if ($id) {
+                return redirect()->route('profile')->with('error', ['Passez à un paiement sur place svp.']);
+            } else {
+                return redirect()->route('book')->with('error', ['Passez à un paiement sur place svp.']);
+            }
         }
     }
     

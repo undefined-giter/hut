@@ -164,9 +164,9 @@
 
       <div class="flex mx-1">
         <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
-          <div class="flex justify-between -mb-0.5">
-            <label for="res_comment">Demande spéciale</label>
-            <p v-if="res_comment" :class="['mr-4', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
+          <div class="flex justify-between">
+            <label for="res_comment" class="!mb-0.5">Demande spéciale</label>
+            <p v-if="res_comment" :class="['mr-4 -mb-0.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
           </div>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="animatedText" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
         </div>
@@ -181,6 +181,7 @@
             :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" 
             :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" 
             :specialDatesPricesArray="specialDatesPricesArray"
+            :res_payed="res_payed"
           />
           <button
             type="button"
@@ -269,7 +270,7 @@ const isScrollbarVisible = ref(false);
 const previousAuthUser = ref(null);
 const openPayementChoiceModal = ref(false);
 const formAction = ref(null);
-
+const res_payed = ref(parseInt(reservationEdit.res_payed) || 0)
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PriceCalculatorService
 {
-    public function calculatePrice(string $startDate, string $endDate, array $selectedOptions): array
+    public function calculatePrice(string $startDate, string $endDate, array $selectedOptions, ?int $id): array
     {
         $prices = DB::table('prices')
         ->whereIn('key', ['price_per_night', 'price_per_night_for_2_and_more_nights', 'percent_reduced_week'])
@@ -76,6 +76,8 @@ class PriceCalculatorService
         }
         
         $res_price = $totalSpecialPrice + $totalRegularPrice + $optionsPrice;
+
+        if($res_price < 1 && $res_price > -1){ $res_price = 0; }
 
         return [ 
             'nights_price' => $totalSpecialPrice + $totalRegularPrice,
