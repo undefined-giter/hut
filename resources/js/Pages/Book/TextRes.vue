@@ -34,7 +34,7 @@
           <li class="p activities right active">Villages pittoresques</li>
           <li class="p activities right active">Faune & flore locale</li>
           <li class="p activities right active">Restaurants locaux</li>
-          <li class="p activities right active">Balade en vélo</li>
+          <li class="p activities right active">Balade à vélo</li>
         </ul>
       </div>
     </div>

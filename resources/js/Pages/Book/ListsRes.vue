@@ -24,13 +24,13 @@
                 ><span v-if="auth && auth.user && auth.user.role !== 'admin'">La vôtre</span>
               </Link>
             </span>
-            <span v-if="auth && auth.user && auth.user.role === 'admin'">
+            <span v-if="auth && auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')">
               <Link :href="route('admin.details', reservation.user_id)">
                 <span class="text-xs">➡️</span><span class="text-blue-700">Profil</span>
               </Link>
             </span>
           </div>
-          <div v-if="auth && auth.user && auth.user.role === 'admin'" class="flex items-center space-x-1">
+          <div v-if="auth && auth.user && (auth.user.role === 'admin' || auth.user.role === 'fake_admin')" class="flex items-center space-x-1">
             <form
               method="POST"
               :action="route('book.delete', reservation.id)"

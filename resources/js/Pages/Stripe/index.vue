@@ -39,8 +39,11 @@
             <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md mb-6 text-center underline">
                 <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Informations de carte</h3>
                 <div id="payment-element" class="mb-4"></div>
-                <button :disabled="isSubmitting || !stripeLoaded" @click.prevent="submitPayment" class="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-200">
+                <!-- <button :disabled="isSubmitting || !stripeLoaded" @click.prevent="submitPayment" class="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-200">
                     <i class="fas fa-lock mr-2"></i> Confirmer et Payer
+                </button> -->
+                <button disabled @click.stop @click.prevent class="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold py-3 rounded-lg shadow-md transition-colors duration-200">
+                    <i class="fas fa-lock mr-2"></i> Attendez que la cabane soit contruite avant de payer par carte
                 </button>
                 <div v-if="stripeError" class="text-red-500 dark:text-red-400 mt-2">{{ stripeError }}</div>
             </div>
