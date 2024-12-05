@@ -104,7 +104,7 @@ class GoogleController extends Controller
             // Tentative de connexion classique
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
-                return redirect()->intended('/book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
+                return redirect()->intended(route('book'))->with('success', ['Vous pouvez à présent réserver votre bonheur']);
             }
         }
 

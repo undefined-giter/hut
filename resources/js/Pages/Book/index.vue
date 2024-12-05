@@ -95,13 +95,10 @@
 
     <form method="POST" id="reservationForm" :action="formAction">
       <input type="hidden" name="_token" :value="csrfToken" />
-      <!-- <input type="hidden" name="_token" :value="usePage().props.csrf_token" /> -->
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
-      <!-- <input type="hidden" name="nights" :value="numberOfNights" /> -->
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
-      <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -247,7 +244,7 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
+const { csrf_token, auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
   edit_reservation_dates = [], reservationEdit = false } = usePage().props;
@@ -260,14 +257,13 @@ const res_comment = ref('');
 const animatedText = ref('');
 const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, ou autres informations pertinantes.";
 const isReservationValid = ref(reservationEdit ? true : false);
-const csrfToken = ref(null);
+const csrfToken = computed(() => csrf_token);
 const today = new Date();
 const selectedOptionsObjects = ref([]);  
 const selectedOptionsIds = ref([]);  
 const calculatedPrice = ref(0);
 const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
-const previousAuthUser = ref(null);
 const openPayementChoiceModal = ref(false);
 const formAction = ref(null);
 const res_payed = ref(parseInt(reservationEdit.res_payed) || 0)
@@ -307,9 +303,6 @@ onMounted(() => {
     }
   }
 
-  csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  previousAuthUser.value = auth.user;
-
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
   displayPhoneModalAfterDelay();
@@ -345,17 +338,6 @@ const handleOptionChange = (option) => {
     selectedOptionsObjects.value = options.filter(opt => selectedOptionsIds.value.includes(opt.id));
   }
 };
-
-
-watch(
-  () => usePage().props.auth.user,
-  (newUser, oldUser) => {
-    if (!previousAuthUser.value && newUser) {
-      window.location.reload();
-    }
-    previousAuthUser.value = newUser;
-  }
-);
 
 const isReservedDate = (cellDate) => {
   if (in_date.includes(cellDate)) {
@@ -470,7 +452,7 @@ const submitPayLater = () => {
 
     setTimeout(() => {
       document.getElementById('reservationForm').submit();
-    }, 25);
+    }, 10);
 };
 
 const submitPayNow = () => {
@@ -480,7 +462,7 @@ const submitPayNow = () => {
 
     setTimeout(() => {
       document.getElementById('reservationForm').submit();
-    }, 25);
+    }, 10);
 }
 
 

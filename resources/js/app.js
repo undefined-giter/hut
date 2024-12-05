@@ -24,7 +24,7 @@ createInertiaApp({
 });
 
 InertiaProgress.init({
-    delay: 10, // Attends 10ms avant de montrer la barre
+    delay: 1, // Attends 1ms avant de montrer la barre
     color: '#EA580C', // Couleur de la barre de progression // Redéfini en app.css
     includeCSS: false, // Inclut le CSS de la barre
     showSpinner: false // Désactive le spinner

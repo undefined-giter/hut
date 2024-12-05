@@ -19,7 +19,6 @@ return [
     */
 
     'driver' => env('SESSION_DRIVER', 'database'),
-    // 'driver' => env('SESSION_DRIVER', 'file'), // TODO test
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +34,6 @@ return [
 
     'lifetime' => env('SESSION_LIFETIME', 240),
 
-    //'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false), // TODO production
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 
     /*
@@ -171,8 +169,7 @@ return [
     |
     */
 
-    // 'secure' => env('SESSION_SECURE_COOKIE', true), // TODO production
-    'secure' => env('SESSION_SECURE_COOKIE', false),
+    'secure' => env('SESSION_SECURE_COOKIE', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -202,7 +199,7 @@ return [
     |
     */
 
-    'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    'secure' => env('SESSION_SAME_SITE', true),
 
     /*
     |--------------------------------------------------------------------------
