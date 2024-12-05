@@ -2,18 +2,21 @@
     Options +FollowSymLinks
     RewriteEngine On
 
+    # Redirection de www vers non-www
     RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
     RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
 
-    # Redirection HTTPS (maintenue)
+    # Forcer HTTPS
     RewriteCond %{HTTPS} off
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
 
-    # Trailing Slashes (si ce n'est pas un dossier) - Exception pour la racine
+    # Supprimer les trailing slashes (sauf pour les dossiers et la racine)
     RewriteCond %{REQUEST_URI} !^/$
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
+
+    # Protéger les requêtes malveillantes avec une query string vide
     RewriteCond %{QUERY_STRING} ^\$$
     RewriteRule ^ - [F]
 
@@ -21,17 +24,19 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-    
-    RewriteCond %{REQUEST_URI} !^/storage/
+
+    # Exclusion pour le dossier /storage/
+    RewriteCond %{REQUEST_URI} ^/storage/ [NC]
+    RewriteRule ^ - [L]
 </IfModule>
 
-# Protection du fichier .env
+# Protection des fichiers sensibles
 <FilesMatch "\.(env|git|log|config|sql|bak)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
 
-# En-têtes de cache (images, CSS, JS)
+# Cache pour les ressources statiques
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/jpg "access plus 1 year"
@@ -47,6 +52,10 @@
     ExpiresByType application/json "access plus 1 month"
 </IfModule>
 
+# Compression GZIP
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
 </IfModule>
+
+# Désactiver l'affichage de l'index des dossiers
+Options -Indexes
