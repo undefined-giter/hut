@@ -27,7 +27,7 @@ class StripeController extends Controller
             ->where('end_date', '>', $validatedData['start_date'])
             ->first();
     
-        if ($id == null && $existingReservation) { return redirect()->route('book')->with('error', ['Vous avez déjà une réservation durant cette période. Veuillez la modifier si nécessaire.']); }
+        if ($id == null && $existingReservation) { return redirect()->route('profile')->with('error', ['Vous avez déjà une réservation durant cette période. Veuillez la modifier si nécessaire.']); }
     
         $conflictingReservations = Reservation::where('user_id', '!=', $userId)
             ->where('start_date', '<', $validatedData['end_date'])

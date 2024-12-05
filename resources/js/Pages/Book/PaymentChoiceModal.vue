@@ -43,6 +43,9 @@ const payLater = () => {
 const payNow = () => {
     isSubmitting.value = true
     emit('payNow');
+    setTimeout(() => {
+        isSubmitting.value = false;
+    }, 4000);
 };
 
 const closeModal = () => {
