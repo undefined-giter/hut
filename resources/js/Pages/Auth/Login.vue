@@ -189,7 +189,7 @@ const submit = () => {
     });
 };
 
-const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+const today = new Date(new Date().setDate(new Date().getDate()));
 
 const isReservedDate = (cellDate) => {
   const in_date = usePage().props.in_date || [];
@@ -200,7 +200,7 @@ const isReservedDate = (cellDate) => {
 
   const formattedCellDate = new Date(cellDate);
 
-  if (formattedCellDate < yesterday) {
+  if (formattedCellDate < today) {
     return 'inner';
   }
 

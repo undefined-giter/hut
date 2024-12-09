@@ -161,10 +161,8 @@
 
       <div class="flex mx-1">
         <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
-          <div class="flex justify-between">
-            <label for="res_comment" class="!mb-0.5">Demande spéciale</label>
-            <p v-if="res_comment" :class="['mr-4 -mb-0.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
-          </div>
+          <label for="res_comment" class="!mb-0.5">Demande spéciale</label>
+          <p v-if="res_comment" :class="['absolute right-2 top-5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="animatedText" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
         </div>
         <div class="flex flex-col items-center ml-auto">

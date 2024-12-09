@@ -19,7 +19,7 @@
                             </div>
                         
                             <div class="flex text-sm mt-1">
-                                <Link :href="route('book.edit', reservation.id)"><span class="text-xs">✏️</span><span class="dark:text-blue-700">Modifier</span></Link>
+                                <Link :href="route('book.edit', reservation.id)"><span class="text-xs">✏️</span><span class="text-blue-700">Modifier</span></Link>
                                 <span class="text-zinc-800 mx-1">|</span>
                                 <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
                                     <input type="hidden" name="_token" :value="csrfToken" />
@@ -41,7 +41,7 @@
                         </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <div class="text-blue-600 dark:text-blue-600 mt-1"><em>Options demandées :</em></div>
+                            <div class="text-blue-600 mt-1"><em>Options demandées :</em></div>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
                                     {{ option.name }} -
@@ -59,7 +59,7 @@
                         </div>
                         <div v-else class="text-blue-600 italic">Aucune option demandée</div>
                         
-                        <div class="text-blue-600 dark:text-blue-600 mt-1"><em>Résumé du Tarif :</em></div>
+                        <div class="text-blue-600 mt-1"><em>Résumé du Tarif :</em></div>
                         <div class="flex justify-between items-end">
                             <p class="text-sm">Nuits & Options : {{ calculateTotal(reservation.res_price) }}<span class="text-sm">€</span></p>
                             <p class="text-sm">Frais carte : {{ calculateTotal(reservation.card_fees) || 0 }} <span class="text-sm">€</span></p>
@@ -81,7 +81,7 @@
                             
                             <div class="flex text-sm mt-1">
                                 <Link :href="route('book.edit', reservation.id)">
-                                    <span class="text-xs">✏️</span><span class="dark:text-blue-700">Modifier</span>
+                                    <span class="text-xs">✏️</span><span class="text-blue-700">Modifier</span>
                                 </Link>
                                 <span class="text-zinc-800 mx-1">|</span>
                                 <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
@@ -104,7 +104,7 @@
                         </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <div class="text-blue-600 dark:text-blue-600 mt-1"><em>Options demandées :</em></div>
+                            <div class="text-blue-600 mt-1"><em>Options demandées :</em></div>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
                                     {{ option.name }} -
@@ -122,9 +122,9 @@
                                 </li>
                             </ul>
                         </div>
-                        <div v-else class="dark:text-blue-600 italic">Aucune option demandée</div>
+                        <div v-else class="text-blue-600 italic">Aucune option demandée</div>
 
-                        <div class="text-blue-600 dark:text-blue-600 mt-1"><em>Résumé du Tarif :</em></div>
+                        <div class="text-blue-600 mt-1"><em>Résumé du Tarif :</em></div>
                         <div class="flex justify-between items-end">
                             <p class="text-sm">Nuits & Options : {{ calculateTotal(reservation.res_price) }}<span class="text-sm">€</span></p>
                             <p class="text-sm">Frais carte : {{ calculateTotal(reservation.card_fees) || 0 }} <span class="text-sm">€</span></p>
@@ -150,7 +150,7 @@
                     </div>
 
                         <div v-if="reservation.options && reservation.options.length > 0">
-                            <div class="text-blue-600 dark:text-blue-600 mt-1"><em>Options demandées :</em></div>
+                            <div class="text-blue-600 mt-1"><em>Options demandées :</em></div>
                             <ul class="list-disc ml-6">
                                 <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
                                     {{ option.name }} -
@@ -166,9 +166,9 @@
                                 </li>
                             </ul>
                         </div>
-                        <div v-else class="dark:text-blue-600 italic">Aucune option demandée</div>
+                        <div v-else class="text-blue-600 italic">Aucune option demandée</div>
 
-                        <div class="text-blue-600 dark:text-blue-600 mt-1"><em>Résumé du Tarif :</em></div>
+                        <div class="text-blue-600 mt-1"><em>Résumé du Tarif :</em></div>
                         <div class="flex justify-between items-end">
                             <p class="text-sm">Nuits & Options : {{ calculateTotal(reservation.res_price) }}<span class="text-sm">€</span></p>
                             <p class="text-sm">Frais carte : {{ calculateTotal(reservation.card_fees) || 0 }} <span class="text-sm">€</span></p>
