@@ -43,6 +43,8 @@
         
         <title inertia>Cabane avec Jacuzzi - Trièves Location</title>
 
+        <meta property="og:site_name" content="Hébergement Cabane Trièves">
+
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
