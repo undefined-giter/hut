@@ -33,7 +33,9 @@
                             v-if="item.isEditing"
                             type="number"
                             v-model="item.editedPrice"
+                            step="1"
                             placeholder="Prix"
+                            @input="item.editedPrice = parseInt(item.editedPrice) || 0"
                         />
                         <span v-else  class="select-text">{{ parseFloat(item.spe_price) % 1 === 0 ? parseFloat(item.spe_price).toFixed(0) : parseFloat(item.spe_price).toFixed(2) }}</span>
                         </td>
@@ -67,7 +69,7 @@
                             class="!w-full"
                         />
                     </div>
-                    <input type="number" v-model="newRecord.price" placeholder="Prix"  />
+                    <input type="number" v-model="newRecord.price" placeholder="Prix" step="1" @input="newRecord.price = Math.floor(newRecord.price)" />
                     <p v-if="priceError" class="text-sm !text-red-600 text-right mr-1 -mt-1">{{ priceError }}</p>
                 </div>
                 <div class="flex justify-between">

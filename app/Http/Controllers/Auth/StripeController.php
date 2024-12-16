@@ -143,7 +143,7 @@ class StripeController extends Controller
             return $reservationController->store($reservationRequest, $reservationId);
     
         } catch (\Exception $e) {
-            return redirect()->route('book')->with('error', ['Le paiement par carte a échoué.']);
+            return redirect()->route('book')->with('error', ['Une erreur est survenue.']);
         }
     }   
 }

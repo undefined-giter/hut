@@ -264,7 +264,7 @@ const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
 const openPayementChoiceModal = ref(false);
 const formAction = ref(null);
-const res_payed = ref(parseInt(reservationEdit.res_payed) || 0)
+const res_payed = ref(parseFloat(reservationEdit.res_payed))
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 

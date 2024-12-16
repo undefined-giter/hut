@@ -16,7 +16,7 @@ const props = defineProps({
     PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS: { type: Number, default: 120 },
     PERCENT_REDUCED_WEEK: { type: Number, default: 10 },
     specialDatesPricesArray: { type: Array, default: () => [] },
-    res_payed: {type: Number }
+    res_payed: { type: Number }
 });
 
 const emit = defineEmits(['price-updated']);
@@ -101,7 +101,7 @@ const calculateTotalPrice = () => {
 
   const optionsPrice = calculateOptionsPrice();
 
-  totalPrice.value = parseFloat(basePrice + optionsPrice - props.res_payed);
+  totalPrice.value = basePrice + optionsPrice - props.res_payed;
 
   totalPriceDisplay.value =
     totalPrice.value % 1 === 0 ? totalPrice.value.toFixed(0) : totalPrice.value.toFixed(2);
