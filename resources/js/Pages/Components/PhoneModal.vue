@@ -78,9 +78,7 @@ const submitPhone = async () => {
       closeModal();
       showConfirmationMessage();
       showPhoneReminder.value = false;
-    } catch (error) {
-      //console.error("Erreur lors de la mise à jour du numéro de téléphone :", error);
-    }
+    } catch (error) {}
   }
 };
 
@@ -103,9 +101,7 @@ const checkUserPhone = async () => {
     if (!response.data.phone) {
       showModal.value = true;
     }
-  } catch (error) {
-    //console.error("Erreur lors de la récupération du numéro de téléphone :", error);
-  }
+  } catch (error) {}
 };
 
 onMounted(() => {

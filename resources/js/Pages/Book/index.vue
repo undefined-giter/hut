@@ -93,14 +93,12 @@
       </template>
     </vue-cal>
 
-    <form method="POST" id="reservationForm" :action="reservationEdit ? `/book/${reservationEdit.id}/update` : '/book'"  @submit.prevent="handleSubmit">
-      <input type="hidden" name="_token" :value="usePage().props.csrf_token" />
+    <form method="POST" id="reservationForm" :action="formAction">
+      <input type="hidden" name="_token" :value="csrfToken" />
       <input type="hidden" name="start_date" :value="arrivalDate ? arrivalDate.toISOString().split('T')[0] : ''" />
       <input type="hidden" name="end_date" :value="departureDate ? departureDate.toISOString().split('T')[0] : ''" />
-      <!-- <input type="hidden" name="nights" :value="numberOfNights" /> -->
       <input type="hidden" name="res_comment" :value="res_comment" />
       <input type="hidden" name="options" :value="JSON.stringify(selectedOptionsObjects)" />
-      <!-- <input type="hidden" name="res_price" :value="calculatedPrice" /> -->
 
       <div class="flex justify-between items-start mt-4">
         <div class="min-h-[60px]">
@@ -118,10 +116,6 @@
             <span v-html="`Réservation du <span class='text-xl font-bold'>${formatDate(arrivalDate)}</span> au <span class='text-xl font-bold'>${formatDate(departureDate)}</span>.`"></span>
             <br>
             <p class="my-1 text-sm">Nombre de nuit{{ numberOfNights > 1 ? 's' : '' }} : <b>{{ numberOfNights }}</b></p>
-          </div>
-
-          <div v-if="dateError" class="text-red-600">
-            {{ dateError }}
           </div>
         </div>
         <button type="button" :class="`${arrivalDate ? '' : 'btn-disabled'} btn text-sm bg-orangeTheme hover:text-orangeTheme !shadow-none !px-2 mr-0.5`" @click="resetReservation">Réinitialiser<br>les Dates</button>
@@ -168,8 +162,8 @@
       <div class="flex mx-1">
         <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
           <label for="res_comment">Demande spéciale</label>
-          <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="resCommentPlaceholder" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
-          <p v-if="res_comment" :class="['absolute top-3.5 right-3.5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
+          <p v-if="res_comment" :class="['absolute right-2 top-5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
+          <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="animatedText" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
         </div>
         <div class="flex flex-col items-center ml-auto">
           <Price
@@ -182,19 +176,27 @@
             :PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS="PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS" 
             :PERCENT_REDUCED_WEEK="PERCENT_REDUCED_WEEK" 
             :specialDatesPricesArray="specialDatesPricesArray"
+            :res_payed="res_payed"
           />
-          <button type="submit" form="reservationForm"
+          <button
+            type="button"
             :disabled="!isReservationValid || resCommentLength > 510"
-            :class="[(!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 'btn block !p-12 !font-bold text-2xl']">
+            :class="[(!isReservationValid || resCommentLength > 510) ? 'btn-disabled cursor-not-allowed' : '', 'btn block !p-12 !font-bold text-2xl']"
+            @click="openPayementChoiceModal = true"
+          >
             {{ reservationEdit ? 'Modifier' : 'Réserver' }}
           </button>
+
+          <PaymentChoiceModal v-if="openPayementChoiceModal" 
+            @payLater="submitPayLater"
+            @payNow="submitPayNow"
+            @close="openPayementChoiceModal = false" 
+            :calculatedPrice="calculatedPrice"
+          />
+
         </div>
       </div>
-      <div v-if="isSubmitting" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-orangeTheme"></div>
-      </div>
     </form>
-    
     
     <div class="mt-8">
       <div class="hidden md:block">
@@ -221,7 +223,6 @@
         </div>
       </div>
     </div>
-
   </Layout>
 
   <PhoneModal v-if="showPhoneModal" />
@@ -232,7 +233,8 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { useUnroll } from '../../shared/utils';
 import PhoneModal from './../Components/PhoneModal.vue';
-import Price from './../Components/Price.vue';
+import PaymentChoiceModal from './PaymentChoiceModal.vue';
+import Price from './Price.vue';
 import TextRes from './TextRes.vue';
 import ListsRes from './ListsRes.vue';
 import ListSpecials from './ListSpecials.vue';
@@ -240,28 +242,29 @@ import Layout from './../Layout.vue';
 import 'vue-cal/dist/vuecal.css';
 import VueCal from 'vue-cal';
 
-const { auth, reservations, options, reservationEdit, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
+const { csrf_token, auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
-  edit_reservation_dates = []  } = usePage().props;
+  edit_reservation_dates = [], reservationEdit = false } = usePage().props;
 
 const arrivalDate = ref(null);
 const departureDate = ref(null);
 const showMonth = ref(showMonthEdit ?? null);
-const dateError = ref(null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
-const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, etc.";
+const animatedText = ref('');
+const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, ou autres informations pertinantes.";
 const isReservationValid = ref(reservationEdit ? true : false);
-const csrfToken = ref(null);
+const csrfToken = computed(() => csrf_token);
 const today = new Date();
 const selectedOptionsObjects = ref([]);  
 const selectedOptionsIds = ref([]);  
 const calculatedPrice = ref(0);
 const gridClass = ref('three-columns');
 const isScrollbarVisible = ref(false);
-const isSubmitting = ref(false);
-const previousAuthUser = ref(null);
+const openPayementChoiceModal = ref(false);
+const formAction = ref(null);
+const res_payed = ref(parseFloat(reservationEdit.res_payed) || 0)
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 
@@ -288,7 +291,9 @@ onMounted(() => {
 
     if (reservationEdit) {
       arrivalDate.value = new Date(reservationEdit.start_date);
+      arrivalDate.value.setHours(23, 59, 59, 999);
       departureDate.value = new Date(reservationEdit.end_date);
+      departureDate.value.setHours(23, 59, 59, 999);
       numberOfNights.value = reservationEdit.nights;
       if (reservationEdit.res_comment) {
         res_comment.value = reservationEdit.res_comment;
@@ -296,12 +301,10 @@ onMounted(() => {
     }
   }
 
-  csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  previousAuthUser.value = auth.user;
-
   window.addEventListener('resize', updateGridClass);
   updateGridClass();
   displayPhoneModalAfterDelay();
+  animateText(resCommentPlaceholder, 50);  
 });
 
 
@@ -334,17 +337,6 @@ const handleOptionChange = (option) => {
   }
 };
 
-
-watch(
-  () => usePage().props.auth.user,
-  (newUser, oldUser) => {
-    if (!previousAuthUser.value && newUser) {
-      window.location.reload();
-    }
-    previousAuthUser.value = newUser;
-  }
-);
-
 const isReservedDate = (cellDate) => {
   if (in_date.includes(cellDate)) {
     return 'in';
@@ -367,21 +359,19 @@ const handleDateClick = (cell) => {
   const selectedDate = new Date(cell);
   selectedDate.setHours(23, 59, 59, 999);
 
-  if (selectedDate < today) {
-    dateError.value = "La date d'arrivée ne peut pas être inférieure à la date actuelle.";
-    resetReservation();
-    return;
-  }
-
   if (!arrivalDate.value) {
     arrivalDate.value = selectedDate;
     departureDate.value = null;
-    dateError.value = null;
     numberOfNights.value = 0;
     isReservationValid.value = false;
   } else if (selectedDate <= arrivalDate.value) {
-    dateError.value = "La date de départ doit être après la date d'arrivée.";
-    resetReservation();
+    if(selectedDate <= today){
+      resetReservation();
+    }else{
+      arrivalDate.value = selectedDate;
+      const timeDiff = departureDate.value.getTime() - arrivalDate.value.getTime();
+      numberOfNights.value = Math.floor(timeDiff / (1000 * 3600 * 24));
+    }
   } else {
     departureDate.value = selectedDate;
     const timeDiff = departureDate.value.getTime() - arrivalDate.value.getTime();
@@ -393,7 +383,6 @@ const handleDateClick = (cell) => {
 const resetReservation = () => {
   arrivalDate.value = null;
   departureDate.value = null;
-  dateError.value = null;
   numberOfNights.value = 0;
   isReservationValid.value = false;
   if(document.querySelector('.vuecal__cell--selected')){
@@ -414,6 +403,20 @@ const displayPhoneModalAfterDelay = () => {
   setTimeout(() => {
     showPhoneModal.value = true;
   }, 6000);
+};
+
+const animateText = (text, delay = 50) => {
+  animatedText.value = '';
+  let index = 0;
+
+  const interval = setInterval(() => {
+    if (index < text.length) {
+      animatedText.value += text[index];
+      index++;
+    } else {
+      clearInterval(interval);
+    }
+  }, delay);
 };
 
 const updateGridClass = () => {
@@ -439,32 +442,29 @@ const updateCalculatedPrice = (price) => {
   calculatedPrice.value = price;
 };
 
-const handleSubmit = async () => {
-  isSubmitting.value = true;
 
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 4000));
-    document.getElementById('reservationForm').submit();
-  } catch (error) {
-    console.error('Erreur lors de la soumission du formulaire', error);
-  } finally {
-  }
+const submitPayLater = () => {
+    formAction.value = reservationEdit 
+        ? route('book.update', { id: reservationEdit.id })
+        : route('book.store');    
+
+    setTimeout(() => {
+      document.getElementById('reservationForm').submit();
+    }, 10);
 };
+
+const submitPayNow = () => {
+    formAction.value = reservationEdit 
+        ? route('payment.show', { id: reservationEdit.id })
+        : route('payment.show');
+
+    setTimeout(() => {
+      document.getElementById('reservationForm').submit();
+    }, 10);
+}
 
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateGridClass);
 });
 </script>
-
-<style scoped>
-.hide-scrollbar::-webkit-scrollbar {display: none;}
-.hide-scrollbar {scrollbar-width: none;}
-.hide-scrollbar {-ms-overflow-style: none;}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-.animate-spin {animation: spin 1s linear infinite;}
-</style>

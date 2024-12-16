@@ -44,23 +44,25 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): \Symfony\Component\HttpFoundation\Response
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
         if (Auth::check()) {
             Auth::user()->update([
-                'last_login' => \Carbon\Carbon::now(),
+                'last_login' => now(),
             ]);
         }
 
-        if (in_array(Auth::user()->role, ['admin', 'fake_admin']))  {
-            return redirect()->intended(route('admin.list'));
+        if (in_array(Auth::user()->role, ['admin', 'fake_admin'])) {
+            session()->flash('success', ['Bienvenue Admin.']);
+            return Inertia::location(route('admin.list'));
         }
 
-        return redirect()->intended(route('book'));
+        session()->flash('success', ['Vous pouvez à présent réserver votre bonheur.']);
+
+        return Inertia::location(route('book'));
     }
 
     /**

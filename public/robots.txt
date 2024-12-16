@@ -4,9 +4,8 @@ Disallow: /css/
 Disallow: /js/
 Disallow: /vendor/
 Disallow: /storage/
-Allow: /
-
-User-agent: Googlebot
+Disallow: /?$
+Disallow: /reserver
 Allow: /
 
 Sitemap: https://cabane.leorip.com/sitemap.xml

@@ -19,8 +19,11 @@ class ReservationRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        session()->put('original_options', $this->input('options'));
+
         $optionsJson = $this->input('options');
         $optionsData = json_decode($optionsJson, true) ?? [];
+        
         if (!is_array($optionsData)) {
             $optionsData = [];
         }
@@ -42,10 +45,13 @@ class ReservationRequest extends FormRequest
             'end_date' => 'required|date|after:start_date',
             // 'nights' => 'required|integer|min:1',
             'res_comment' => 'nullable|max:510',
-            //'res_price' => 'required|numeric',
+            // 'res_price' => 'required|numeric',
             'options' => 'nullable|array',
             'options.*.id' => 'nullable|exists:options,id',
             'options.*.by_day' => 'nullable|boolean',
+            'payed' => 'nullable|numeric',
+            'res_payed' => 'nullable|numeric',
+            'card_fees' => 'nullable|numeric',
         ];
     }
 }

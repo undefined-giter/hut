@@ -120,7 +120,7 @@ watch(
     },
 );
 
-const { baseUrl, auth, flash, showAccountRoad = false } = usePage().props;
+const { baseUrl, auth, flash, showAccountRoad } = usePage().props;
 
 const user = computed(() => auth?.user || null);
 

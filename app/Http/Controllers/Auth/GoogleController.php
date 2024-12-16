@@ -19,7 +19,7 @@ class GoogleController extends Controller
                 'openid',
                 'profile',
                 'email',
-                'https://www.googleapis.com/auth/user.phonenumbers.read'
+                //'https://www.googleapis.com/auth/user.phonenumbers.read',
             ])
             ->redirect();
     }
@@ -29,26 +29,25 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
 
-            $phone = $googleUser->user['phoneNumbers'][0]['value'] ?? $googleUser->user['phone_number'] ?? null;
+            // $phone = $googleUser->user['phoneNumbers'][0]['value'] ?? $googleUser->user['phone_number'] ?? null;
 
-            if (!$phone) {
-                $client = new Client();
-                $response = $client->get('https://people.googleapis.com/v1/people/me', [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $googleUser->token,
-                    ],
-                    'query' => [
-                        'personFields' => 'phoneNumbers',
-                    ],
-                ]);
+            // if (!$phone) {
+            //     $client = new Client();
+            //     $response = $client->get('https://people.googleapis.com/v1/people/me', [
+            //         'headers' => [
+            //             'Authorization' => 'Bearer ' . $googleUser->token,
+            //         ],
+            //         'query' => [
+            //             'personFields' => 'phoneNumbers',
+            //         ],
+            //     ]);
                 
-                $person = json_decode($response->getBody(), true);
-                $phone = $person['phoneNumbers'][0]['value'] ?? null;
-            }
+            //     $person = json_decode($response->getBody(), true);
+            //     $phone = $person['phoneNumbers'][0]['value'] ?? null;
+            // }
             
-            if($phone){ $phone = preg_replace('/^(\+33|33)/', '0', $phone); }
+            // if($phone){ $phone = preg_replace('/^(\+33|33)/', '0', $phone); }
 
-            // Vérifie si l'utilisateur existe déjà dans la base de données
             $user = User::where('google_id', $googleUser->getId())
                         ->orWhere('email', $googleUser->getEmail())
                         ->first();
@@ -66,7 +65,7 @@ class GoogleController extends Controller
                     'email' => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
                     'email_verified_at' => now(),
-                    'phone' => $phone,
+                    // 'phone' => $phone,
                     'picture' => $googleUser->getAvatar() ?? 'default_user.png',
                     'password' => Hash::make(str()->random(24)),
                     //'last_login' => now(),
@@ -75,14 +74,15 @@ class GoogleController extends Controller
             }
             
             Auth::login($user);
-
-            $redirect = redirect()->route('book')->with('success', ['Vous pouvez à présent réserver votre séjour de bonheur']);
-            if ($userIsNew) { $redirect->with('showAccountRoad', true); }
-            return $redirect;
+            
+            return redirect()->route('book')->with([
+                'success' => ['Vous pouvez à présent réserver votre séjour de bonheur'],
+                'showAccountRoad' => $userIsNew,
+            ]);
             
         } catch (\Exception $e) {
             \Log::error('Erreur de connexion avec Google : '.$e->getMessage());
-            return redirect()->route('login')->with('error', ['Erreur lors de la connexion avec Google.']);
+            return redirect()->route('register')->with('error', ['Erreur lors de la connexion avec Google.']);
         }
     }
 
@@ -104,7 +104,7 @@ class GoogleController extends Controller
             // Tentative de connexion classique
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
-                return redirect()->intended('/book')->with('success', ['Vous pouvez à présent réserver votre bonheur']);
+                return redirect()->intended(route('book'))->with('success', ['Vous pouvez à présent réserver votre bonheur']);
             }
         }
 

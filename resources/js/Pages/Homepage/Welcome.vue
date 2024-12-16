@@ -3,7 +3,7 @@
 
     <Layout>
         <h1 class="text-5xl">Bienvenue dans Votre Cabane avec&nbsp;Jacuzzi</h1>
-        
+
         <div class="flex justify-between oleoScript font-bold">
 
             <p class="ml-3 -mt-1">Réservez directement au 

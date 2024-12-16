@@ -17,7 +17,7 @@ onMounted(() => {
         setTimeout(() => {
             visible.value = false;
         }, 1000);
-    }, 5000);
+    }, 6000);
 
     return () => clearTimeout(timeout);
 });
@@ -26,7 +26,7 @@ onMounted(() => {
 <style>
 .notification {
   position: absolute;
-  top: 10px; /* Ajuste la position pour qu'il ne touche pas le bord supérieur */
+  top: 6px; /* Ajuste la position pour qu'il ne touche pas le bord supérieur */
   left: 60px; /* Ajuste pour les petits écrans */
   width: 250px; /* Largeur par défaut */
   max-width: 90%; /* Empêche le dépassement sur les petits écrans */
@@ -52,7 +52,7 @@ onMounted(() => {
 
 .notification-arrow {
   position: absolute;
-  top: 6px; /* Place la flèche légèrement plus bas */
+  top: 2px; /* Place la flèche légèrement plus bas */
   left: -10px; /* Flèche toujours à gauche */
   width: 0;
   height: 0;

@@ -6,6 +6,8 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReservationController;
 
+use App\Http\Controllers\Auth\StripeController;
+
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\SpecialDatePriceController;
@@ -32,9 +34,12 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reserver', [ReservationController::class, 'index'])->name('book');
-    Route::post('/book', [ReservationController::class, 'store']);
+    Route::post('/book', [ReservationController::class, 'store'])->name('book.store');
+
+    Route::post('/paiement-avec-stripe/{id?}', [StripeController::class, 'showPaymentPage'])->name('payment.show');
+    Route::post('/process-stripe', [StripeController::class, 'processPayment'])->name('payment.process');
     
-    Route::get('/book/{id}/edit', [ReservationController::class, 'edit'])->name('book.edit');
+    Route::get('/reserver/{id}/modifier', [ReservationController::class, 'edit'])->name('book.edit');
     Route::post('/book/{id}/update', [ReservationController::class, 'store'])->name('book.update');
 
     Route::delete('/book/{id}', [ReservationController::class, 'destroy'])->name('book.delete');
