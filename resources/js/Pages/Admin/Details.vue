@@ -5,9 +5,9 @@
 
         <Reservations :reservations="reservations" :connected_user_id="connected_user_id" />
 
-        <div class="bg-light dark:bg-dark shadow-lg rounded-lg p-8 mx-auto hover:scale-105 transform transition-transform duration-300">            
+        <div class="mx-auto hover:scale-105 transform transition-transform duration-300 mb-4">            
             <h2 class="text-center">Profil</h2>
-            <div class="max-w-[384px] mx-auto pt-0">
+            <div class="max-w-[384px] mx-auto pt-0 bg-light dark:bg-dark shadow-lg rounded-lg p-2">
                 <img :src="`${baseUrl}/profiles/${user.picture}`" loading="lazy" alt="Photo de profil" class="mx-auto rounded-full w-[280px] h-[180px]">
 
                 <div class="flex flex-col mt-4 dark:text-white font-semibold">

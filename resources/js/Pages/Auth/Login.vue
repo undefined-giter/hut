@@ -26,7 +26,7 @@
 
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="email" value="Email" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -44,7 +44,7 @@
 
             <div class="mt-4" title="Assurez-vous d'utiliser les identifiants correspondant à ceux entrés lors de votre inscription">
                 <div class="flex">
-                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -64,7 +64,7 @@
                     <label class="flex items-center" title="Nos cookies ont une durée de vie de 2 heures seulement.
 Inutile de vous surcharger de cookies 😉">
                         <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
-                        <span class="text-sm pt-1 md:pt-0 text-gray-600 dark:text-gray-400">Rester connecté</span>
+                        <span class="text-sm pt-0.5 pl-0.5 text-dark font-mirza dark:text-white">Rester connecté</span>
                     </label>
                     <div class="mt-2">
                         <Link
@@ -83,7 +83,7 @@ Inutile de vous surcharger de cookies 😉">
             <div class="mt-8 mb-2 text-center">
                 <Link
                     :href="route('register')"
-                    class="font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
+                    class="font-bold underline text-black dark:text-blue-400 decoration-green-600 hover:decoration-green-400 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>
@@ -94,7 +94,7 @@ Inutile de vous surcharger de cookies 😉">
         @click="focusEmail"
         locale="fr"
         active-view="month"
-        class="vuecal--rounded-theme vuecal--blue-theme text-black dark:text-[#ccc]"
+        class="vuecal--rounded-theme vuecal--blue-theme communFont"
         hide-view-selector
         :disable-views="['years', 'year', 'week', 'day']"
         :dblclick-to-navigate="false"

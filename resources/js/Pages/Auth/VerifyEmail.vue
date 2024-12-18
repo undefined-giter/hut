@@ -2,7 +2,7 @@
     <GuestLayout>
         <Head title="Vérifier Email | Cabane" />
 
-        <div class="mb-4 text-sm text-orangeTheme dark:text-orangeTheme">
+        <div class="mb-4 text-sm !text-orangeTheme">
             Merci de vous être inscrit ! Avant de commencer, pourriez-vous vérifier votre adresse email en cliquant sur le lien que nous vous avons envoyé ? Si vous n'avez pas reçu l'email, nous vous en enverrons volontiers un autre.
             <br>Pensez à vérifier vos spams.
         </div>

@@ -8,7 +8,7 @@
             <p class="text-center">Demande d'information</p>
             <div title="Merci de renseigner vos nom et prénom">
                 <div class="flex">
-                    <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs !text-red-700">*</span>
                 </div>
                 <TextInput
                     id="name"
@@ -27,7 +27,7 @@
 
             <div class="mt-4" title="Veuillez renseigner votre Email svp">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-500">*</span>
+                    <InputLabel for="email" value="Email" /><span class="text-xs !text-red-700">*</span>
                 </div>
                 <TextInput
                     id="email"
@@ -63,7 +63,7 @@
 
             <div class="mt-4">
                 <div class="flex" title="Entre 20 et 510 caractères">
-                    <InputLabel for="message" value="Message" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="message" value="Message" /><span class="text-xs !text-red-700">*</span>
                 </div>
                 <textarea
                     id="message"
@@ -79,7 +79,7 @@
                 <InputError :message="form.errors.message" />
             </div>
             <div class="ml-auto mt-2 flex justify-between">
-                <span class="text-lg mt-3.5 text-orangeTheme oleoScript font-bold">
+                <span class="text-lg mt-3.5 !text-orangeTheme font-semibold">
                     <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">
                         📱&nbsp;{{ adminPhone }}
                     </a>

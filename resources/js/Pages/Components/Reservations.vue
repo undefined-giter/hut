@@ -1,15 +1,15 @@
 <template>
-    <div v-if="reservations.length > 0" class="bg-light dark:bg-dark shadow-md rounded-lg pt-4 mx-auto mb-4 hover:scale-105 transform transition-transform duration-300">
+    <div v-if="reservations.length > 0" class="shadow-md rounded-lg p-4 mb-4 hover:scale-105 transform transition-transform duration-300">
         <div @click="toggleUnroll(4)" class="flex justify-center">
             <h2 class="text-lg cursor-pointer">Réservations</h2>
             <h2 style="transform: translateY(2px); text-decoration: none; font-size: 1em;">{{ isUnrolled(4) ? '🔼' : '🔽' }}</h2>
         </div>
 
-        <transition name="fade-slide" v-show="isUnrolled(4)" class="max-w-sm mx-auto mb-4 px-2 md:px-0">
-            <div style="max-height: 350px; overflow-y: auto;">
+        <transition name="fade-slide" v-show="isUnrolled(4)" class="bg-light dark:bg-dark rounded-xl py-1 max-w-sm mx-auto mb-4 px-2 md:px-0">
+            <div style="max-height: 350px; overflow-y: auto;" class="!px-2">
                 <h3 class="text-center dark:text-orangeTheme" v-if="currentReservations.length > 0">Réservation Actuelle :</h3>
                 <ul v-if="currentReservations.length > 0" class="mb-6">
-                    <li v-for="reservation in currentReservations" :key="reservation.id" class="dark:text-blue-400">
+                    <li v-for="reservation in currentReservations" :key="reservation.id" class="communFont hover:bg-[#fedeae] hover:dark:bg-[#04180d]">
 
                         <div class="flex justify-between">
                             <div>
@@ -21,10 +21,10 @@
                             <div class="flex text-sm mt-1">
                                 <Link :href="route('book.edit', reservation.id)"><span class="text-xs">✏️</span><span class="text-blue-700">Modifier</span></Link>
                                 <span class="text-zinc-800 mx-1">|</span>
-                                <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
+                                <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="text-right">
                                     <input type="hidden" name="_token" :value="csrfToken" />
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="text-red-600 mr-1"><span class="text-xs">❌</span>Annuler</button>
+                                    <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
                                 </form>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <div class="text-blue-600 mt-1"><em>Options demandées :</em></div>
                             <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
+                                <li v-for="option in reservation.options" :key="option.id" class="whitespace-normal break-words">
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -63,15 +63,15 @@
                         <div class="flex justify-between items-end">
                             <p class="text-sm">Nuits & Options : {{ calculateTotal(reservation.res_price) }}<span class="text-sm">€</span></p>
                             <p class="text-sm">Frais carte : {{ calculateTotal(reservation.card_fees) || 0 }} <span class="text-sm">€</span></p>
-                            <p class="text-sm mr-1">Total : {{ calculateTotal(reservation.res_price, reservation.card_fees) }}<span class="text-sm"> €</span></p>
+                            <p class="text-sm">Total : {{ calculateTotal(reservation.res_price, reservation.card_fees) }}<span class="text-sm"> €</span></p>
                         </div>
                         <p class="-mt-0.5">Reste à payer en liquide à l'arrivée : <span class="!text-green-500 text-xl">{{ calculateTotal(reservation.res_price, reservation.card_fees) - reservation.payed }}</span> <span class="!text-green-500 text-sm">€</span></p>
                     </li>
                 </ul>
         
                 <h3 class="text-center text-orangeTheme" v-if="upcomingReservations.length > 0">{{ upcomingReservations.length === 1 ? 'Réservation à venir :' : 'Réservations à venir :' }}</h3>
-                <ul v-if="upcomingReservations.length > 0" :class="{ 'mb-6': !isLastList }">
-                    <li v-for="(reservation, index) in upcomingReservations" :key="reservation.id" :class="{ 'mb-6': index !== upcomingReservations.length - 1 }" class="dark:text-blue-400 hover:dark:bg-zinc-900">
+                <ul v-if="upcomingReservations.length > 0" :class="[{ 'mb-6': !isLastList }, 'communFont']">
+                    <li v-for="(reservation, index) in upcomingReservations" :key="reservation.id" :class="{ 'mb-6': index !== upcomingReservations.length - 1 }" class="communFont hover:bg-[#fedeae] hover:dark:bg-[#04180d]">
                         <div class="flex justify-between">
                             <div>
                                 {{ formatDateShort(new Date(reservation.start_date)) }} - 
@@ -83,11 +83,11 @@
                                 <Link :href="route('book.edit', reservation.id)">
                                     <span class="text-xs">✏️</span><span class="text-blue-700">Modifier</span>
                                 </Link>
-                                <span class="text-zinc-800 mx-1">|</span>
-                                <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="mr-0.5 text-right">
+                                <span class="!text-zinc-800 mx-1">|</span>
+                                <form method="POST" :action="route('book.delete', reservation.id)" @submit.prevent="confirmDelete" class="text-right">
                                     <input type="hidden" name="_token" :value="csrfToken" />
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="text-red-600 mr-1"><span class="text-xs">❌</span>Annuler</button>
+                                    <button type="submit" class="text-red-600"><span class="text-xs">❌</span>Annuler</button>
                                 </form>
                             </div>
                         </div>
@@ -105,8 +105,8 @@
 
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <div class="text-blue-600 mt-1"><em>Options demandées :</em></div>
-                            <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
+                            <ul class="communFont list-disc ml-6">
+                                <li v-for="option in reservation.options" :key="option.id" class="whitespace-normal break-words">
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -128,15 +128,15 @@
                         <div class="flex justify-between items-end">
                             <p class="text-sm">Nuits & Options : {{ calculateTotal(reservation.res_price) }}<span class="text-sm">€</span></p>
                             <p class="text-sm">Frais carte : {{ calculateTotal(reservation.card_fees) || 0 }} <span class="text-sm">€</span></p>
-                            <p class="text-sm mr-1">Total : {{ calculateTotal(reservation.res_price, reservation.card_fees) }}<span class="text-sm"> €</span></p>
+                            <p class="text-sm">Total : {{ calculateTotal(reservation.res_price, reservation.card_fees) }}<span class="text-sm"> €</span></p>
                         </div>
                         <p class="-mt-0.5">Reste à payer en liquide à l'arrivée : <span class="!text-green-500 text-xl">{{ calculateTotal(reservation.res_price, reservation.card_fees) - reservation.payed }}</span> <span class="!text-green-500 text-sm">€</span></p>
                     </li>
                 </ul>
 
                 <h3 class="text-center dark:text-orangeTheme" v-if="pastReservations.length > 0">{{ pastReservations.length === 1 ? 'Réservation passée :' : 'Réservations passées :' }}</h3>
-                <ul v-if="pastReservations.length > 0">
-                    <li v-for="(reservation, index) in pastReservations" :key="reservation.id" :class="{ 'mb-6': index !== pastReservations.length - 1 }" class="dark:text-blue-400">
+                <ul v-if="pastReservations.length > 0" class="communFont">
+                    <li v-for="(reservation, index) in pastReservations" :key="reservation.id" :class="{ 'mb-6': index !== pastReservations.length - 1 }" class="communFont hover:bg-[#fedeae] hover:dark:bg-[#04180d]">
                     {{ formatDateShort(new Date(reservation.start_date)) }} - {{ formatDateShort(new Date(reservation.end_date)) }} : {{ reservation.nights }} nuit{{ reservation.nights > 1 ? 's' : '' }} <br>
                     Du {{ formatDate(new Date(reservation.start_date)) }} au {{ formatDate(new Date(reservation.end_date)) }} 
                     
@@ -151,8 +151,8 @@
 
                         <div v-if="reservation.options && reservation.options.length > 0">
                             <div class="text-blue-600 mt-1"><em>Options demandées :</em></div>
-                            <ul class="list-disc ml-6">
-                                <li v-for="option in reservation.options" :key="option.id" class="dark:text-blue-400 whitespace-normal break-words">
+                            <ul class="communFont list-disc ml-6">
+                                <li v-for="option in reservation.options" :key="option.id" class="whitespace-normal break-words">
                                     {{ option.name }} -
                                     <small>
                                         <span v-if="option.price == 0.00">Inclu</span>
@@ -172,7 +172,7 @@
                         <div class="flex justify-between items-end">
                             <p class="text-sm">Nuits & Options : {{ calculateTotal(reservation.res_price) }}<span class="text-sm">€</span></p>
                             <p class="text-sm">Frais carte : {{ calculateTotal(reservation.card_fees) || 0 }} <span class="text-sm">€</span></p>
-                            <p class="text-sm mr-1">Total : {{ calculateTotal(reservation.res_price, reservation.card_fees) }}<span class="text-sm"> €</span></p>
+                            <p class="text-sm">Total : {{ calculateTotal(reservation.res_price, reservation.card_fees) }}<span class="text-sm"> €</span></p>
                         </div>
                         <p class="-mt-0.5">Reste à payer en liquide à l'arrivée : <span class="!text-green-500 text-xl">{{ Math.round(calculateTotal(reservation.res_price, reservation.card_fees) - reservation.payed)}}</span> <span class="!text-green-500 text-sm">€</span></p>
                     </li>
@@ -281,13 +281,13 @@ const isLastList = computed(() => {
 
 const confirmDelete = (event) => {
     Swal.fire({
-        title: '<span class="font-oleo text-2xl text-purple-600 underline">Êtes-vous sûr ?</span>',
+        title: '<span class="text-2xl text-purple-600 underline">Êtes-vous sûr ?</span>',
         text: "Vous ne pourrez pas annuler cette action !",
         icon: 'warning',
         iconColor: '#F97316',
         showCancelButton: true,
-        confirmButtonText: '<span class="font-kalnia">Oui, supprimer</span>',
-        cancelButtonText: '<span class="font-kalnia">Non, annuler</span>',
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Non, annuler',
         customClass: {
             popup: 'bg-light dark:bg-dark shadow-lg rounded-lg',
             title: 'font-mirza text-pink-600',

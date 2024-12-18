@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 @font-face {
+    font-family: 'MuktaMahee Regular';
+    src: url('../fonts/Mukta_Mahee/MuktaMahee-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MuktaMahee ExtraBold';
+    src: url('../fonts/Mukta_Mahee/MuktaMahee-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
     font-family: 'Kalnia Glaze';
     src: url('../fonts/Kalnia_Glaze/KalniaGlaze-Regular.ttf') format('truetype');
     font-weight: normal;
@@ -15,38 +27,22 @@
     font-style: normal;
 }
 @font-face {
-    font-family: 'Mirza';
-    src: url('../fonts/Mirza/Mirza-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Mirza';
-    src: url('../fonts/Mirza/Mirza-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Mirza';
-    src: url('../fonts/Mirza/Mirza-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-@font-face {
     font-family: 'Oleo Script';
     src: url('../fonts/Oleo_Script/OleoScript-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
-@font-face {
-    font-family: 'Oleo Script';
-    src: url('../fonts/Oleo_Script/OleoScript-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
+
+.MuktaMaheeExtrabold { font-family: 'MuktaMahee ExtraBold', sans-serif; }
+.MuktaMaheeRegular { font-family: 'MuktaMahee Regular', sans-serif; }
 .kalniaGlaze {font-family: 'Kalnia Glaze', sans-serif;}
 .mirza {font-family: 'Mirza', sans-serif;}
 .oleoScript {font-family: 'Oleo Script', sans-serif;}
+
+p, li, td, .communFont {
+    @apply text-[#2f3b39] dark:text-blue-400;
+    font-family: 'MuktaMahee Regular', 'sans-serif';
+}
 
 main, table {@apply bg-light dark:bg-dark;}
 
@@ -109,7 +105,7 @@ main, table {@apply bg-light dark:bg-dark;}
 
 .custom-underline {
     text-decoration: underline;
-    text-decoration-color: #800064;
+    text-decoration-color: #a300b2;
     text-underline-offset: 3px;
 }
 
@@ -117,22 +113,17 @@ button{ border-radius: 1em; }
 
 table tr:hover span, table tr:hover td{ color: black !important; }
 
-p, .p, table td {
-    @apply text-blue-800 dark:text-blue-400;
-    font-family: 'mirza', 'sans-serif'; 
-    font-size: 1.15em;
-}
-
-th, tr:hover{ @apply bg-orange-500 dark:bg-orangeTheme !important; }
+th, tr:hover{ @apply bg-orangeTheme !important; }
 
 h1, h2 {
-    font-family: 'Kalnia Glaze', sans-serif;
+    font-family: 'MuktaMahee ExtraBold', sans-serif;
+    color: #5d0055;
     font-size: 1.8rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
     text-align: center;
     text-decoration: underline;
-    text-decoration-color: #68005f;
+    text-decoration-color: #5d0055;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
     animation-name: backInDown;
@@ -140,22 +131,20 @@ h1, h2 {
     animation-timing-function: cubic-bezier(0.25, 0.85, 0.25, 1);
 }
 
+.dark h1, 
+.dark h2 {
+    color: #7e0073;
+    text-decoration-color: #7e0073;
+}
+
 h2{
-    font-family: 'Kalnia Glaze', sans-serif;
     font-size: 1.25rem;
     font-weight: 400;
     margin-bottom: 1rem;
-    text-align: center;
-    text-decoration: underline;
-    text-decoration-color: #68005f;
-    text-decoration-thickness: 1px;
     text-underline-offset: 1px;
 }
 
-h3{
-    font-family: 'Oleo Script', sans-serif;
-    color: #ccc;
-}
+h3{ font-family: 'Oleo Script', sans-serif; }
 
 .bg_img {
     background: url('/img/hut.png') fixed center no-repeat;
@@ -185,9 +174,13 @@ h3{
 
 a:hover {z-index: 50;}
 
+.highlight{
+    color: '#17fae8';
+    font-weight: 700;
+}
 
 .btn {
-    font-family: 'Oleo Script', sans-serif; 
+    font-family: 'MuktaMahee Regular', sans-serif; 
     background-color: #002ccd;
     color: #ccc;
     padding: 10px 16px;
@@ -246,7 +239,10 @@ a:hover {z-index: 50;}
     user-drag: none;
 }
 
-label { @apply text-blue-800 dark:text-[#ccc] font-mirza -mb-1 ml-1 !important; }
+label { @apply font-mirza -mb-1 ml-1;  }
+.label {
+    @apply font-mirza -mb-1 ml-1 text-white;
+}
 
 input[type="text"],
 input[type="number"],
@@ -278,6 +274,12 @@ input[type="checkbox"]:not(:checked) {
     background-color: #bfbfbf !important;
     @apply bg-gray-500 dark:bg-[#111827] focus:ring focus:outline-none focus:ring-blue-400 dark:focus:ring-orange-400 !important;
 }
+
+.custom-scrollbar {
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+.custom-scrollbar::-webkit-scrollbar { display: none; }
 
 ::-webkit-scrollbar {
     width: 8px;

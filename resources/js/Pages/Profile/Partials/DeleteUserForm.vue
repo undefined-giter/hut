@@ -47,7 +47,7 @@ const closeModal = () => {
 </script>
 
 <template>
-    <section class="space-y-6 max-w-sm mx-auto">
+    <section class="max-w-sm mx-auto">
 
         <div @click="toggleUnroll(3)">
             <div class="flex justify-center cursor-pointer">
@@ -57,7 +57,7 @@ const closeModal = () => {
         </div>
 
 
-        <transition name="fade-slide" v-show="isUnrolled(3)" class="max-w-sm mx-auto text-sm">
+        <transition name="fade-slide" v-show="isUnrolled(3)" class="max-w-sm mx-auto text-sm bg-light dark:bg-dark p-2 rounded-xl">
             <div>
                 <p>
                     Supprimer votre compte supprimera toutes vos réservations.

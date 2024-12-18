@@ -9,7 +9,7 @@
     <vue-cal
       locale="fr"
       active-view="month"
-      class="vuecal--rounded-theme vuecal--blue-theme text-black dark:text-[#ccc]"
+      class="vuecal--rounded-theme vuecal--blue-theme communFont"
       hide-view-selector
       @cell-click="handleDateClick"
       :disable-views="['years', 'year', 'week', 'day']"
@@ -118,7 +118,7 @@
             <p class="my-1 text-sm">Nombre de nuit{{ numberOfNights > 1 ? 's' : '' }} : <b>{{ numberOfNights }}</b></p>
           </div>
         </div>
-        <button type="button" :class="`${arrivalDate ? '' : 'btn-disabled'} btn text-sm bg-orangeTheme hover:text-orangeTheme !shadow-none !px-2 mr-0.5`" @click="resetReservation">Réinitialiser<br>les Dates</button>
+        <button type="button" :class="`${arrivalDate ? '' : 'btn-disabled'} btn text-sm bg-orangeTheme !hover:text-orangeTheme !shadow-none !px-2 mr-0.5`" @click="resetReservation">Réinitialiser<br>les Dates</button>
       </div>
 
       <h3 v-if="options.length >= 1" class="underline text-blue-700 dark:text-blue-500 text-xl mt-4">Options disponibles :</h3>
@@ -127,14 +127,14 @@
         <label v-for="(option, index) in options" :key="option.id"
         :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600', 'relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10']">
           <div class="flex items-center">
-            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1.5 form-checkbox"/>
+            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1 form-checkbox"/>
             <div class="flex justify-between w-full max-w-[98%]">
               <div :title="option.name.length >= 25 ? option.name : ''"
-              class="oleoScript text-xl whitespace-nowrap overflow-hidden text-ellipsis">{{ option.name }}</div>
-              <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'">
+              class="text-2xl font-bold whitespace-nowrap overflow-hidden text-ellipsis -mt-1.5">{{ option.name }}</div>
+              <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'" class="-mt-1">
                 &nbsp;{{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small>&nbsp;€</small>
               </div>
-              <div v-if="option.price === '0.00'">Inclu</div>
+              <div v-if="option.price === '0.00'" class="-mt-1">Inclu</div>
             </div>
           </div>
 
@@ -143,7 +143,7 @@
           </p>
 
           <div class="absolute bottom-1 right-4 flex items-center space-x-1">
-            <span v-if="option.by_day_display" :class="[selectedOptionsIds.includes(option.id) && !option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']" title="1 unité pour l'entièreté du séjour / bouton gris">1 pour le séjour</span>
+            <span v-if="option.by_day_display" :class="[selectedOptionsIds.includes(option.id) && !option.by_day ? 'underline underline-offset-2' : '', 'mirza font-bold']" title="1 unité pour l'entièreté du séjour / bouton gris">1 pour le séjour</span>
             <label v-if="option.by_day_display" class="cursor-pointer flex items-center">
               <input type="checkbox" 
                 v-model="option.by_day" 
@@ -154,14 +154,14 @@
               <div :class="[selectedOptionsIds.includes(option.id) ? 'hover:scale-105 hover:bg-gray-500' : '!border-purple-800', option.by_day ? 'hover:scale-105 hover:bg-gray-500 border-green-500' : 'border-orangeTheme', `w-11 h-6 bg-gray-600 rounded-full relative peer peer-checked:after:translate-x-[20px] after:content-[''] after:absolute peer-checked:bg-green-800 peer-checked:after:bg-green-300 after:bg-gray-400 after:rounded-full after:h-5 after:w-5 after:transition-all border border-[2px] peer-checked:hover:bg-green-900 transition-transform duration-300`]"></div>
             </label>
             <span v-if="option.by_day_display" title="1 par nuit réservée / bouton vert
-(distribué en journée si applicable pour l'option)" :class="[option.by_day ? 'underline underline-offset-2' : '', 'text-gray-800 mirza font-semibold']">Par jour</span>
+(distribué en journée si applicable pour l'option)" :class="[option.by_day ? 'underline underline-offset-2' : '', 'mirza font-semibold']">Par jour</span>
           </div>
         </label>
       </div>
 
       <div class="flex mx-1">
         <div class="flex-1 mr-4 mt-2 relative max-w-[230px] sm:max-w-[840px]">
-          <label for="res_comment">Demande spéciale</label>
+          <label for="res_comment" class="communFont">Demande spéciale</label>
           <p v-if="res_comment" :class="['absolute right-2 top-5', resCommentLength > 510 ? '!text-red-700' : '']">{{ resCommentLength }}/510<small> caractères</small></p>
           <textarea id="res_comment" v-model="res_comment" maxlength="510" rows="4" :placeholder="animatedText" class="w-full no-scrollbar rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl"></textarea>
         </div>
@@ -201,24 +201,24 @@
     <div class="mt-8">
       <div class="hidden md:block">
         <div class="flex justify-evenly">
-          <h3 @click="toggleUnroll(6)" class="underline text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
-          <h3 @click="toggleUnroll(0)" class="underline text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
+          <h3 @click="toggleUnroll(6)" class="underline text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', '!text-orangeTheme mb-1']"></span></h3>
+          <h3 @click="toggleUnroll(0)" class="underline !text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', '!text-red-600 mb-1 decoration-none']"></span></h3>
         </div>
         
-        <div class="flex">
-          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[14%]']" />
-          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300 mx-auto" />
+        <div :class="['flex', isUnrolled(0) & isUnrolled(6) ? 'justify-end' : '']">
+          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[16%]']" />
+          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" :class="['transition-all duration-300', !isUnrolled(6) ? 'mx-auto' : '']" />
         </div>
       </div>
 
       <div class="flex flex-col md:hidden">
         <div class="mx-auto">
-          <h3 @click="toggleUnroll(6)" class="underline text-center text-xl text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', 'text-orangeTheme mb-1']"></span></h3>
+          <h3 @click="toggleUnroll(6)" class="underline text-center text-xl !text-orangeTheme cursor-pointer">{{ isUnrolled(6) ? 'Cacher' : 'Afficher' }} les dates & prix spéciaux<span :class="[isUnrolled(6) ? 'triangle-up' : 'triangle-down', '!text-orangeTheme mb-1']"></span></h3>
           <ListSpecials v-show="isUnrolled(6)" class="transition-all duration-300" />
         </div>
 
-        <div class="mt-4">
-          <h3 @click="toggleUnroll(0)" class="underline text-center text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', 'text-red-600 mb-1 decoration-none']"></span></h3>
+        <div class="mt-4 mx-auto">
+          <h3 @click="toggleUnroll(0)" class="underline text-center !text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', '!text-red-600 mb-1 decoration-none']"></span></h3>
           <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" class="transition-all duration-300" />
         </div>
       </div>

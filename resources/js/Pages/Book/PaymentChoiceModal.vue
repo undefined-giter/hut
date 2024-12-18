@@ -3,9 +3,9 @@
     
         <div class="relative bg-orangeTheme rounded-lg shadow-xl w-[90%] max-w-lg p-6 text-center text-white" @click.stop>
     
-            <h3 class="text-2xl font-bold mb-4 font-kalnia underline">Choisissez votre méthode de paiement</h3>
+            <h3 class="text-2xl font-bold mb-4 underline">Choisissez votre méthode de paiement</h3>
 
-            <p class="text-sm mb-6 font-kalnia !text-black">Réservez en toute simplicité avec le choix qui vous convient le mieux</p>
+            <p class="text-sm mb-6 !text-black">Réservez en toute simplicité avec le choix qui vous convient le mieux</p>
 
             <p class="text-left ml-2 !text-black">Réserver Immédiatement :</p>
             <button @click.prevent="payLater" class="btn w-full mb-4">Payer à l'arrivée, <b>en liquide</b> les {{ calculatedPrice.toFixed(2).replace(/\.00$/, '') }} €</button>
