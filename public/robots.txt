@@ -3,9 +3,10 @@ Disallow: /admin/
 Disallow: /css/
 Disallow: /js/
 Disallow: /vendor/
-Disallow: /storage/
 Disallow: /?$
 Disallow: /reserver
+Allow: /img/
+Allow: /storage/img/hut.png
 Allow: /
 
 Sitemap: https://cabane.leorip.com/sitemap.xml
