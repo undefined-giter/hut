@@ -63,8 +63,8 @@
                 <div>
                     <label class="flex items-center" title="Nos cookies ont une durée de vie de 2 heures seulement.
 Inutile de vous surcharger de cookies 😉">
-                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
-                        <span class="text-sm pt-0.5 pl-0.5 text-dark font-mirza dark:text-white">Rester connecté</span>
+                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="-mt-1 -ml-1" />
+                        <span class="text-sm pl-0.5 font-mirza text-gray-300">Rester connecté</span>
                     </label>
                     <div class="mt-2">
                         <Link
@@ -110,11 +110,11 @@ Inutile de vous surcharger de cookies 😉">
                         const result = isReservedDate(cell.formattedDate);
                         switch (result) {
                             case 'in':
-                                return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                                return 'background: linear-gradient(to right, blue, blue, blue, blue, darkred, darkred, darkred, darkred);';
                             case 'inner':
-                                return 'background: red;';
+                                return 'background: darkred;';
                             case 'out':
-                                return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                                return 'background: linear-gradient(to right, darkred, darkred, darkred, darkred, blue, blue, blue, blue);';
                             default:
                                 return '';
                         }

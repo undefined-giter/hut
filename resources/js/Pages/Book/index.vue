@@ -68,22 +68,22 @@
               } else if (userSwitch) {
                 return 'background: linear-gradient(to right, green, green, green, green, #410045, green, green, green, green);';
               } else if (userSwitchToOther) {
-                return 'background: linear-gradient(to right, green, green, green, green, #410045, red, red, red, red);';
+                return 'background: linear-gradient(to right, green, green, green, green, #410045, darkred, darkred, darkred, darkred);';
               } else if (otherSwitchToUser) {
-                return 'background: linear-gradient(to right, red, red, red, red, #410045, green, green, green, green);';
+                return 'background: linear-gradient(to right, darkred, darkred, darkred, darkred, #410045, green, green, green, green);';
               }
 
               switch (result) {
                   case 'in':
-                    return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                    return 'background: linear-gradient(to right, blue, blue, blue, blue, darkred, darkred, darkred, darkred);';
                   case 'inner':
-                    return 'background: red;';
+                    return 'background: darkred;';
                   case 'out':
-                    return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                    return 'background: linear-gradient(to right, darkred, darkred, darkred, darkred, blue, blue, blue, blue);';
                   case 'switch':
                     return auth.user.role === 'admin' 
-                        ? 'background: linear-gradient(to right, red, red, red, #2c006c, red, red, red);' 
-                        : 'background: red;';
+                        ? 'background: linear-gradient(to right, darkred, darkred, darkred, #2c006c, darkred, darkred, darkred);' 
+                        : 'background: darkred;';
                 default:
                   return '';
               }
@@ -127,14 +127,14 @@
         <label v-for="(option, index) in options" :key="option.id"
         :class="[selectedOptionsIds.includes(option.id) ? 'dark:bg-green-600 border border-green-600' : 'dark:bg-orange-500 border border-orange-600', 'relative h-[154px] option_hover p-3.5 border border-2 rounded-md shadow-sm cursor-pointer duration-300 transform hover:z-10']">
           <div class="flex items-center">
-            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1 form-checkbox"/>
+            <input type="checkbox" :value="option.id" v-model="selectedOptionsIds" class="mr-1 -mt-4 form-checkbox"/>
             <div class="flex justify-between w-full max-w-[98%]">
               <div :title="option.name.length >= 25 ? option.name : ''"
-              class="text-2xl font-bold whitespace-nowrap overflow-hidden text-ellipsis -mt-1.5">{{ option.name }}</div>
+              class="text-2xl font-bold whitespace-nowrap overflow-hidden text-ellipsis -mt-1">{{ option.name }}</div>
               <div v-if="option.price !== null && option.price !== '' && option.price !== '0.00'" class="-mt-1">
                 &nbsp;{{ option.price.endsWith('.00') ? parseInt(option.price) : option.price }}<small>&nbsp;€</small>
               </div>
-              <div v-if="option.price === '0.00'" class="-mt-1">Inclu</div>
+              <div v-if="option.price === '0.00'" class="-mt-2">Inclu</div>
             </div>
           </div>
 
@@ -205,9 +205,9 @@
           <h3 @click="toggleUnroll(0)" class="underline !text-red-600 text-xl cursor-pointer">{{ isUnrolled(0) ? 'Cacher' : 'Afficher' }} les nuits déjà réservées<span :class="[isUnrolled(0) ? 'triangle-up' : 'triangle-down', '!text-red-600 mb-1 decoration-none']"></span></h3>
         </div>
         
-        <div :class="['flex', isUnrolled(0) & isUnrolled(6) ? 'justify-end' : '']">
-          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[16%]']" />
-          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" :class="['transition-all duration-300', !isUnrolled(6) ? 'mx-auto' : '']" />
+        <div :class="['flex', isUnrolled(0) && isUnrolled(6) ? 'justify-end mr-6' : '']">
+          <ListSpecials v-show="isUnrolled(6)" :class="[isUnrolled(0) ? '' : 'ml-[18%]']" />
+          <ListsRes v-show="isUnrolled(0)" :reservations="reservations" :auth="auth" :formatDate="formatDate" :class="['transition-all duration-300', !isUnrolled(6) ? 'ml-auto mr-8' : '']" />
         </div>
       </div>
 
