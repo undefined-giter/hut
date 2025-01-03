@@ -25,7 +25,7 @@
                             <img 
                                 :src="profilePicture"
                                 loading="lazy"
-                                alt="Photo de profil"
+                                alt="Profil"
                                 class="img-transition rounded-full h-8 w-8 md:h-10 md:w-10 ml-5 -mt-3.5 ml-4 md:ml-2 md:mt-2 transition-all duration-300"
                                 draggable="false"
                             />

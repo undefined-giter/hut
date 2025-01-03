@@ -23,7 +23,7 @@
                             :
                             `${baseUrl}/profiles/` + user.picture 
                             : `${baseUrl}/profiles/default_user.png`"
-                            loading="lazy" alt="Photo de profil" class="rounded-full h-8 w-8 mx-auto">
+                            loading="lazy" alt="Profil" class="rounded-full h-8 w-8 mx-auto">
                     </td>
                     <td class="border-b border-orangeTheme max-w-[90px]" draggable="false">
                         <div class="overflow-x-auto whitespace-nowrap custom-scrollbar select-text">

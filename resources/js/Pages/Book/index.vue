@@ -15,7 +15,8 @@
       :disable-views="['years', 'year', 'week', 'day']"
       :dblclick-to-navigate="false"
       style="height:400px;"
-      :min-date="today"
+      :min-date="minDate"
+      :max-date="maxDate"
       :selected-date="showMonth"
     >
       <template #cell-content="{ cell }">
@@ -50,6 +51,13 @@
             ]"
 
             :style="(() => {
+              const cellDate = new Date(cell.formattedDate);
+              const maxDateObj = new Date(maxDate);
+
+              if (cellDate > maxDateObj) {
+                return 'background: darkred;';
+              }
+
               const userIn = Array.isArray(user_in_date) && user_in_date.includes(cell.formattedDate);
               const userInner = Array.isArray(user_inner_date) && user_inner_date.includes(cell.formattedDate);
               const userOut = Array.isArray(user_out_date) && user_out_date.includes(cell.formattedDate);
@@ -249,14 +257,12 @@ const { csrf_token, auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT,
 
 const arrivalDate = ref(null);
 const departureDate = ref(null);
-const showMonth = ref(showMonthEdit ?? null);
 const numberOfNights = ref(0);
 const res_comment = ref('');
 const animatedText = ref('');
 const resCommentPlaceholder = "Bonjour,\nN'hésitez pas à partager plus de précisions afin que nous préparions au mieux votre séjour.\nComme votre heure d'arrivée envisagée, ou autres informations pertinantes.";
 const isReservationValid = ref(reservationEdit ? true : false);
 const csrfToken = computed(() => csrf_token);
-const today = new Date();
 const selectedOptionsObjects = ref([]);  
 const selectedOptionsIds = ref([]);  
 const calculatedPrice = ref(0);
@@ -265,6 +271,13 @@ const isScrollbarVisible = ref(false);
 const openPayementChoiceModal = ref(false);
 const formAction = ref(null);
 const res_payed = ref(parseFloat(reservationEdit.res_payed) || 0)
+
+const currentYear = new Date().getFullYear();
+const mayFirst = new Date(`${currentYear}-05-01`);
+const today = new Date();
+const minDate = ref(today > mayFirst ? today.toISOString().split('T')[0] : `${currentYear}-05-01`);
+const maxDate = ref(`${currentYear}-09-30`);
+const showMonth = ref(showMonthEdit ?? minDate.value);
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 
@@ -365,7 +378,7 @@ const handleDateClick = (cell) => {
     numberOfNights.value = 0;
     isReservationValid.value = false;
   } else if (selectedDate <= arrivalDate.value) {
-    if(selectedDate <= today){
+    if(selectedDate <= minDate){
       resetReservation();
     }else{
       arrivalDate.value = selectedDate;

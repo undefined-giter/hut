@@ -69,6 +69,17 @@
                     <SpecialsDatesPrices v-if="isUnrolled(5)" />
                 </transition>
             </div>
+
+            <div>
+                <div @click="toggleUnroll(7)" class="flex cursor-pointer">
+                    <h3 class="underline !text-orangeTheme text-lg">{{ isUnrolled(7) ? 'Cacher' : 'Afficher' }} les Dates Limites</h3>
+                    <h3 style="transform: translateY(4px); text-decoration: none; font-size: 0.9em;">{{ isUnrolled(5) ? '🔼' : '🔽' }}</h3>
+                </div>
+    
+                <transition name="fade">
+                    <LimitesDates v-if="isUnrolled(7)" />
+                </transition>
+            </div>
         </form>
     </Layout>
 </template>
@@ -79,6 +90,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Layout from './../Layout.vue';
 import { useUnroll } from './../../shared/utils';
 import SpecialsDatesPrices from './SpecialsDatesPrices.vue';
+import LimitesDates from './LimitesDates.vue';
 
 const props = defineProps(['errors', 'price_per_night', 'price_per_night_for_2_and_more_nights', 'percent_reduced_week']);
 

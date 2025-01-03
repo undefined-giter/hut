@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\StripeController;
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\SpecialDatePriceController;
+use App\Http\Controllers\Admin\LimitesDatesController;
 use App\Http\Controllers\Admin\AdminCommentController;
 
 use Illuminate\Support\Facades\Route;
@@ -56,28 +57,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile/{id}', [ProfileController::class, 'destroy'])->name('user.delete');
 
     Route::get('/specials-dates-prices', [SpecialDatePriceController::class, 'index'])->name('specials-dates-prices.index');
+    Route::get('/limites-dates', [LimitesDatesController::class, 'index']);
 });
 
 Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::get('/liste-utilisateurs', [UserController::class, 'index'])->name('list');
     Route::get('/utilisateur/{id}', [UserController::class, 'show'])->name('details');
-
+    
     Route::get('/comments/{user}', [AdminCommentController::class, 'index'])->name('comments');
     Route::post('/comments', [AdminCommentController::class, 'store'])->name('comment.store');
     Route::put('/comments/{comment}', [AdminCommentController::class, 'update'])->name('comment.update');
     Route::delete('/comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comment.delete');
-
+    
     Route::resource('/options', OptionController::class)->except(['show', 'create']);
     Route::get('/option/creer-nouvelle-option', [OptionController::class, 'create'])->name('options.create');
     Route::put('/options/{option}/toggle-availability', [OptionController::class, 'toggleAvailability'])->name('options.toggle-availability');
     Route::put('/options/{option}/toggle-preselected', [OptionController::class, 'togglePreselected'])->name('options.toggle-preselected');
     Route::put('/options/{option}/toggle-by-day-display', [OptionController::class, 'toggleByDayDisplay'])->name('options.toggle-by-day-display');
     Route::put('/options/{option}/toggle-by-day-preselected', [OptionController::class, 'toggleByDayPreselected'])->name('options.toggle-by-day-preselected');
-
+    
     Route::get('/prix', [PriceController::class, 'getPrices'])->name('prices');
     Route::post('/prix', [PriceController::class, 'updatePrices'])->name('prices.update');
-
+    
     Route::resource('/specials-dates-prices', SpecialDatePriceController::class)->except(['index']);    
+    Route::put('/limites-dates/min', [LimitesDatesController::class, 'updateMinDate']);
+    Route::put('/limites-dates/max', [LimitesDatesController::class, 'updateMaxDate']);
 });
 
 require __DIR__.'/auth.php';
