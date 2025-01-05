@@ -100,13 +100,16 @@ Inutile de vous surcharger de cookies 😉">
         :dblclick-to-navigate="false"
         style="height:400px; cursor: default !important"
         :read-only="true"
-        :selected-date="showMonth"
+        :selected-date="minDateDynamic"
         >
             <template #cell-content="{ cell }">
                 <span 
                     class="vuecal__cell-date cursor-default"
                     
                     :style="(() => {
+                        if (cell.formattedDate < minDateDynamic || cell.formattedDate > maxDate) {
+                            return 'background: darkred;';
+                        }
                         const result = isReservedDate(cell.formattedDate);
                         switch (result) {
                             case 'in':
@@ -139,16 +142,11 @@ import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-    showMonth: {
-        type: String,
-    }
+const props = defineProps({
+    canResetPassword: Boolean,
+    status: String,
+    minDate: String,
+    maxDate: String
 });
 
 const imageLoaded = ref(false)
@@ -191,12 +189,20 @@ const submit = () => {
 
 const today = new Date(new Date().setDate(new Date().getDate()));
 
+const todayStr = today.getFullYear() + '-' +
+                 String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                 String(today.getDate()).padStart(2, '0');
+
+const minDateDynamic = ref(
+    props.minDate < todayStr
+        ? todayStr 
+        : props.minDate
+);
+
 const isReservedDate = (cellDate) => {
   const in_date = usePage().props.in_date || [];
   const inner_date = usePage().props.inner_date || [];
   const out_date = usePage().props.out_date || [];
-
-  
 
   const formattedCellDate = new Date(cellDate);
 

@@ -13,6 +13,8 @@ use Inertia\Response;
 use Carbon\Carbon;
 use App\Models\Reservation;
 use App\Http\Controllers\ReservationController;
+use App\Models\Admin\LimitesDates;
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -29,6 +31,8 @@ class AuthenticatedSessionController extends Controller
         $calendarColors = $reservationController->getCalendarColors($reservations);
         $calendarColors['inner_date'] = array_merge($calendarColors['inner_date'], $calendarColors['switch_date']);
 
+        $limitesDates = LimitesDates::first();
+
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
@@ -37,7 +41,8 @@ class AuthenticatedSessionController extends Controller
             'inner_date' => $calendarColors['inner_date'],
             'out_date' => $calendarColors['out_date'],
 
-            'showMonth' => now()->startOfMonth()->toDateString(),
+            'minDate' => $limitesDates->minDate,
+            'maxDate' => $limitesDates->maxDate,
         ]);
     }
 
