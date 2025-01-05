@@ -3,7 +3,7 @@
         <transition name="fade">
             <div>
                 <div>
-                    <p>Réservable à partir du <b>{{ formatDate(minDate) }}</b></p>
+                    <p>Réservable à partir du <span class="bold text-green-500">{{ formatDate(minDate) }}</span></p>
                     <p>Modifier la date minimale de réservation :</p>
                     <Datepicker 
                         v-model="minDate" 
@@ -12,7 +12,7 @@
                 </div>
                 <br>
                 <div>
-                    <p>Réservable jusqu'au <b>{{ formatDate(maxDate) }}</b></p>
+                    <p>Réservable jusqu'au <span class="bold text-green-500">{{ formatDate(maxDate) }}</span></p>
                     <p>Modifier la date maximale de réservation :</p>
                     <Datepicker 
                         v-model="maxDate" 
@@ -46,22 +46,32 @@ const fetchLimitesDates = async () => {
 const formatDateForBackend = (date) => {
     if (!date) return "";
     const d = new Date(date);
-    return d.toISOString().split("T")[0];
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
-const updateMinDate = async (newValue) => {   
+const updateMinDate = async (newValue) => {
     const formattedDate = formatDateForBackend(newValue);
-    console.log("Mise à jour minDate:", formattedDate);
     try {
-        await axios.put(`/limites-dates/min`, { minDate: formattedDate });
+        await axios.patch('/limites-dates/min', { minDate: formattedDate }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        minDate.value = formattedDate;
     } catch (error) {}
 };
 
-const updateMaxDate = async (newValue) => {   
+const updateMaxDate = async (newValue) => {
     const formattedDate = formatDateForBackend(newValue);
-    console.log("Mise à jour maxDate:", formattedDate);
+    
+    if (new Date(formattedDate) < new Date(minDate.value)) {
+        alert("La date maximale doit être supérieure ou égale à la date minimale.");
+        return;
+    }
+
     try {
-        await axios.put(`/limites-dates/max`, { maxDate: formattedDate });
+        await axios.patch(`/limites-dates/max`, { maxDate: formattedDate }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        maxDate.value = formattedDate;
     } catch (error) {}
 };
 

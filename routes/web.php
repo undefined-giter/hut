@@ -80,8 +80,8 @@ Route::middleware(['auth', Admin::class])->name('admin.')->group(function () {
     Route::post('/prix', [PriceController::class, 'updatePrices'])->name('prices.update');
     
     Route::resource('/specials-dates-prices', SpecialDatePriceController::class)->except(['index']);    
-    Route::put('/limites-dates/min', [LimitesDatesController::class, 'updateMinDate']);
-    Route::put('/limites-dates/max', [LimitesDatesController::class, 'updateMaxDate']);
+    Route::patch('/limites-dates/min', [LimitesDatesController::class, 'updateMinDate']);
+    Route::patch('/limites-dates/max', [LimitesDatesController::class, 'updateMaxDate']);
 });
 
 require __DIR__.'/auth.php';

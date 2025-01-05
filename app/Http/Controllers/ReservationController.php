@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
 use App\Services\PriceCalculatorService;
+use App\Models\Admin\LimitesDates;
 
 class ReservationController extends Controller
 {
@@ -153,6 +154,11 @@ class ReservationController extends Controller
             ->orderBy('spe_date', 'asc')
             ->get();
 
+        
+        $limitesDates = LimitesDates::first();
+        $minDate = $limitesDates->minDate;
+        $maxDate = $limitesDates->maxDate;
+
 
         return Inertia::render('Book/index', [
             'reservations' => $reservations,
@@ -172,6 +178,9 @@ class ReservationController extends Controller
             'user_switch_date' => $calendarColors['user_switch_date'],
             'user_switch_to_other' => $calendarColors['user_switch_to_other'],
             'other_switch_to_user' => $calendarColors['other_switch_to_user'],
+
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
 
             'showAccountRoad' => session('showAccountRoad', false),
         ]);

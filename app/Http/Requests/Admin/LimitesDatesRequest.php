@@ -15,15 +15,8 @@ class LimitesDatesRequest extends FormRequest
     public function rules()
     {
         return [
-            'minDate' => 'required|date',
-            'maxDate' => 'required|date|after_or_equal:minDate',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'maxDate.after_or_equal' => 'La date maximale doit être après ou égale à la date minimale.',
+            'minDate' => 'sometimes|required|date',
+            'maxDate' => 'sometimes|required|date',
         ];
     }
 

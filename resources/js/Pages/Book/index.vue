@@ -15,7 +15,7 @@
       :disable-views="['years', 'year', 'week', 'day']"
       :dblclick-to-navigate="false"
       style="height:400px;"
-      :min-date="minDate"
+      :min-date="minDateDynamic"
       :max-date="maxDate"
       :selected-date="showMonth"
     >
@@ -53,8 +53,9 @@
             :style="(() => {
               const cellDate = new Date(cell.formattedDate);
               const maxDateObj = new Date(maxDate);
+              const minDateDynamicObj = new Date(minDateDynamic);
 
-              if (cellDate > maxDateObj) {
+              if (cellDate < minDateDynamicObj || cellDate > maxDateObj) {
                 return 'background: darkred;';
               }
 
@@ -253,6 +254,7 @@ import VueCal from 'vue-cal';
 const { csrf_token, auth, reservations, options, showMonthEdit, PRICE_PER_NIGHT, PRICE_PER_NIGHT_FOR_2_AND_MORE_NIGHTS, PERCENT_REDUCED_WEEK, specialDatesPricesArray,
   in_date, inner_date, out_date, switch_date, 
   user_in_date, user_inner_date, user_out_date, user_switch_date, user_switch_to_other, other_switch_to_user,
+  minDate, maxDate,
   edit_reservation_dates = [], reservationEdit = false } = usePage().props;
 
 const arrivalDate = ref(null);
@@ -272,12 +274,18 @@ const openPayementChoiceModal = ref(false);
 const formAction = ref(null);
 const res_payed = ref(parseFloat(reservationEdit.res_payed) || 0)
 
-const currentYear = new Date().getFullYear();
-const mayFirst = new Date(`${currentYear}-05-01`);
 const today = new Date();
-const minDate = ref(today > mayFirst ? today.toISOString().split('T')[0] : `${currentYear}-05-01`);
-const maxDate = ref(`${currentYear}-09-30`);
-const showMonth = ref(showMonthEdit ?? minDate.value);
+const todayStr = today.getFullYear() + '-' +
+                 String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                 String(today.getDate()).padStart(2, '0');
+
+const minDateDynamic = ref(
+    minDate < todayStr
+        ? todayStr 
+        : minDate
+);
+
+const showMonth = ref(showMonthEdit ?? minDateDynamic.value);
 
 const { isUnrolled, toggleUnroll } = useUnroll();
 
@@ -378,7 +386,7 @@ const handleDateClick = (cell) => {
     numberOfNights.value = 0;
     isReservationValid.value = false;
   } else if (selectedDate <= arrivalDate.value) {
-    if(selectedDate <= minDate){
+    if(selectedDate <= minDateDynamic){
       resetReservation();
     }else{
       arrivalDate.value = selectedDate;
