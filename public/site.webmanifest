@@ -17,11 +17,18 @@
       "src": "/icons/favicon-64x64.png",
       "sizes": "64x64",
       "type": "image/png"
+    },
+    {
+      "src": "/img/hut.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "theme_color": "#EA580C",
   "background_color": "#141414",
   "display": "standalone",
   "start_url": "/",
-  "scope": "/"
+  "scope": "/",
+  "orientation": "portrait-primary"
 }

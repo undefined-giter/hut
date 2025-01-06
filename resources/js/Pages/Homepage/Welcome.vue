@@ -4,10 +4,10 @@
     <Layout>
         <h1 class="text-5xl">Bienvenue dans Votre Cabane avec&nbsp;Jacuzzi</h1>
 
-        <div class="flex justify-between oleoScript font-bold">
+        <div class="flex justify-between">
 
             <p class="ml-3 -mt-1">Réservez directement au 
-                <span class="text-2xl text-orangeTheme">
+                <span class="text-2xl text-orangeTheme font-semibold">
                     <a :href="`tel:${adminPhoneHref}`" class="select-text cursor-pointer">
                         <span style="font-size:0.8em">📱</span>&nbsp;<span class="-ml-2">{{ adminPhone }}</span>
                     </a>

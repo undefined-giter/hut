@@ -25,7 +25,7 @@
             <p class="text-center">Ou s'inscrire manuellement</p>
             <!-- <div title="Veuillez entrer vos nom et prénom svp">
                 <div class="flex">
-                    <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="name" value="Nom & Prénom" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -58,7 +58,7 @@
 
             <div title="votre_mail@exemple.com">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="email" value="Email" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -94,7 +94,7 @@
 
             <div class="mt-4" title="Assurez-vous d'avoir un mot de passe sécurisé et unique d'au moins 8 caractères">
                 <div class="flex">
-                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -111,7 +111,7 @@
 
             <div class="mt-4" title="Assurez-vous d'inscrire le même mot de passe dans les deux champs">
                 <div class="flex">
-                    <InputLabel for="password_confirmation" value="Confirmez votre Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="password_confirmation" value="Confirmez votre Mot de Passe" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput

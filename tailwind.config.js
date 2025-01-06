@@ -15,16 +15,17 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                kalnia: ['KalniaGlaze', ...defaultTheme.fontFamily.sans],
                 mirza: ['Mirza', ...defaultTheme.fontFamily.sans],
                 oleo: ['OleoScript', ...defaultTheme.fontFamily.sans],
+                muktaRegular: ['MuktaMahee Regular', ...defaultTheme.fontFamily.sans],
+                muktaExtraBold: ['MuktaMahee ExtraBold', ...defaultTheme.fontFamily.sans],
               },
             colors: {
-                light: 'rgba(204, 204, 204, 0.8)',
-                dark: 'rgba(20, 20, 20, 0.9)',
+                light: 'rgba(203, 189, 170, 0.8)',
+                dark: 'rgba(12, 24, 12, 0.8)',
                 orangeTheme : '#EA580C',
                 inputsLight : 'rgba(191, 191, 191, 0.8)',
-                inputsDark : 'rgba(17, 24, 39, 0.8)',
+                inputsDark : 'rgba(13, 37, 13, 0.8)',
             },
             screens: {
                 'xs': '480px',

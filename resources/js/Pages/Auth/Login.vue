@@ -26,7 +26,7 @@
 
             <div title="Assurez-vous d'utiliser le même mail que vous avez utiliser pour votre inscription">
                 <div class="flex">
-                    <InputLabel for="email" value="Email" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="email" value="Email" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -44,7 +44,7 @@
 
             <div class="mt-4" title="Assurez-vous d'utiliser les identifiants correspondant à ceux entrés lors de votre inscription">
                 <div class="flex">
-                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs text-red-700">*</span>
+                    <InputLabel for="password" value="Mot de Passe" /><span class="text-xs !text-red-700">*</span>
                 </div>
 
                 <TextInput
@@ -63,8 +63,8 @@
                 <div>
                     <label class="flex items-center" title="Nos cookies ont une durée de vie de 2 heures seulement.
 Inutile de vous surcharger de cookies 😉">
-                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="mt-1 -ml-1" />
-                        <span class="text-sm pt-1 md:pt-0 text-gray-600 dark:text-gray-400">Rester connecté</span>
+                        <Checkbox name="remember" v-model:checked="form.remember" :style="{ transform: 'scale(0.75)' }" class="-mt-1 -ml-1" />
+                        <span class="text-sm pl-0.5 font-mirza text-gray-300">Rester connecté</span>
                     </label>
                     <div class="mt-2">
                         <Link
@@ -83,7 +83,7 @@ Inutile de vous surcharger de cookies 😉">
             <div class="mt-8 mb-2 text-center">
                 <Link
                     :href="route('register')"
-                    class="font-bold underline text-black dark:text-gray-400 hover:text-gray-600 decoration-green-600 hover:decoration-green-400 dark:hover:text-gray-100"
+                    class="font-bold underline text-black dark:text-blue-400 decoration-green-600 hover:decoration-green-400 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
                 >
                     Pas encore de compte ?
                 </Link>
@@ -94,27 +94,30 @@ Inutile de vous surcharger de cookies 😉">
         @click="focusEmail"
         locale="fr"
         active-view="month"
-        class="vuecal--rounded-theme vuecal--blue-theme text-black dark:text-[#ccc]"
+        class="vuecal--rounded-theme vuecal--blue-theme communFont"
         hide-view-selector
         :disable-views="['years', 'year', 'week', 'day']"
         :dblclick-to-navigate="false"
         style="height:400px; cursor: default !important"
         :read-only="true"
-        :selected-date="showMonth"
+        :selected-date="minDateDynamic"
         >
             <template #cell-content="{ cell }">
                 <span 
                     class="vuecal__cell-date cursor-default"
                     
                     :style="(() => {
+                        if (cell.formattedDate < minDateDynamic || cell.formattedDate > maxDate) {
+                            return 'background: darkred;';
+                        }
                         const result = isReservedDate(cell.formattedDate);
                         switch (result) {
                             case 'in':
-                                return 'background: linear-gradient(to right, blue, blue, blue, blue, red, red, red, red);';
+                                return 'background: linear-gradient(to right, blue, blue, blue, blue, darkred, darkred, darkred, darkred);';
                             case 'inner':
-                                return 'background: red;';
+                                return 'background: darkred;';
                             case 'out':
-                                return 'background: linear-gradient(to right, red, red, red, red, blue, blue, blue, blue);';
+                                return 'background: linear-gradient(to right, darkred, darkred, darkred, darkred, blue, blue, blue, blue);';
                             default:
                                 return '';
                         }
@@ -139,16 +142,11 @@ import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-    showMonth: {
-        type: String,
-    }
+const props = defineProps({
+    canResetPassword: Boolean,
+    status: String,
+    minDate: String,
+    maxDate: String
 });
 
 const imageLoaded = ref(false)
@@ -191,12 +189,20 @@ const submit = () => {
 
 const today = new Date(new Date().setDate(new Date().getDate()));
 
+const todayStr = today.getFullYear() + '-' +
+                 String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                 String(today.getDate()).padStart(2, '0');
+
+const minDateDynamic = ref(
+    props.minDate < todayStr
+        ? todayStr 
+        : props.minDate
+);
+
 const isReservedDate = (cellDate) => {
   const in_date = usePage().props.in_date || [];
   const inner_date = usePage().props.inner_date || [];
   const out_date = usePage().props.out_date || [];
-
-  
 
   const formattedCellDate = new Date(cellDate);
 

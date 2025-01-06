@@ -39,9 +39,11 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
         <link rel="mask-icon" href="{{ asset('icons/favicon.ico') }}" color="#ad5205">
 
-        <link rel="preload" as="image" href="/img/hut.png" type="image/png">
+        <link rel="preload" as="image" href="{{ asset('img/hut.png') }}" type="image/png">
         
         <title inertia>Cabane avec Jacuzzi - Trièves Location</title>
+
+        <meta property="og:site_name" content="Hébergement Cabane Trièves">
 
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

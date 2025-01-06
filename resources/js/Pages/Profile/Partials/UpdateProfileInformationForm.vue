@@ -63,7 +63,7 @@ const submit = () => {
         
         
         <transition name="fade-slide" v-show="isUnrolled(1)">
-            <form @submit.prevent="submit" class="space-y-6 max-w-sm mx-auto text-sm">
+            <form @submit.prevent="submit" class="space-y-6 max-w-sm mx-auto text-sm bg-light dark:bg-dark p-2 rounded-xl">
                 <p>Modifier les informations de votre profil.</p>
 
                 <div>

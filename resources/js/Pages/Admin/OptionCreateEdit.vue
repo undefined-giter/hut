@@ -6,19 +6,19 @@
         <form @submit.prevent="submitForm" class="max-w-sm mx-auto bg-light dark:bg-dark p-4 rounded-lg">
             
             <div class="mb-4">
-                <label for="name" class="block !-mb-0.5">Nom<span class="text-xs text-red-700">*</span></label>
+                <label for="name" class="block !-mb-0.5 label">Nom<span class="text-xs !text-red-700">*</span></label>
                 <input v-model="form.name" type="text" id="name" class="input w-full p-2" required />
             </div>
 
             <div class="mb-4">
-                <label for="description" class="block !-mb-0.5">Description<span class="text-xs text-red-700">*</span></label>
+                <label for="description" class="block !-mb-0.5 label">Description<span class="text-xs !text-red-700">*</span></label>
                 <textarea v-model="form.description" id="description" rows="4" class="input w-full p-2"></textarea>
             </div>
 
             <div class="mb-4" title='Insérer "0" (zéro) pour afficher "Inclu" aux utilisateurs sur la page de réservation.
 Laisser vide pour ne rien afficher.
 Format "12.34". Les réductions (prix négatifs) sont permis.'>
-                <label for="price" class="block !-mb-0.5">Prix (€)</label>
+                <label for="price" class="block !-mb-0.5 label">Prix (€)</label>
                 <input v-model="form.price" type="number" step="0.01" id="price" class="input w-full p-2" />
             </div>
 
@@ -26,18 +26,18 @@ Format "12.34". Les réductions (prix négatifs) sont permis.'>
                 <div>
                     <div class="flex items-center mb-4">
                         <input v-model="form.available" type="checkbox" id="available" />
-                        <label for="available" class="ml-2">Disponible</label>
+                        <label for="available" class="ml-2 label">Disponible</label>
                     </div>
     
                     <div class="flex items-center mb-4">
                         <input v-model="form.preselected" type="checkbox" id="preselected" />
-                        <label for="preselected" class="ml-2">Présélectionnée</label>
+                        <label for="preselected" class="ml-2 label">Présélectionnée</label>
                     </div>
                 </div>
                 <div>
                     <div class="flex items-center mb-4">
                         <input v-model="form.by_day_display" type="checkbox" id="by_day_display" />
-                        <label for="by_day_display" class="ml-2">Afficher la case "Par jour"</label>
+                        <label for="by_day_display" class="ml-2 label">Afficher la case "Par jour"</label>
                     </div>
 
 
@@ -48,7 +48,7 @@ Format "12.34". Les réductions (prix négatifs) sont permis.'>
     
                     <div class="flex items-center mb-4">
                         <input v-model="form.by_day_preselected" type="checkbox" id="by_day_preselected" />
-                        <label for="by_day_preselected" class="ml-2">Présélectionnée Par Jour</label>
+                        <label for="by_day_preselected" class="ml-2 label">Présélectionnée Par Jour</label>
                     </div>
                 </div>
             </div>

@@ -199,6 +199,7 @@ Seuls les maillots de bain appropriés sont autorisés. Les vêtements de ville 
 L'utilisation de produits cosmétiques, d'huiles, de lotions ou de crèmes solaires est interdite avant d'entrer dans l'eau.
 
 4. Sécurité et comportement
+Le jaccuzi est strictement interdit aux mineurs en dessous de 18 ans, même accompagné.
 Interdiction de plonger : Le jacuzzi n'est pas conçu pour les plongeons. Tout saut ou plongeon est strictement interdit.
 Interdiction de courir ou de jouer dans la zone du jacuzzi : La zone du jacuzzi doit rester calme et sécurisée pour tous les utilisateurs. Toute forme de jeu ou de course est interdite.
 Utilisation de dispositifs électroniques : Les appareils électroniques (téléphones, haut-parleurs, etc.) ne sont pas autorisés dans ou à proximité du jacuzzi pour éviter les risques de choc électrique.
